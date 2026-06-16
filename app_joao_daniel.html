@@ -52,8 +52,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 .mun-val-label{font-size:10px;color:#888;margin-bottom:1px}
 .mun-val-num{font-size:13px;font-weight:600;color:#1c1c1e}
 .mun-val-num.red{color:#cc0000}
-.mun-bar{height:3px;background:#f0f0f0;margin:0 14px 10px;border-radius:2px;overflow:hidden}
+.mun-bar{height:3px;background:#f0f0f0;margin:0 14px 8px;border-radius:2px;overflow:hidden}
 .mun-bar-fill{height:100%;background:#cc0000;border-radius:2px}
+.mun-objetos{padding:0 14px 10px;border-top:1px solid #f2f2f7}
+.mun-objeto-item{font-size:11px;color:#555;padding:4px 0;border-bottom:1px solid #f7f7f7;line-height:1.4}
+.mun-objeto-item:last-child{border-bottom:none}
 
 /* DETALHE MUNICÍPIO */
 .detalhe{display:none;padding:0 16px 80px}
@@ -164,7 +167,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 
   <!-- DETALHE MUNICÍPIO -->
   <div id="detalhe" class="detalhe">
+    <div style="display:flex;gap:8px;align-items:center;padding-bottom:4px">
     <button class="back-btn" onclick="voltarLista()">← Voltar</button>
+    <button class="back-btn" onclick="exportarMunPDF()" style="background:#cc0000;color:#fff;border-color:#cc0000;margin-left:auto">⬇ Exportar PDF</button>
+  </div>
     <div class="detalhe-nome" id="det-nome"></div>
     <div class="detalhe-totais" id="det-totais"></div>
     <div id="det-emendas"></div>
@@ -306,11 +312,17 @@ function renderMunicipios(data){
         </div>
       </div>
       <div class="mun-bar"><div class="mun-bar-fill" style="width:${pct}%"></div></div>
+      <div class="mun-objetos">${
+        data.filter(r=>r.municipio===m.nome).map(r=>
+          `<div class="mun-objeto-item">· ${r.objeto}</div>`
+        ).join('')
+      }</div>
     </div>`;
   }).join('');
 }
 
 function verMunicipio(nome){
+  _munAtual=nome;
   const rows=D.filter(r=>r.municipio===nome);
   const tI=rows.reduce((s,r)=>s+r.indicado,0);
   const tE=rows.reduce((s,r)=>s+r.empenhado,0);
@@ -439,6 +451,92 @@ function onBusca(){
 }
 
 loadData();
+
+let _munAtual="";
 </script>
 </body>
 </html>
+<script>
+function exportarMunPDF(){
+  const nome=_munAtual;
+  const rows=D.filter(r=>r.municipio===nome);
+  if(!rows.length)return;
+  const tI=rows.reduce((s,r)=>s+r.indicado,0);
+  const tE=rows.reduce((s,r)=>s+r.empenhado,0);
+  const tP=rows.reduce((s,r)=>s+r.pago,0);
+  const pct=tI>0?Math.min(100,Math.round(tP/tI*100)):0;
+  const now=new Date().toLocaleString('pt-BR');
+
+  const linhas=rows.map((r,i)=>{
+    const bg=i%2===0?'#ffffff':'#fafafa';
+    return `<tr style="background:${bg}">
+      <td>${r.objeto}</td>
+      <td>${r.orgao}</td>
+      <td>${r.ano}</td>
+      <td>${r.tipo}</td>
+      <td style="text-align:right">${r.indicado>0?'R$ '+Math.round(r.indicado).toLocaleString('pt-BR'):'—'}</td>
+      <td style="text-align:right">${r.pago>0?'R$ '+Math.round(r.pago).toLocaleString('pt-BR'):'—'}</td>
+      <td>${r.situacao||'—'}</td>
+    </tr>`;
+  }).join('');
+
+  const html=`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+  <title>Emendas em ${nome} — Dep. João Daniel PT/SE</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,sans-serif;font-size:10px;color:#222;padding:20px}
+    .cabecalho{display:flex;align-items:center;gap:12px;border-bottom:3px solid #cc0000;padding-bottom:12px;margin-bottom:14px}
+    .cab-estrela{width:40px;height:40px;background:#cc0000;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .cab-titulo{font-size:16px;font-weight:700;color:#cc0000}
+    .cab-sub{font-size:11px;color:#666;margin-top:2px}
+    .municipio{font-size:20px;font-weight:700;color:#1c1c1e;margin-bottom:12px}
+    .totais{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+    .total{background:#f9f9f9;border:1px solid #eee;border-radius:6px;padding:8px 10px;border-left:3px solid #cc0000}
+    .total-label{font-size:9px;color:#888;margin-bottom:2px;text-transform:uppercase}
+    .total-value{font-size:12px;font-weight:700;color:#222}
+    .total-value.red{color:#cc0000}
+    table{width:100%;border-collapse:collapse;font-size:9px}
+    thead th{background:#cc0000;color:#fff;padding:6px 5px;text-align:left;font-weight:600}
+    tbody td{padding:5px;border-bottom:1px solid #eee;vertical-align:top;word-break:break-word}
+    tfoot td{background:#fff5f5;color:#cc0000;font-weight:700;padding:6px 5px;border-top:2px solid #cc0000}
+    .rodape{margin-top:14px;font-size:9px;color:#aaa;text-align:right;border-top:1px solid #eee;padding-top:8px}
+    @media print{body{padding:10px}@page{margin:1cm;size:A4 landscape}}
+  </style></head><body>
+  <div class="cabecalho">
+    <div class="cab-estrela"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+    <div>
+      <div class="cab-titulo">Dep. João Daniel — PT/SE · Mandato Popular</div>
+      <div class="cab-sub">Relatório de Emendas · Gerado em ${now}</div>
+    </div>
+  </div>
+  <div class="municipio">📍 ${nome}</div>
+  <div class="totais">
+    <div class="total"><div class="total-label">Emendas</div><div class="total-value">${rows.length}</div></div>
+    <div class="total"><div class="total-label">Total indicado</div><div class="total-value">R$ ${Math.round(tI).toLocaleString('pt-BR')}</div></div>
+    <div class="total"><div class="total-label">Total empenhado</div><div class="total-value">R$ ${Math.round(tE).toLocaleString('pt-BR')}</div></div>
+    <div class="total"><div class="total-label">Total pago · ${pct}%</div><div class="total-value red">R$ ${Math.round(tP).toLocaleString('pt-BR')}</div></div>
+  </div>
+  <table>
+    <thead><tr>
+      <th style="width:30%">Objeto</th><th>Órgão</th><th>Ano</th><th>Tipo</th>
+      <th style="text-align:right">Indicado R$</th>
+      <th style="text-align:right">Pago R$</th>
+      <th>Situação</th>
+    </tr></thead>
+    <tbody>${linhas}</tbody>
+    <tfoot><tr>
+      <td colspan="4">TOTAL (${rows.length} emendas)</td>
+      <td style="text-align:right">R$ ${Math.round(tI).toLocaleString('pt-BR')}</td>
+      <td style="text-align:right">R$ ${Math.round(tP).toLocaleString('pt-BR')}</td>
+      <td></td>
+    </tr></tfoot>
+  </table>
+  <div class="rodape">Mandato Popular · Dep. João Daniel PT/SE · ${now}</div>
+  </body></html>`;
+
+  const win=window.open('','_blank');
+  win.document.write(html);
+  win.document.close();
+  setTimeout(()=>win.print(),500);
+}
+</script>
