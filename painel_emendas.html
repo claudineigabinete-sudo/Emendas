@@ -30,6 +30,8 @@ body{font-family:Arial,sans-serif;background:#f5f5f5;color:#222}
 .filters input[type=text]{width:200px}
 .filter-reset{font-size:12px;color:#cc0000;cursor:pointer;background:none;border:none;padding:5px 0}
 .filter-reset:hover{text-decoration:underline}
+.export-btn{font-size:12px;background:#cc0000;color:#fff;border:none;border-radius:6px;padding:5px 12px;cursor:pointer;height:30px;font-weight:500}
+.export-btn:hover{background:#990000}
 .table-wrap{padding:0 20px 4px;overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
 thead th{background:#cc0000;color:#fff;padding:7px 8px;text-align:left;font-weight:600;font-size:10px;white-space:nowrap}
@@ -104,6 +106,7 @@ tfoot tr td{background:#fff5f5;font-weight:600;color:#cc0000;padding:6px 8px;fon
       <select id="f-rp"><option value="">Todos os RPs</option></select>
       <input type="text" id="f-busca" placeholder="Buscar objeto ou proponente…"/>
       <button class="filter-reset" onclick="resetFilters()">↺ Limpar filtros</button>
+      <button class="export-btn" onclick="exportarPDF()">⬇ Exportar PDF</button>
     </div>
     <div class="table-wrap">
       <table>
@@ -426,6 +429,106 @@ function renderCharts(){
 ['f-ano','f-orgao','f-mun','f-tipo','f-rp'].forEach(id=>document.getElementById(id).addEventListener('change',applyFilters));
 document.getElementById('f-busca').addEventListener('input',applyFilters);
 loadData();
+
+function exportarPDF(){
+  const tI=filtered.reduce((s,r)=>s+r.indicado,0);
+  const tE=filtered.reduce((s,r)=>s+r.empenhado,0);
+  const tP=filtered.reduce((s,r)=>s+r.pago,0);
+  const pct=tI>0?Math.round(tP/tI*100):0;
+  const now=new Date().toLocaleString("pt-BR");
+
+  // Detectar filtros ativos
+  const filtrosAtivos=[];
+  const fAno=document.getElementById("f-ano").value;
+  const fOrg=document.getElementById("f-orgao").value;
+  const fMun=document.getElementById("f-mun").value;
+  const fTipo=document.getElementById("f-tipo").value;
+  const fRp=document.getElementById("f-rp").value;
+  const fBusca=document.getElementById("f-busca").value;
+  if(fAno)filtrosAtivos.push("Ano: "+fAno);
+  if(fOrg)filtrosAtivos.push("Órgão: "+fOrg);
+  if(fMun)filtrosAtivos.push("Município: "+fMun);
+  if(fTipo)filtrosAtivos.push("Tipo: "+fTipo);
+  if(fRp)filtrosAtivos.push("RP: "+fRp);
+  if(fBusca)filtrosAtivos.push("Busca: "+fBusca);
+
+  const linhas=filtered.map((r,i)=>{
+    const bg=i%2===0?"#ffffff":"#fafafa";
+    return `<tr style="background:${bg}">`+
+      `<td>${r.nemenda}</td>`+
+      `<td>${r.ano}</td>`+
+      `<td>${r.orgao}</td>`+
+      `<td>${r.rp}</td>`+
+      `<td>${r.tipo}</td>`+
+      `<td>${r.objeto}</td>`+
+      `<td>${r.proponente}</td>`+
+      `<td>${r.municipio}</td>`+
+      `<td>${r.situacao}</td>`+
+      `<td style="text-align:right">${r.indicado>0?"R$ "+Math.round(r.indicado).toLocaleString("pt-BR"):"—"}</td>`+
+      `<td style="text-align:right">${r.empenhado>0?"R$ "+Math.round(r.empenhado).toLocaleString("pt-BR"):"—"}</td>`+
+      `<td style="text-align:right">${r.pago>0?"R$ "+Math.round(r.pago).toLocaleString("pt-BR"):"—"}</td>`+
+    "</tr>";
+  }).join("");
+
+  const html=`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório de Emendas — Dep. João Daniel PT/SE</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,sans-serif;font-size:10px;color:#222;padding:20px}
+    .cabecalho{display:flex;align-items:center;gap:12px;border-bottom:3px solid #cc0000;padding-bottom:12px;margin-bottom:14px}
+    .cab-estrela{width:40px;height:40px;background:#cc0000;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .cab-titulo{font-size:16px;font-weight:700;color:#cc0000}
+    .cab-sub{font-size:11px;color:#666;margin-top:2px}
+    .filtros{background:#fff5f5;border:1px solid #f7c1c1;border-radius:6px;padding:8px 12px;margin-bottom:12px;font-size:10px;color:#666}
+    .filtros strong{color:#cc0000}
+    .totais{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+    .total{background:#f9f9f9;border:1px solid #eee;border-radius:6px;padding:8px 10px;border-left:3px solid #cc0000}
+    .total-label{font-size:9px;color:#888;margin-bottom:2px;text-transform:uppercase}
+    .total-value{font-size:12px;font-weight:700;color:#222}
+    .total-value.red{color:#cc0000}
+    table{width:100%;border-collapse:collapse;font-size:9px}
+    thead th{background:#cc0000;color:#fff;padding:6px 5px;text-align:left;font-weight:600;white-space:nowrap}
+    tbody td{padding:5px;border-bottom:1px solid #eee;vertical-align:top;word-break:break-word}
+    tfoot td{background:#fff5f5;color:#cc0000;font-weight:700;padding:6px 5px;border-top:2px solid #cc0000}
+    .rodape{margin-top:14px;font-size:9px;color:#aaa;text-align:right;border-top:1px solid #eee;padding-top:8px}
+    @media print{
+      body{padding:10px}
+      @page{margin:1cm;size:A4 landscape}
+    }
+  </style></head><body>
+  <div class="cabecalho">
+    <div class="cab-estrela"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+    <div><div class="cab-titulo">Dep. João Daniel — PT/SE · Mandato Popular</div>
+    <div class="cab-sub">Relatório de Emendas Parlamentares · Gerado em ${now}</div></div>
+  </div>
+  ${filtrosAtivos.length?`<div class="filtros"><strong>Filtros aplicados:</strong> ${filtrosAtivos.join(" · ")}</div>`:""}
+  <div class="totais">
+    <div class="total"><div class="total-label">Registros</div><div class="total-value">${filtered.length} de ${D.length}</div></div>
+    <div class="total"><div class="total-label">Total indicado</div><div class="total-value">R$ ${Math.round(tI).toLocaleString("pt-BR")}</div></div>
+    <div class="total"><div class="total-label">Total empenhado</div><div class="total-value">R$ ${Math.round(tE).toLocaleString("pt-BR")}</div></div>
+    <div class="total"><div class="total-label">Total pago</div><div class="total-value red">R$ ${Math.round(tP).toLocaleString("pt-BR")} (${pct}%)</div></div>
+  </div>
+  <table>
+    <thead><tr>
+      <th>Nº Emenda</th><th>Ano</th><th>Órgão</th><th>RP</th><th>Tipo</th>
+      <th style="width:20%">Objeto</th><th style="width:15%">Proponente</th><th>Município</th><th>Situação</th>
+      <th>Indicado R$</th><th>Empenhado R$</th><th>Pago R$</th>
+    </tr></thead>
+    <tbody>${linhas}</tbody>
+    <tfoot><tr>
+      <td colspan="9">TOTAL (${filtered.length} registros)</td>
+      <td style="text-align:right">R$ ${Math.round(tI).toLocaleString("pt-BR")}</td>
+      <td style="text-align:right">R$ ${Math.round(tE).toLocaleString("pt-BR")}</td>
+      <td style="text-align:right">R$ ${Math.round(tP).toLocaleString("pt-BR")}</td>
+    </tr></tfoot>
+  </table>
+  <div class="rodape">Mandato Popular · Dep. João Daniel PT/SE · ${now}</div>
+  </body></html>`;
+
+  const win=window.open("","_blank");
+  win.document.write(html);
+  win.document.close();
+  setTimeout(()=>win.print(),500);
+}
 </script>
 </body>
 </html>
