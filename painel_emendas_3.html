@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emendas Parlamentares — Dep. João Daniel PT/SE</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f5f5f5;color:#222}
+.hdr{background:linear-gradient(135deg,#cc0000 60%,#990000 100%);padding:14px 20px;display:flex;align-items:center;gap:14px}
+.hdr-star{width:36px;height:36px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hdr-title{color:#fff;font-size:15px;font-weight:600}
+.hdr-sub{color:rgba(255,255,255,0.8);font-size:11px;margin-top:2px}
+.hdr-badge{margin-left:auto;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:11px;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.refresh-btn{background:none;border:1px solid rgba(255,255,255,0.5);color:#fff;font-size:11px;padding:4px 12px;border-radius:6px;cursor:pointer;margin-right:8px}
+.refresh-btn:hover{background:rgba(255,255,255,0.15)}
+.tabs{display:flex;border-bottom:2px solid #cc0000;background:#fff;padding:0 20px}
+.tab{padding:10px 18px;font-size:13px;font-weight:500;cursor:pointer;color:#666;border-bottom:2px solid transparent;margin-bottom:-2px;background:none;border-left:none;border-right:none;border-top:none}
+.tab.active{color:#cc0000;border-bottom:2px solid #cc0000}
+.tab:hover{color:#cc0000}
+.loading{padding:40px 20px;text-align:center;color:#888;font-size:13px}
+.erro{padding:14px 16px;background:#fcebeb;color:#a32d2d;border-radius:8px;margin:14px 20px;font-size:12px;line-height:1.6;border:1px solid #f7c1c1}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px 20px}
+.metric{background:#fff;border-radius:8px;padding:12px 14px;border-left:3px solid #cc0000;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+.metric-label{font-size:11px;color:#888;margin-bottom:4px}
+.metric-value{font-size:15px;font-weight:600;color:#222}
+.filters{padding:0 20px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filters select,.filters input{font-size:12px;padding:5px 8px;border-radius:6px;border:1px solid #ddd;background:#fff;color:#222;height:30px}
+.filters input[type=text]{width:200px}
+.filter-reset{font-size:12px;color:#cc0000;cursor:pointer;background:none;border:none;padding:5px 0}
+.filter-reset:hover{text-decoration:underline}
+.table-wrap{padding:0 20px 4px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
+thead th{background:#cc0000;color:#fff;padding:7px 8px;text-align:left;font-weight:600;font-size:10px;white-space:nowrap}
+tbody tr{border-bottom:1px solid #eee}
+tbody tr:hover{background:#fff5f5}
+tbody td{padding:6px 8px;color:#222;vertical-align:middle}
+.td-ell{max-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pill{display:inline-block;font-size:9px;padding:2px 6px;border-radius:999px;white-space:nowrap}
+.s-ok{background:#eaf3de;color:#3b6d11}
+.s-info{background:#e6f1fb;color:#185fa5}
+.s-err{background:#fcebeb;color:#a32d2d}
+.s-warn{background:#faeeda;color:#854f0b}
+.s-gray{background:#f0f0f0;color:#666}
+.link-a{color:#cc0000;font-size:13px;text-decoration:none}
+.link-a:hover{text-decoration:underline}
+.pagination{display:flex;align-items:center;justify-content:space-between;padding:8px 20px 14px;font-size:11px;color:#888}
+.pagination button{background:#fff;border:1px solid #ddd;border-radius:6px;padding:4px 12px;cursor:pointer;font-size:12px;color:#222}
+.pagination button:hover:not(:disabled){background:#f5f5f5}
+.pagination button:disabled{opacity:.4;cursor:default}
+.prop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;padding:14px 20px}
+.prop-card{background:#fff;border:1px solid #eee;border-radius:10px;padding:14px;border-top:3px solid #cc0000;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.prop-card:hover{border-top-color:#990000;box-shadow:0 2px 6px rgba(0,0,0,0.12)}
+.prop-card-name{font-size:12px;font-weight:600;color:#222;margin-bottom:8px;line-height:1.3}
+.prop-row{display:flex;justify-content:space-between;font-size:11px;color:#888;margin-bottom:3px}
+.prop-val{font-weight:600;color:#222}
+.prop-detail{padding:14px 20px 20px;display:none}
+.back-btn{background:#fff;border:1px solid #cc0000;color:#cc0000;font-size:11px;padding:4px 12px;border-radius:6px;cursor:pointer;margin-bottom:12px}
+.back-btn:hover{background:#fff5f5}
+.detail-title{font-size:14px;font-weight:600;color:#cc0000;margin-bottom:10px}
+.detail-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.dm{background:#fff5f5;border-radius:6px;padding:10px;text-align:center;border:1px solid #f7c1c1}
+.dm-label{font-size:10px;color:#888;margin-bottom:3px}
+.dm-value{font-size:14px;font-weight:600;color:#cc0000}
+.charts-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px 20px 20px}
+.chart-card{background:#fff;border:1px solid #eee;border-radius:10px;padding:14px;border-top:3px solid #cc0000;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.chart-title{font-size:11px;font-weight:600;color:#888;margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em}
+tfoot tr td{background:#fff5f5;font-weight:600;color:#cc0000;padding:6px 8px;font-size:11px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-star">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="#cc0000"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+  </div>
+  <div>
+    <div class="hdr-title">Dep. João Daniel — PT/SE · Mandato Popular</div>
+    <div class="hdr-sub" id="hdr-sub">Carregando dados...</div>
+  </div>
+  <div style="margin-left:auto;display:flex;align-items:center">
+    <button class="refresh-btn" onclick="loadData()">↺ Atualizar</button>
+    <span class="hdr-badge">Somente leitura</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('emendas',this)">Emendas</button>
+  <button class="tab" onclick="switchTab('proponentes',this)">Proponentes</button>
+  <button class="tab" onclick="switchTab('graficos',this)">Gráficos</button>
+</div>
+
+<div id="tab-emendas">
+  <div id="loading-msg" class="loading">Conectando ao Google Sheets...</div>
+  <div id="erro-msg" class="erro" style="display:none"></div>
+  <div id="painel" style="display:none">
+    <div class="metrics" id="metrics"></div>
+    <div class="filters">
+      <select id="f-ano"><option value="">Todos os anos</option></select>
+      <select id="f-orgao"><option value="">Todos os órgãos</option></select>
+      <select id="f-mun"><option value="">Todos os municípios</option></select>
+      <select id="f-tipo"><option value="">Todos os tipos</option></select>
+      <select id="f-rp"><option value="">Todos os RPs</option></select>
+      <input type="text" id="f-busca" placeholder="Buscar objeto ou proponente…"/>
+      <button class="filter-reset" onclick="resetFilters()">↺ Limpar filtros</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <colgroup>
+          <col style="width:80px"><col style="width:48px"><col style="width:75px">
+          <col style="width:38px"><col style="width:70px">
+          <col style="width:200px"><col style="width:150px"><col style="width:100px">
+          <col style="width:120px">
+          <col style="width:90px"><col style="width:90px"><col style="width:90px">
+          <col style="width:28px">
+        </colgroup>
+        <thead><tr>
+          <th>Nº Emenda</th><th>Ano</th><th>Órgão</th><th>RP</th><th>Tipo</th>
+          <th>Objeto</th><th>Proponente</th><th>Município</th><th>Situação</th>
+          <th style="text-align:right">Indicado R$</th>
+          <th style="text-align:right">Empenhado R$</th>
+          <th style="text-align:right">Pago R$</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="pagination">
+      <span id="pag-info"></span>
+      <div style="display:flex;gap:6px;align-items:center">
+        <button id="btn-prev" onclick="changePage(-1)">‹ Anterior</button>
+        <button id="btn-next" onclick="changePage(1)">Próxima ›</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-proponentes" style="display:none">
+  <div style="padding:14px 20px 0">
+    <input type="text" id="prop-busca" placeholder="Buscar proponente…" oninput="renderProponentes()" style="width:100%;font-size:12px;padding:8px 12px;border-radius:6px;border:1px solid #ddd"/>
+  </div>
+  <div id="prop-list"><div class="prop-grid" id="prop-grid"></div></div>
+  <div class="prop-detail" id="prop-detail">
+    <button class="back-btn" onclick="closeDetail()">← Voltar para lista</button>
+    <div class="detail-title" id="detail-name"></div>
+    <div class="detail-metrics" id="detail-metrics"></div>
+    <div class="table-wrap">
+      <table>
+        <colgroup><col style="width:80px"><col style="width:48px"><col style="width:75px"><col style="width:200px"><col style="width:100px"><col style="width:90px"><col style="width:90px"><col style="width:120px"><col style="width:28px"></colgroup>
+        <thead><tr><th>Nº Emenda</th><th>Ano</th><th>Órgão</th><th>Objeto</th><th>Município</th><th style="text-align:right">Indicado</th><th style="text-align:right">Empenhado</th><th>Situação</th><th></th></tr></thead>
+        <tbody id="detail-tbody"></tbody>
+        <tfoot id="detail-tfoot"></tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="tab-graficos" style="display:none">
+  <div class="charts-wrap">
+    <div class="chart-card"><div class="chart-title">Indicado por órgão (top 8)</div><div style="position:relative;height:220px"><canvas id="cOrgao"></canvas></div></div>
+    <div class="chart-card"><div class="chart-title">Indicado por ano</div><div style="position:relative;height:220px"><canvas id="cAno"></canvas></div></div>
+    <div class="chart-card"><div class="chart-title">Distribuição por tipo de emenda</div><div style="position:relative;height:220px"><canvas id="cTipo"></canvas></div></div>
+    <div class="chart-card"><div class="chart-title">Top 10 municípios por valor indicado</div><div style="position:relative;height:220px"><canvas id="cMun"></canvas></div></div>
+  </div>
+</div>
+
+<script>
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyPzLZWMISk_jtybnA_-mDoIFeXTER2L8oh2QHt1lrnHaF3OFU4czZDqssOX_Nf5SRZTw/exec';
+const PAGE=20;
+let D=[],filtered=[],page=1;
+let chartO,chartA,chartT,chartM,chartsRendered=false;
+
+const FMT=v=>isNaN(v)||v===''?'—':'R$ '+Math.round(v).toLocaleString('pt-BR');
+const NUM=v=>(!v&&v!==0)||isNaN(v)?'—':Math.round(v).toLocaleString('pt-BR');
+const N=v=>{
+  if(v===null||v===undefined||v==='')return 0;
+  if(typeof v==='number')return isNaN(v)?0:v;
+  const s=String(v).trim();
+  // Remove R$, espaços e caracteres não numéricos exceto , e .
+  const clean=s.replace(/[R$\s]/g,'');
+  // Formato brasileiro: 1.234.567,89
+  if(/^\d{1,3}(\.\d{3})*(,\d+)?$/.test(clean)){
+    return parseFloat(clean.replace(/\./g,'').replace(',','.'))||0;
+  }
+  // Formato com vírgula como milhar: 1,234,567.89
+  if(/^\d{1,3}(,\d{3})*(\.\d+)?$/.test(clean)){
+    return parseFloat(clean.replace(/,/g,''))||0;
+  }
+  // Número puro
+  return parseFloat(clean.replace(',','.'))||0;
+};
+
+function sC(s){
+  if(!s)return 's-gray';
+  const l=s.toLowerCase();
+  if(l.includes('conclu')||l.includes('pago')||l.includes('aprovad'))return 's-ok';
+  if(l.includes('execu')||l.includes('anális')||l.includes('analise')||l.includes('aguardando')||l.includes('iniciada')||l.includes('comprov')||l.includes('empenhad')||l.includes('complement'))return 's-info';
+  if(l.includes('anulado')||l.includes('rescindido')||l.includes('rejeit')||l.includes('cancelad'))return 's-err';
+  return 's-warn';
+}
+
+function showErro(msg){
+  document.getElementById('loading-msg').style.display='none';
+  document.getElementById('painel').style.display='none';
+  const el=document.getElementById('erro-msg');
+  el.style.display='block';
+  el.innerHTML=msg;
+}
+
+function loadData(){
+  document.getElementById('loading-msg').style.display='block';
+  document.getElementById('erro-msg').style.display='none';
+  document.getElementById('painel').style.display='none';
+  document.getElementById('hdr-sub').textContent='Carregando dados...';
+
+  const cbName='_cb_'+Date.now();
+  const timeout=setTimeout(()=>{
+    delete window[cbName];
+    showErro('Tempo esgotado. Verifique sua conexão e clique em ↺ Atualizar.');
+  },15000);
+
+  window[cbName]=function(rows){
+    clearTimeout(timeout);
+    delete window[cbName];
+    try{
+      D=rows.map(r=>({
+        nemenda:String(r['Nº Emenda']||''),
+        ano:String(r['Ano Emenda']||''),
+        orgao:String(r['ORGÃO']||'').trim(),
+        link:String(r['Link']||''),
+        situacao:String(r['Situação']||''),
+        objeto:String(r['Objeto']||''),
+        proponente:String(r['Proponente']||''),
+        municipio:String(r['Município']||''),
+        rp:String(r['RP']||''),
+        tipo:String(r['Tipo Emenda']||''),
+        indicado:N(r['Indicado']),
+        empenhado:N(r['Empenhado']),
+        pago:N(r['Pago']),
+      }));
+      filtered=[...D];
+      document.getElementById('loading-msg').style.display='none';
+      document.getElementById('painel').style.display='block';
+      const now=new Date().toLocaleString('pt-BR');
+      document.getElementById('hdr-sub').textContent='Painel de Emendas Parlamentares · '+D.length+' registros · atualizado '+now;
+      populateFilters();render();renderProponentes();chartsRendered=false;
+    }catch(e){showErro('Erro ao processar dados: '+e.message);}
+  };
+
+  const s=document.createElement('script');
+  s.src=SCRIPT_URL+'?callback='+cbName;
+  s.onerror=()=>{
+    clearTimeout(timeout);delete window[cbName];
+    showErro('Erro ao conectar. Verifique sua conexão e clique em ↺ Atualizar.');
+  };
+  document.head.appendChild(s);
+}
+
+function populateFilters(){
+  const sel=(id,arr)=>{
+    const el=document.getElementById(id);
+    while(el.options.length>1)el.remove(1);
+    arr.forEach(v=>{if(!v)return;const o=document.createElement('option');o.value=v;o.textContent=v;el.appendChild(o);});
+  };
+  sel('f-ano',[...new Set(D.map(r=>r.ano))].sort());
+  sel('f-orgao',[...new Set(D.map(r=>r.orgao))].sort());
+  sel('f-mun',[...new Set(D.map(r=>r.municipio))].sort());
+  sel('f-tipo',[...new Set(D.map(r=>r.tipo))].sort());
+  sel('f-rp',[...new Set(D.map(r=>r.rp))].sort());
+}
+
+function applyFilters(){
+  const ano=document.getElementById('f-ano').value;
+  const org=document.getElementById('f-orgao').value;
+  const mun=document.getElementById('f-mun').value;
+  const tipo=document.getElementById('f-tipo').value;
+  const rp=document.getElementById('f-rp').value;
+  const q=document.getElementById('f-busca').value.toLowerCase();
+  filtered=D.filter(r=>{
+    if(ano&&r.ano!==ano)return false;
+    if(org&&r.orgao!==org)return false;
+    if(mun&&r.municipio!==mun)return false;
+    if(tipo&&r.tipo!==tipo)return false;
+    if(rp&&r.rp!==rp)return false;
+    if(q&&!r.objeto.toLowerCase().includes(q)&&!r.proponente.toLowerCase().includes(q))return false;
+    return true;
+  });
+  page=1;render();
+}
+
+function resetFilters(){
+  ['f-ano','f-orgao','f-mun','f-tipo','f-rp'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-busca').value='';
+  filtered=[...D];page=1;render();
+}
+
+function render(){
+  const tI=filtered.reduce((s,r)=>s+r.indicado,0);
+  const tE=filtered.reduce((s,r)=>s+r.empenhado,0);
+  const tP=filtered.reduce((s,r)=>s+r.pago,0);
+  const pct=tI>0?Math.round(tP/tI*100):0;
+  document.getElementById('metrics').innerHTML=
+    '<div class="metric"><div class="metric-label">Registros</div><div class="metric-value">'+filtered.length+' <span style="font-size:11px;color:#888">de '+D.length+'</span></div></div>'+
+    '<div class="metric"><div class="metric-label">Total indicado</div><div class="metric-value" style="font-size:13px">'+FMT(tI)+'</div></div>'+
+    '<div class="metric"><div class="metric-label">Total empenhado</div><div class="metric-value" style="font-size:13px">'+FMT(tE)+'</div></div>'+
+    '<div class="metric"><div class="metric-label">Total pago · <span style="color:#cc0000">'+pct+'% exec.</span></div><div class="metric-value" style="font-size:13px;color:#cc0000">'+FMT(tP)+'</div></div>';
+
+  const s=(page-1)*PAGE,e=Math.min(s+PAGE,filtered.length);
+  document.getElementById('tbody').innerHTML=filtered.slice(s,e).map(r=>{
+    const lk=r.link?'<a class="link-a" href="'+r.link+'" target="_blank" title="Ver no TransfereGov">↗</a>':'';
+    return '<tr>'+
+      '<td style="font-size:10px">'+r.nemenda+'</td>'+
+      '<td>'+r.ano+'</td>'+
+      '<td style="font-size:10px">'+r.orgao+'</td>'+
+      '<td style="font-size:10px">'+r.rp+'</td>'+
+      '<td style="font-size:10px">'+r.tipo+'</td>'+
+      '<td class="td-ell" title="'+r.objeto+'">'+r.objeto+'</td>'+
+      '<td class="td-ell" title="'+r.proponente+'" style="font-size:10px">'+r.proponente+'</td>'+
+      '<td style="font-size:10px">'+r.municipio+'</td>'+
+      '<td><span class="pill '+sC(r.situacao)+'">'+( r.situacao||'—')+'</span></td>'+
+      '<td style="text-align:right;font-size:10px">'+NUM(r.indicado)+'</td>'+
+      '<td style="text-align:right;font-size:10px">'+NUM(r.empenhado)+'</td>'+
+      '<td style="text-align:right;font-size:10px">'+NUM(r.pago)+'</td>'+
+      '<td>'+lk+'</td>'+
+    '</tr>';
+  }).join('');
+  document.getElementById('pag-info').textContent=(s+1)+'–'+e+' de '+filtered.length+' registros';
+  document.getElementById('btn-prev').disabled=page===1;
+  document.getElementById('btn-next').disabled=e>=filtered.length;
+}
+
+function changePage(d){page+=d;render();}
+
+function switchTab(name,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  ['emendas','proponentes','graficos'].forEach(n=>{
+    document.getElementById('tab-'+n).style.display=n===name?'block':'none';
+  });
+  if(name==='proponentes')renderProponentes();
+  if(name==='graficos'&&!chartsRendered&&D.length>0){renderCharts();chartsRendered=true;}
+}
+
+function renderProponentes(){
+  if(!D.length)return;
+  const q=(document.getElementById('prop-busca').value||'').toLowerCase();
+  const map={};
+  D.forEach(r=>{
+    const k=r.proponente;if(!k)return;
+    if(!map[k])map[k]={name:k,qtd:0,ind:0,emp:0,pago:0,mun:new Set()};
+    map[k].qtd++;map[k].ind+=r.indicado;map[k].emp+=r.empenhado;map[k].pago+=r.pago;map[k].mun.add(r.municipio);
+  });
+  const list=Object.values(map).filter(p=>!q||p.name.toLowerCase().includes(q)).sort((a,b)=>b.ind-a.ind);
+  document.getElementById('prop-list').style.display='block';
+  document.getElementById('prop-detail').style.display='none';
+  document.getElementById('prop-grid').innerHTML=list.map(p=>
+    '<div class="prop-card" onclick="openDetail(\''+p.name.replace(/'/g,"\\'")+'\')">' +
+    '<div class="prop-card-name">'+p.name+'</div>'+
+    '<div class="prop-row"><span>Emendas</span><span class="prop-val">'+p.qtd+'</span></div>'+
+    '<div class="prop-row"><span>Municípios</span><span class="prop-val">'+p.mun.size+'</span></div>'+
+    '<div class="prop-row"><span>Indicado</span><span class="prop-val" style="color:#cc0000">'+FMT(p.ind)+'</span></div>'+
+    '<div class="prop-row"><span>Pago</span><span class="prop-val">'+FMT(p.pago)+'</span></div>'+
+    '</div>').join('');
+}
+
+function openDetail(name){
+  const rows=D.filter(r=>r.proponente===name);
+  const tI=rows.reduce((s,r)=>s+r.indicado,0);
+  const tE=rows.reduce((s,r)=>s+r.empenhado,0);
+  const tP=rows.reduce((s,r)=>s+r.pago,0);
+  document.getElementById('detail-name').textContent=name;
+  document.getElementById('detail-metrics').innerHTML=
+    '<div class="dm"><div class="dm-label">Emendas</div><div class="dm-value">'+rows.length+'</div></div>'+
+    '<div class="dm"><div class="dm-label">Total indicado</div><div class="dm-value" style="font-size:12px">'+FMT(tI)+'</div></div>'+
+    '<div class="dm"><div class="dm-label">Total pago</div><div class="dm-value" style="font-size:12px">'+FMT(tP)+'</div></div>';
+  document.getElementById('detail-tbody').innerHTML=rows.map(r=>{
+    const lk=r.link?'<a class="link-a" href="'+r.link+'" target="_blank">↗</a>':'';
+    return '<tr>'+
+      '<td style="font-size:10px">'+r.nemenda+'</td>'+
+      '<td>'+r.ano+'</td>'+
+      '<td style="font-size:10px">'+r.orgao+'</td>'+
+      '<td class="td-ell" title="'+r.objeto+'">'+r.objeto+'</td>'+
+      '<td style="font-size:10px">'+r.municipio+'</td>'+
+      '<td style="text-align:right;font-size:10px">'+NUM(r.indicado)+'</td>'+
+      '<td style="text-align:right;font-size:10px">'+NUM(r.empenhado)+'</td>'+
+      '<td><span class="pill '+sC(r.situacao)+'">'+( r.situacao||'—')+'</span></td>'+
+      '<td>'+lk+'</td>'+
+    '</tr>';
+  }).join('');
+  document.getElementById('detail-tfoot').innerHTML=
+    '<tr><td colspan="5">TOTAL</td>'+
+    '<td style="text-align:right">'+NUM(tI)+'</td>'+
+    '<td style="text-align:right">'+NUM(tE)+'</td>'+
+    '<td colspan="2"></td></tr>';
+  document.getElementById('prop-list').style.display='none';
+  document.getElementById('prop-detail').style.display='block';
+}
+
+function closeDetail(){
+  document.getElementById('prop-detail').style.display='none';
+  document.getElementById('prop-list').style.display='block';
+}
+
+function renderCharts(){
+  const txt='#666';const grid='rgba(0,0,0,0.07)';
+  const sc={x:{ticks:{color:txt,font:{size:9}},grid:{color:grid}},y:{ticks:{color:txt,font:{size:9},callback:v=>'R$'+(v/1e6).toFixed(1)+'M'},grid:{color:grid}}};
+  const orgMap={};D.forEach(r=>{orgMap[r.orgao]=(orgMap[r.orgao]||0)+r.indicado;});
+  const top8=Object.entries(orgMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  if(chartO)chartO.destroy();
+  chartO=new Chart(document.getElementById('cOrgao'),{type:'bar',data:{labels:top8.map(x=>x[0]),datasets:[{data:top8.map(x=>x[1]),backgroundColor:'#cc000099',borderColor:'#990000',borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{...sc,x:{ticks:{color:txt,font:{size:9},maxRotation:35},grid:{color:grid}}}}});
+  const anoMap={};D.forEach(r=>{anoMap[r.ano]=(anoMap[r.ano]||0)+r.indicado;});
+  const anos=Object.keys(anoMap).sort();
+  if(chartA)chartA.destroy();
+  chartA=new Chart(document.getElementById('cAno'),{type:'bar',data:{labels:anos,datasets:[{data:anos.map(a=>anoMap[a]),backgroundColor:'#cc000099',borderColor:'#990000',borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{...sc,x:{ticks:{color:txt,font:{size:9},autoSkip:false,maxRotation:45},grid:{color:grid}}}}});
+  const tipoMap={};D.forEach(r=>{const k=r.tipo||'Outro';tipoMap[k]=(tipoMap[k]||0)+r.indicado;});
+  const tipos=Object.entries(tipoMap).sort((a,b)=>b[1]-a[1]);
+  if(chartT)chartT.destroy();
+  chartT=new Chart(document.getElementById('cTipo'),{type:'doughnut',data:{labels:tipos.map(x=>x[0]),datasets:[{data:tipos.map(x=>x[1]),backgroundColor:['#cc0000','#990000','#e05555','#f5a0a0','#555','#888','#bbb'],borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:txt,font:{size:9},boxWidth:10}}}}});
+  const munMap={};D.forEach(r=>{munMap[r.municipio]=(munMap[r.municipio]||0)+r.indicado;});
+  const top10=Object.entries(munMap).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  if(chartM)chartM.destroy();
+  chartM=new Chart(document.getElementById('cMun'),{type:'bar',data:{labels:top10.map(x=>x[0]),datasets:[{data:top10.map(x=>x[1]),backgroundColor:'#cc000099',borderColor:'#990000',borderWidth:1}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:txt,font:{size:9},callback:v=>'R$'+(v/1e6).toFixed(1)+'M'},grid:{color:grid}},y:{ticks:{color:txt,font:{size:9}},grid:{color:grid}}}}});
+}
+
+['f-ano','f-orgao','f-mun','f-tipo','f-rp'].forEach(id=>document.getElementById(id).addEventListener('change',applyFilters));
+document.getElementById('f-busca').addEventListener('input',applyFilters);
+loadData();
+</script>
+</body>
+</html>
