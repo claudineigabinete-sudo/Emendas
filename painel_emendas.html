@@ -236,7 +236,7 @@ function loadData(){
         objeto:String(r['Objeto']||''),
         proponente:String(r['Proponente']||''),
         municipio:String(r['Município']||''),
-        rp:String(r['RP']||'').trim().replace(/\s+/g,''),
+        rp:String(r['RP']||'').trim().replace(/[^a-zA-Z0-9]/g,''),
         tipo:String(r['Tipo Emenda']||''),
         indicado:N(r['Indicado']),
         empenhado:N(r['Empenhado']),
