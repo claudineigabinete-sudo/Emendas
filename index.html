@@ -5,25 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emendas · João Daniel PT/SE</title>
 <style>
-body{font-family:Arial,sans-serif;background:#f2f2f7;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}
-.box{background:#fff;border-radius:16px;padding:32px 24px;max-width:340px;width:90%;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.1)}
-.estrela{width:56px;height:56px;background:#cc0000;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
-h1{font-size:18px;color:#1c1c1e;margin-bottom:6px}
-p{font-size:13px;color:#888;margin-bottom:24px}
-a{display:block;padding:14px;border-radius:10px;text-decoration:none;font-size:15px;font-weight:600;margin-bottom:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:linear-gradient(135deg,#cc0000,#990000);min-height:100vh;display:flex;align-items:center;justify-content:center}
+.box{background:#fff;border-radius:16px;padding:32px 24px;max-width:340px;width:90%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
+.estrela{width:60px;height:60px;background:#cc0000;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+h1{font-size:20px;font-weight:700;color:#cc0000;margin-bottom:4px}
+.sub{font-size:13px;color:#888;margin-bottom:28px;line-height:1.5}
+a{display:block;padding:14px;border-radius:10px;text-decoration:none;font-size:15px;font-weight:600;margin-bottom:12px;transition:opacity .2s}
+a:hover{opacity:.85}
 .btn-assessoria{background:#cc0000;color:#fff}
-.btn-parlamentar{background:#f2f2f7;color:#cc0000;border:2px solid #cc0000}
+.btn-parlamentar{background:#f5f5f5;color:#cc0000;border:2px solid #cc0000}
+.footer{margin-top:20px;font-size:11px;color:#bbb}
 </style>
 </head>
 <body>
 <div class="box">
   <div class="estrela">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
   </div>
   <h1>Dep. João Daniel</h1>
-  <p>PT/SE · Mandato Popular<br>Acompanhamento de Emendas Parlamentares</p>
+  <div class="sub">PT/SE · Mandato Popular<br>Acompanhamento de Emendas Parlamentares</div>
   <a href="painel_emendas.html" class="btn-assessoria">📊 Painel da Assessoria</a>
   <a href="app_joao_daniel.html" class="btn-parlamentar">📱 App do Parlamentar</a>
+  <div class="footer">Mandato Popular · 2015–2026</div>
 </div>
 </body>
 </html>
