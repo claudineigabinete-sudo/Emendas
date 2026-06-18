@@ -3,18 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Emendas Parlamentares — Dep. João Daniel PT/SE</title>
+<title>Emendas · João Daniel PT/SE</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f5f5f5;color:#222}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#cc0000,#990000)}
+.login-box{background:#fff;border-radius:16px;padding:32px 28px;width:100%;max-width:360px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
+.login-logo{text-align:center;margin-bottom:20px}
+.login-star{width:56px;height:56px;background:#cc0000;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.login-titulo{font-size:18px;font-weight:700;color:#cc0000;text-align:center}
+.login-sub{font-size:12px;color:#888;text-align:center;margin-top:4px;margin-bottom:24px}
+.login-field{margin-bottom:14px}
+.login-field label{display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:5px}
+.login-field input{width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;outline:none;transition:border .2s}
+.login-field input:focus{border-color:#cc0000}
+.login-btn{width:100%;padding:12px;background:#cc0000;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;transition:background .2s}
+.login-btn:hover{background:#990000}
+.login-erro{background:#fcebeb;color:#a32d2d;border-radius:8px;padding:10px 12px;font-size:12px;margin-top:12px;display:none;text-align:center}
+.login-cadastro{text-align:center;margin-top:16px;font-size:12px;color:#888}
+.login-cadastro a{color:#cc0000;cursor:pointer;text-decoration:none;font-weight:600}
+.login-cadastro a:hover{text-decoration:underline}
+
+/* CADASTRO */
+.cadastro-box{background:#fff;border-radius:16px;padding:32px 28px;width:100%;max-width:360px;box-shadow:0 8px 32px rgba(0,0,0,0.2);display:none}
+.cadastro-titulo{font-size:18px;font-weight:700;color:#cc0000;text-align:center;margin-bottom:4px}
+.cadastro-sub{font-size:12px;color:#888;text-align:center;margin-bottom:20px}
+.cadastro-ok{background:#eaf3de;color:#3b6d11;border-radius:8px;padding:12px;font-size:13px;margin-top:12px;display:none;text-align:center;line-height:1.5}
+
+/* HEADER */
 .hdr{background:linear-gradient(135deg,#cc0000 60%,#990000 100%);padding:14px 20px;display:flex;align-items:center;gap:14px}
 .hdr-star{width:36px;height:36px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .hdr-title{color:#fff;font-size:15px;font-weight:600}
-.hdr-sub{color:rgba(255,255,255,0.8);font-size:11px;margin-top:2px}
-.hdr-badge{margin-left:auto;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:11px;padding:4px 10px;border-radius:999px;white-space:nowrap}
-.refresh-btn{background:none;border:1px solid rgba(255,255,255,0.5);color:#fff;font-size:11px;padding:4px 12px;border-radius:6px;cursor:pointer;margin-right:8px}
-.refresh-btn:hover{background:rgba(255,255,255,0.15)}
+.hdr-sub{color:rgba(255,255,255,0.75);font-size:11px;margin-top:2px}
+.hdr-user{margin-left:auto;display:flex;align-items:center;gap:8px}
+.hdr-username{color:rgba(255,255,255,0.85);font-size:11px}
+.hdr-logout{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:11px;padding:4px 10px;border-radius:999px;cursor:pointer}
+.hdr-logout:hover{background:rgba(255,255,255,0.25)}
+
+/* PAINEL */
 .tabs{display:flex;border-bottom:2px solid #cc0000;background:#fff;padding:0 20px}
 .tab{padding:10px 18px;font-size:13px;font-weight:500;cursor:pointer;color:#666;border-bottom:2px solid transparent;margin-bottom:-2px;background:none;border-left:none;border-right:none;border-top:none}
 .tab.active{color:#cc0000;border-bottom:2px solid #cc0000}
@@ -73,98 +102,150 @@ tfoot tr td{background:#fff5f5;font-weight:600;color:#cc0000;padding:6px 8px;fon
 </head>
 <body>
 
-<div class="hdr">
-  <div class="hdr-star">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="#cc0000"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+<!-- TELA DE LOGIN -->
+<div id="tela-login" class="login-wrap">
+  <div id="box-login" class="login-box">
+    <div class="login-logo">
+      <div class="login-star">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      </div>
+      <div class="login-titulo">Mandato Popular</div>
+      <div class="login-sub">Dep. João Daniel · PT/SE<br>Painel de Emendas Parlamentares</div>
+    </div>
+    <div class="login-field">
+      <label>Usuário</label>
+      <input type="text" id="login-usuario" placeholder="seu.usuario" onkeydown="if(event.key==='Enter')fazerLogin()"/>
+    </div>
+    <div class="login-field">
+      <label>Senha</label>
+      <input type="password" id="login-senha" placeholder="••••••••" onkeydown="if(event.key==='Enter')fazerLogin()"/>
+    </div>
+    <button class="login-btn" onclick="fazerLogin()">Entrar</button>
+    <div class="login-erro" id="login-erro"></div>
+    <div class="login-cadastro">Não tem acesso? <a onclick="mostrarCadastro()">Solicitar cadastro</a></div>
   </div>
-  <div>
-    <div class="hdr-title">Dep. João Daniel — PT/SE · Mandato Popular</div>
-    <div class="hdr-sub" id="hdr-sub">Carregando dados...</div>
-  </div>
-  <div style="margin-left:auto;display:flex;align-items:center">
-    <button class="refresh-btn" onclick="loadData()">↺ Atualizar</button>
-    <span class="hdr-badge">Somente leitura</span>
+
+  <div id="box-cadastro" class="cadastro-box">
+    <div class="cadastro-titulo">Solicitar Acesso</div>
+    <div class="cadastro-sub">Preencha os dados abaixo.<br>Seu acesso será liberado pelo administrador.</div>
+    <div class="login-field">
+      <label>Nome completo</label>
+      <input type="text" id="cad-nome" placeholder="Seu nome completo"/>
+    </div>
+    <div class="login-field">
+      <label>Usuário</label>
+      <input type="text" id="cad-usuario" placeholder="Escolha um usuário (sem espaços)"/>
+    </div>
+    <div class="login-field">
+      <label>Senha</label>
+      <input type="password" id="cad-senha" placeholder="Escolha uma senha"/>
+    </div>
+    <div class="login-field">
+      <label>Confirmar senha</label>
+      <input type="password" id="cad-senha2" placeholder="Repita a senha"/>
+    </div>
+    <button class="login-btn" onclick="fazerCadastro()">Solicitar acesso</button>
+    <div class="login-erro" id="cad-erro"></div>
+    <div class="cadastro-ok" id="cad-ok"></div>
+    <div class="login-cadastro" style="margin-top:12px"><a onclick="mostrarLogin()">← Voltar para o login</a></div>
   </div>
 </div>
 
-<div class="tabs">
-  <button class="tab active" onclick="switchTab('emendas',this)">Emendas</button>
-  <button class="tab" onclick="switchTab('proponentes',this)">Proponentes</button>
-  <button class="tab" onclick="switchTab('graficos',this)">Gráficos</button>
-</div>
+<!-- PAINEL -->
+<div id="tela-painel" style="display:none">
+  <div class="hdr">
+    <div class="hdr-star">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#cc0000"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+    </div>
+    <div>
+      <div class="hdr-title">Dep. João Daniel — PT/SE · Mandato Popular</div>
+      <div class="hdr-sub" id="hdr-sub">Carregando dados...</div>
+    </div>
+    <div class="hdr-user">
+      <span class="hdr-username" id="hdr-username"></span>
+      <button class="hdr-logout" onclick="fazerLogout()">Sair</button>
+    </div>
+  </div>
 
-<div id="tab-emendas">
-  <div id="loading-msg" class="loading">Conectando ao Google Sheets...</div>
-  <div id="erro-msg" class="erro" style="display:none"></div>
-  <div id="painel" style="display:none">
-    <div class="metrics" id="metrics"></div>
-    <div class="filters">
-      <select id="f-ano"><option value="">Todos os anos</option></select>
-      <select id="f-orgao"><option value="">Todos os órgãos</option></select>
-      <select id="f-mun"><option value="">Todos os municípios</option></select>
-      <select id="f-tipo"><option value="">Todos os tipos</option></select>
-      <select id="f-rp"><option value="">Todos os RPs</option></select>
-      <input type="text" id="f-busca" placeholder="Buscar objeto ou proponente…"/>
-      <button class="filter-reset" onclick="resetFilters()">↺ Limpar filtros</button>
-      <button class="export-btn" onclick="exportarPDF()">⬇ Exportar PDF</button>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <colgroup>
-          <col style="width:80px"><col style="width:48px"><col style="width:75px">
-          <col style="width:38px"><col style="width:70px">
-          <col style="width:200px"><col style="width:150px"><col style="width:100px">
-          <col style="width:120px">
-          <col style="width:90px"><col style="width:90px"><col style="width:90px">
-          <col style="width:28px">
-        </colgroup>
-        <thead><tr>
-          <th>Nº Emenda</th><th>Ano</th><th>Órgão</th><th>RP</th><th>Tipo</th>
-          <th>Objeto</th><th>Proponente</th><th>Município</th><th>Situação</th>
-          <th style="text-align:right">Indicado R$</th>
-          <th style="text-align:right">Empenhado R$</th>
-          <th style="text-align:right">Pago R$</th>
-          <th></th>
-        </tr></thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </div>
-    <div class="pagination">
-      <span id="pag-info"></span>
-      <div style="display:flex;gap:6px;align-items:center">
-        <button id="btn-prev" onclick="changePage(-1)">‹ Anterior</button>
-        <button id="btn-next" onclick="changePage(1)">Próxima ›</button>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('emendas',this)">Emendas</button>
+    <button class="tab" onclick="switchTab('proponentes',this)">Proponentes</button>
+    <button class="tab" onclick="switchTab('graficos',this)">Gráficos</button>
+  </div>
+
+  <div id="tab-emendas">
+    <div id="loading-msg" class="loading">Conectando ao Google Sheets...</div>
+    <div id="erro-msg" class="erro" style="display:none"></div>
+    <div id="painel" style="display:none">
+      <div class="metrics" id="metrics"></div>
+      <div class="filters">
+        <select id="f-ano"><option value="">Todos os anos</option></select>
+        <select id="f-orgao"><option value="">Todos os órgãos</option></select>
+        <select id="f-mun"><option value="">Todos os municípios</option></select>
+        <select id="f-tipo"><option value="">Todos os tipos</option></select>
+        <select id="f-rp"><option value="">Todos os RPs</option></select>
+        <input type="text" id="f-busca" placeholder="Buscar objeto ou proponente…"/>
+        <button class="filter-reset" onclick="resetFilters()">↺ Limpar filtros</button>
+        <button class="export-btn" onclick="exportarPDF()">⬇ Exportar PDF</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <colgroup>
+            <col style="width:80px"><col style="width:48px"><col style="width:75px">
+            <col style="width:38px"><col style="width:70px">
+            <col style="width:200px"><col style="width:150px"><col style="width:100px">
+            <col style="width:120px">
+            <col style="width:90px"><col style="width:90px"><col style="width:90px">
+            <col style="width:28px">
+          </colgroup>
+          <thead><tr>
+            <th>Nº Emenda</th><th>Ano</th><th>Órgão</th><th>RP</th><th>Tipo</th>
+            <th>Objeto</th><th>Proponente</th><th>Município</th><th>Situação</th>
+            <th style="text-align:right">Indicado R$</th>
+            <th style="text-align:right">Empenhado R$</th>
+            <th style="text-align:right">Pago R$</th>
+            <th></th>
+          </tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <span id="pag-info"></span>
+        <div style="display:flex;gap:6px;align-items:center">
+          <button id="btn-prev" onclick="changePage(-1)">‹ Anterior</button>
+          <button id="btn-next" onclick="changePage(1)">Próxima ›</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div id="tab-proponentes" style="display:none">
-  <div style="padding:14px 20px 0">
-    <input type="text" id="prop-busca" placeholder="Buscar proponente…" oninput="renderProponentes()" style="width:100%;font-size:12px;padding:8px 12px;border-radius:6px;border:1px solid #ddd"/>
-  </div>
-  <div id="prop-list"><div class="prop-grid" id="prop-grid"></div></div>
-  <div class="prop-detail" id="prop-detail">
-    <button class="back-btn" onclick="closeDetail()">← Voltar para lista</button>
-    <div class="detail-title" id="detail-name"></div>
-    <div class="detail-metrics" id="detail-metrics"></div>
-    <div class="table-wrap">
-      <table>
-        <colgroup><col style="width:80px"><col style="width:48px"><col style="width:75px"><col style="width:200px"><col style="width:100px"><col style="width:90px"><col style="width:90px"><col style="width:120px"><col style="width:28px"></colgroup>
-        <thead><tr><th>Nº Emenda</th><th>Ano</th><th>Órgão</th><th>Objeto</th><th>Município</th><th style="text-align:right">Indicado</th><th style="text-align:right">Empenhado</th><th>Situação</th><th></th></tr></thead>
-        <tbody id="detail-tbody"></tbody>
-        <tfoot id="detail-tfoot"></tfoot>
-      </table>
+  <div id="tab-proponentes" style="display:none">
+    <div style="padding:14px 20px 0">
+      <input type="text" id="prop-busca" placeholder="Buscar proponente…" oninput="renderProponentes()" style="width:100%;font-size:12px;padding:8px 12px;border-radius:6px;border:1px solid #ddd"/>
+    </div>
+    <div id="prop-list"><div class="prop-grid" id="prop-grid"></div></div>
+    <div class="prop-detail" id="prop-detail">
+      <button class="back-btn" onclick="closeDetail()">← Voltar para lista</button>
+      <div class="detail-title" id="detail-name"></div>
+      <div class="detail-metrics" id="detail-metrics"></div>
+      <div class="table-wrap">
+        <table>
+          <colgroup><col style="width:80px"><col style="width:48px"><col style="width:75px"><col style="width:200px"><col style="width:100px"><col style="width:90px"><col style="width:90px"><col style="width:120px"><col style="width:28px"></colgroup>
+          <thead><tr><th>Nº Emenda</th><th>Ano</th><th>Órgão</th><th>Objeto</th><th>Município</th><th style="text-align:right">Indicado</th><th style="text-align:right">Empenhado</th><th>Situação</th><th></th></tr></thead>
+          <tbody id="detail-tbody"></tbody>
+          <tfoot id="detail-tfoot"></tfoot>
+        </table>
+      </div>
     </div>
   </div>
-</div>
 
-<div id="tab-graficos" style="display:none">
-  <div class="charts-wrap">
-    <div class="chart-card"><div class="chart-title">Indicado por órgão (top 8)</div><div style="position:relative;height:220px"><canvas id="cOrgao"></canvas></div></div>
-    <div class="chart-card"><div class="chart-title">Indicado por ano</div><div style="position:relative;height:220px"><canvas id="cAno"></canvas></div></div>
-    <div class="chart-card"><div class="chart-title">Distribuição por tipo de emenda</div><div style="position:relative;height:220px"><canvas id="cTipo"></canvas></div></div>
-    <div class="chart-card"><div class="chart-title">Top 10 municípios por valor indicado</div><div style="position:relative;height:220px"><canvas id="cMun"></canvas></div></div>
+  <div id="tab-graficos" style="display:none">
+    <div class="charts-wrap">
+      <div class="chart-card"><div class="chart-title">Indicado por órgão (top 8)</div><div style="position:relative;height:220px"><canvas id="cOrgao"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">Indicado por ano</div><div style="position:relative;height:220px"><canvas id="cAno"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">Distribuição por tipo de emenda</div><div style="position:relative;height:220px"><canvas id="cTipo"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">Top 10 municípios por valor indicado</div><div style="position:relative;height:220px"><canvas id="cMun"></canvas></div></div>
+    </div>
   </div>
 </div>
 
@@ -173,25 +254,17 @@ const SCRIPT_URL='https://script.google.com/macros/s/AKfycbxgMJcm7x2SyQlRrfnx-zF
 const PAGE=20;
 let D=[],filtered=[],page=1;
 let chartO,chartA,chartT,chartM,chartsRendered=false;
+let usuarioLogado='',nomeLogado='';
 
 const FMT=v=>isNaN(v)||v===''?'—':'R$ '+Math.round(v).toLocaleString('pt-BR');
 const NUM=v=>(!v&&v!==0)||isNaN(v)?'—':Math.round(v).toLocaleString('pt-BR');
 const N=v=>{
   if(v===null||v===undefined||v==='')return 0;
   if(typeof v==='number')return isNaN(v)?0:v;
-  const s=String(v).trim();
-  // Remove R$, espaços e caracteres não numéricos exceto , e .
-  const clean=s.replace(/[R$\s]/g,'');
-  // Formato brasileiro: 1.234.567,89
-  if(/^\d{1,3}(\.\d{3})*(,\d+)?$/.test(clean)){
-    return parseFloat(clean.replace(/\./g,'').replace(',','.'))||0;
-  }
-  // Formato com vírgula como milhar: 1,234,567.89
-  if(/^\d{1,3}(,\d{3})*(\.\d+)?$/.test(clean)){
-    return parseFloat(clean.replace(/,/g,''))||0;
-  }
-  // Número puro
-  return parseFloat(clean.replace(',','.'))||0;
+  const s=String(v).trim().replace(/[R$\s]/g,'');
+  if(/^\d{1,3}(\.\d{3})*(,\d+)?$/.test(s))return parseFloat(s.replace(/\./g,'').replace(',','.'))||0;
+  if(/^\d{1,3}(,\d{3})*(\.\d+)?$/.test(s))return parseFloat(s.replace(/,/g,''))||0;
+  return parseFloat(s.replace(',','.'))||0;
 };
 
 function sC(s){
@@ -203,30 +276,98 @@ function sC(s){
   return 's-warn';
 }
 
-function showErro(msg){
-  document.getElementById('loading-msg').style.display='none';
-  document.getElementById('painel').style.display='none';
-  const el=document.getElementById('erro-msg');
-  el.style.display='block';
-  el.innerHTML=msg;
+// ---- LOGIN ----
+function mostrarCadastro(){
+  document.getElementById('box-login').style.display='none';
+  document.getElementById('box-cadastro').style.display='block';
+}
+function mostrarLogin(){
+  document.getElementById('box-cadastro').style.display='none';
+  document.getElementById('box-login').style.display='block';
 }
 
+function fazerLogin(){
+  const usuario=document.getElementById('login-usuario').value.trim();
+  const senha=document.getElementById('login-senha').value;
+  const erroEl=document.getElementById('login-erro');
+  if(!usuario||!senha){erroEl.textContent='Preencha usuário e senha.';erroEl.style.display='block';return;}
+  erroEl.style.display='none';
+
+  const cbName='_login_'+Date.now();
+  window[cbName]=function(res){
+    delete window[cbName];
+    if(res.ok){
+      usuarioLogado=res.usuario;
+      nomeLogado=res.nome;
+      document.getElementById('tela-login').style.display='none';
+      document.getElementById('tela-painel').style.display='block';
+      document.getElementById('hdr-username').textContent='Olá, '+res.nome;
+      loadData();
+    } else {
+      erroEl.textContent=res.msg||'Erro ao fazer login.';
+      erroEl.style.display='block';
+    }
+  };
+  const s=document.createElement('script');
+  s.src=SCRIPT_URL+'?action=login&usuario='+encodeURIComponent(usuario)+'&senha='+encodeURIComponent(senha)+'&callback='+cbName;
+  document.head.appendChild(s);
+}
+
+function fazerCadastro(){
+  const nome=document.getElementById('cad-nome').value.trim();
+  const usuario=document.getElementById('cad-usuario').value.trim();
+  const senha=document.getElementById('cad-senha').value;
+  const senha2=document.getElementById('cad-senha2').value;
+  const erroEl=document.getElementById('cad-erro');
+  const okEl=document.getElementById('cad-ok');
+  erroEl.style.display='none';okEl.style.display='none';
+
+  if(!nome||!usuario||!senha||!senha2){erroEl.textContent='Preencha todos os campos.';erroEl.style.display='block';return;}
+  if(senha!==senha2){erroEl.textContent='As senhas não coincidem.';erroEl.style.display='block';return;}
+  if(usuario.includes(' ')){erroEl.textContent='Usuário não pode ter espaços.';erroEl.style.display='block';return;}
+
+  const cbName='_cad_'+Date.now();
+  window[cbName]=function(res){
+    delete window[cbName];
+    if(res.ok){
+      okEl.textContent=res.msg;
+      okEl.style.display='block';
+    } else {
+      erroEl.textContent=res.msg||'Erro ao cadastrar.';
+      erroEl.style.display='block';
+    }
+  };
+  const s=document.createElement('script');
+  s.src=SCRIPT_URL+'?action=cadastro&nome='+encodeURIComponent(nome)+'&usuario='+encodeURIComponent(usuario)+'&senha='+encodeURIComponent(senha)+'&callback='+cbName;
+  document.head.appendChild(s);
+}
+
+function fazerLogout(){
+  usuarioLogado='';nomeLogado='';
+  document.getElementById('tela-painel').style.display='none';
+  document.getElementById('tela-login').style.display='flex';
+  document.getElementById('login-usuario').value='';
+  document.getElementById('login-senha').value='';
+}
+
+// ---- DADOS ----
 function loadData(){
   document.getElementById('loading-msg').style.display='block';
   document.getElementById('erro-msg').style.display='none';
   document.getElementById('painel').style.display='none';
-  document.getElementById('hdr-sub').textContent='Carregando dados...';
 
-  const cbName='_cb_'+Date.now();
+  const cbName='_dados_'+Date.now();
   const timeout=setTimeout(()=>{
     delete window[cbName];
-    showErro('Tempo esgotado. Verifique sua conexão e clique em ↺ Atualizar.');
+    document.getElementById('loading-msg').style.display='none';
+    document.getElementById('erro-msg').style.display='block';
+    document.getElementById('erro-msg').textContent='Tempo esgotado. Tente novamente.';
   },15000);
 
-  window[cbName]=function(rows){
-    clearTimeout(timeout);
-    delete window[cbName];
+  window[cbName]=function(res){
+    clearTimeout(timeout);delete window[cbName];
     try{
+      const rows=res.dados||res;
       D=rows.map(r=>({
         nemenda:String(r['Nº Emenda']||''),
         ano:String(r['Ano Emenda']||''),
@@ -246,16 +387,22 @@ function loadData(){
       document.getElementById('loading-msg').style.display='none';
       document.getElementById('painel').style.display='block';
       const now=new Date().toLocaleString('pt-BR');
-      document.getElementById('hdr-sub').textContent='Painel de Emendas Parlamentares · '+D.length+' registros · atualizado '+now;
+      document.getElementById('hdr-sub').textContent='Painel de Emendas · '+D.length+' registros · atualizado '+now;
       populateFilters();render();renderProponentes();chartsRendered=false;
-    }catch(e){showErro('Erro ao processar dados: '+e.message);}
+    }catch(e){
+      document.getElementById('loading-msg').style.display='none';
+      document.getElementById('erro-msg').style.display='block';
+      document.getElementById('erro-msg').textContent='Erro ao processar dados: '+e.message;
+    }
   };
 
   const s=document.createElement('script');
-  s.src=SCRIPT_URL+'?callback='+cbName;
+  s.src=SCRIPT_URL+'?action=dados&callback='+cbName;
   s.onerror=()=>{
     clearTimeout(timeout);delete window[cbName];
-    showErro('Erro ao conectar. Verifique sua conexão e clique em ↺ Atualizar.');
+    document.getElementById('loading-msg').style.display='none';
+    document.getElementById('erro-msg').style.display='block';
+    document.getElementById('erro-msg').textContent='Erro de conexão.';
   };
   document.head.appendChild(s);
 }
@@ -426,109 +573,77 @@ function renderCharts(){
   chartM=new Chart(document.getElementById('cMun'),{type:'bar',data:{labels:top10.map(x=>x[0]),datasets:[{data:top10.map(x=>x[1]),backgroundColor:'#cc000099',borderColor:'#990000',borderWidth:1}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:txt,font:{size:9},callback:v=>'R$'+(v/1e6).toFixed(1)+'M'},grid:{color:grid}},y:{ticks:{color:txt,font:{size:9}},grid:{color:grid}}}}});
 }
 
-['f-ano','f-orgao','f-mun','f-tipo','f-rp'].forEach(id=>document.getElementById(id).addEventListener('change',applyFilters));
-document.getElementById('f-busca').addEventListener('input',applyFilters);
-loadData();
-
 function exportarPDF(){
   const tI=filtered.reduce((s,r)=>s+r.indicado,0);
   const tE=filtered.reduce((s,r)=>s+r.empenhado,0);
   const tP=filtered.reduce((s,r)=>s+r.pago,0);
   const pct=tI>0?Math.round(tP/tI*100):0;
-  const now=new Date().toLocaleString("pt-BR");
-
-  // Detectar filtros ativos
+  const now=new Date().toLocaleString('pt-BR');
   const filtrosAtivos=[];
-  const fAno=document.getElementById("f-ano").value;
-  const fOrg=document.getElementById("f-orgao").value;
-  const fMun=document.getElementById("f-mun").value;
-  const fTipo=document.getElementById("f-tipo").value;
-  const fRp=document.getElementById("f-rp").value;
-  const fBusca=document.getElementById("f-busca").value;
-  if(fAno)filtrosAtivos.push("Ano: "+fAno);
-  if(fOrg)filtrosAtivos.push("Órgão: "+fOrg);
-  if(fMun)filtrosAtivos.push("Município: "+fMun);
-  if(fTipo)filtrosAtivos.push("Tipo: "+fTipo);
-  if(fRp)filtrosAtivos.push("RP: "+fRp);
-  if(fBusca)filtrosAtivos.push("Busca: "+fBusca);
-
+  const fAno=document.getElementById('f-ano').value;
+  const fOrg=document.getElementById('f-orgao').value;
+  const fMun=document.getElementById('f-mun').value;
+  const fTipo=document.getElementById('f-tipo').value;
+  const fRp=document.getElementById('f-rp').value;
+  const fBusca=document.getElementById('f-busca').value;
+  if(fAno)filtrosAtivos.push('Ano: '+fAno);
+  if(fOrg)filtrosAtivos.push('Órgão: '+fOrg);
+  if(fMun)filtrosAtivos.push('Município: '+fMun);
+  if(fTipo)filtrosAtivos.push('Tipo: '+fTipo);
+  if(fRp)filtrosAtivos.push('RP: '+fRp);
+  if(fBusca)filtrosAtivos.push('Busca: '+fBusca);
   const linhas=filtered.map((r,i)=>{
-    const bg=i%2===0?"#ffffff":"#fafafa";
-    return `<tr style="background:${bg}">`+
-      `<td>${r.nemenda}</td>`+
-      `<td>${r.ano}</td>`+
-      `<td>${r.orgao}</td>`+
-      `<td>${r.rp}</td>`+
-      `<td>${r.tipo}</td>`+
-      `<td>${r.objeto}</td>`+
-      `<td>${r.proponente}</td>`+
-      `<td>${r.municipio}</td>`+
-      `<td>${r.situacao}</td>`+
-      `<td style="text-align:right">${r.indicado>0?"R$ "+Math.round(r.indicado).toLocaleString("pt-BR"):"—"}</td>`+
-      `<td style="text-align:right">${r.empenhado>0?"R$ "+Math.round(r.empenhado).toLocaleString("pt-BR"):"—"}</td>`+
-      `<td style="text-align:right">${r.pago>0?"R$ "+Math.round(r.pago).toLocaleString("pt-BR"):"—"}</td>`+
-    "</tr>";
-  }).join("");
-
-  const html=`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório de Emendas — Dep. João Daniel PT/SE</title>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Arial,sans-serif;font-size:10px;color:#222;padding:20px}
-    .cabecalho{display:flex;align-items:center;gap:12px;border-bottom:3px solid #cc0000;padding-bottom:12px;margin-bottom:14px}
-    .cab-estrela{width:40px;height:40px;background:#cc0000;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .cab-titulo{font-size:16px;font-weight:700;color:#cc0000}
-    .cab-sub{font-size:11px;color:#666;margin-top:2px}
-    .filtros{background:#fff5f5;border:1px solid #f7c1c1;border-radius:6px;padding:8px 12px;margin-bottom:12px;font-size:10px;color:#666}
-    .filtros strong{color:#cc0000}
-    .totais{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
-    .total{background:#f9f9f9;border:1px solid #eee;border-radius:6px;padding:8px 10px;border-left:3px solid #cc0000}
-    .total-label{font-size:9px;color:#888;margin-bottom:2px;text-transform:uppercase}
-    .total-value{font-size:12px;font-weight:700;color:#222}
-    .total-value.red{color:#cc0000}
-    table{width:100%;border-collapse:collapse;font-size:9px}
-    thead th{background:#cc0000;color:#fff;padding:6px 5px;text-align:left;font-weight:600;white-space:nowrap}
-    tbody td{padding:5px;border-bottom:1px solid #eee;vertical-align:top;word-break:break-word}
-    tfoot td{background:#fff5f5;color:#cc0000;font-weight:700;padding:6px 5px;border-top:2px solid #cc0000}
-    .rodape{margin-top:14px;font-size:9px;color:#aaa;text-align:right;border-top:1px solid #eee;padding-top:8px}
-    @media print{
-      body{padding:10px}
-      @page{margin:1cm;size:A4 landscape}
-    }
-  </style></head><body>
-  <div class="cabecalho">
-    <div class="cab-estrela"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
-    <div><div class="cab-titulo">Dep. João Daniel — PT/SE · Mandato Popular</div>
-    <div class="cab-sub">Relatório de Emendas Parlamentares · Gerado em ${now}</div></div>
-  </div>
-  ${filtrosAtivos.length?`<div class="filtros"><strong>Filtros aplicados:</strong> ${filtrosAtivos.join(" · ")}</div>`:""}
-  <div class="totais">
-    <div class="total"><div class="total-label">Registros</div><div class="total-value">${filtered.length} de ${D.length}</div></div>
-    <div class="total"><div class="total-label">Total indicado</div><div class="total-value">R$ ${Math.round(tI).toLocaleString("pt-BR")}</div></div>
-    <div class="total"><div class="total-label">Total empenhado</div><div class="total-value">R$ ${Math.round(tE).toLocaleString("pt-BR")}</div></div>
-    <div class="total"><div class="total-label">Total pago</div><div class="total-value red">R$ ${Math.round(tP).toLocaleString("pt-BR")} (${pct}%)</div></div>
-  </div>
-  <table>
-    <thead><tr>
-      <th>Nº Emenda</th><th>Ano</th><th>Órgão</th><th>RP</th><th>Tipo</th>
-      <th style="width:20%">Objeto</th><th style="width:15%">Proponente</th><th>Município</th><th>Situação</th>
-      <th>Indicado R$</th><th>Empenhado R$</th><th>Pago R$</th>
-    </tr></thead>
-    <tbody>${linhas}</tbody>
-    <tfoot><tr>
-      <td colspan="9">TOTAL (${filtered.length} registros)</td>
-      <td style="text-align:right">R$ ${Math.round(tI).toLocaleString("pt-BR")}</td>
-      <td style="text-align:right">R$ ${Math.round(tE).toLocaleString("pt-BR")}</td>
-      <td style="text-align:right">R$ ${Math.round(tP).toLocaleString("pt-BR")}</td>
-    </tr></tfoot>
-  </table>
-  <div class="rodape">Mandato Popular · Dep. João Daniel PT/SE · ${now}</div>
-  </body></html>`;
-
-  const win=window.open("","_blank");
+    const bg=i%2===0?'#ffffff':'#fafafa';
+    return '<tr style="background:'+bg+'">'+
+      '<td>'+r.nemenda+'</td><td>'+r.ano+'</td><td>'+r.orgao+'</td><td>'+r.rp+'</td><td>'+r.tipo+'</td>'+
+      '<td>'+r.objeto+'</td><td>'+r.proponente+'</td><td>'+r.municipio+'</td><td>'+r.situacao+'</td>'+
+      '<td style="text-align:right">'+(r.indicado>0?'R$ '+Math.round(r.indicado).toLocaleString('pt-BR'):'—')+'</td>'+
+      '<td style="text-align:right">'+(r.empenhado>0?'R$ '+Math.round(r.empenhado).toLocaleString('pt-BR'):'—')+'</td>'+
+      '<td style="text-align:right">'+(r.pago>0?'R$ '+Math.round(r.pago).toLocaleString('pt-BR'):'—')+'</td>'+
+    '</tr>';
+  }).join('');
+  const html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório de Emendas</title>'+
+  '<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;font-size:10px;color:#222;padding:20px}'+
+  '.cab{display:flex;align-items:center;gap:12px;border-bottom:3px solid #cc0000;padding-bottom:12px;margin-bottom:14px}'+
+  '.cab-star{width:40px;height:40px;background:#cc0000;border-radius:50%;display:flex;align-items:center;justify-content:center}'+
+  '.cab-titulo{font-size:16px;font-weight:700;color:#cc0000}.cab-sub{font-size:11px;color:#666;margin-top:2px}'+
+  '.filtros{background:#fff5f5;border:1px solid #f7c1c1;border-radius:6px;padding:8px 12px;margin-bottom:12px;font-size:10px;color:#666}'+
+  '.totais{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}'+
+  '.total{background:#f9f9f9;border:1px solid #eee;border-radius:6px;padding:8px 10px;border-left:3px solid #cc0000}'+
+  '.total-label{font-size:9px;color:#888;margin-bottom:2px;text-transform:uppercase}.total-value{font-size:12px;font-weight:700}'+
+  'table{width:100%;border-collapse:collapse;font-size:9px}'+
+  'thead th{background:#cc0000;color:#fff;padding:6px 5px;text-align:left;font-weight:600}'+
+  'tbody td{padding:5px;border-bottom:1px solid #eee;vertical-align:top;word-break:break-word}'+
+  'tfoot td{background:#fff5f5;color:#cc0000;font-weight:700;padding:6px 5px;border-top:2px solid #cc0000}'+
+  '.rodape{margin-top:14px;font-size:9px;color:#aaa;text-align:right;border-top:1px solid #eee;padding-top:8px}'+
+  '@media print{body{padding:10px}@page{margin:1cm;size:A4 landscape}}</style></head><body>'+
+  '<div class="cab"><div class="cab-star"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>'+
+  '<div><div class="cab-titulo">Dep. João Daniel — PT/SE · Mandato Popular</div>'+
+  '<div class="cab-sub">Relatório de Emendas Parlamentares · Gerado por '+nomeLogado+' em '+now+'</div></div></div>'+
+  (filtrosAtivos.length?'<div class="filtros"><strong>Filtros:</strong> '+filtrosAtivos.join(' · ')+'</div>':'')+
+  '<div class="totais">'+
+  '<div class="total"><div class="total-label">Registros</div><div class="total-value">'+filtered.length+' de '+D.length+'</div></div>'+
+  '<div class="total"><div class="total-label">Total indicado</div><div class="total-value">R$ '+Math.round(tI).toLocaleString('pt-BR')+'</div></div>'+
+  '<div class="total"><div class="total-label">Total empenhado</div><div class="total-value">R$ '+Math.round(tE).toLocaleString('pt-BR')+'</div></div>'+
+  '<div class="total"><div class="total-label">Total pago</div><div class="total-value" style="color:#cc0000">R$ '+Math.round(tP).toLocaleString('pt-BR')+' ('+pct+'%)</div></div>'+
+  '</div>'+
+  '<table><thead><tr><th>Nº Emenda</th><th>Ano</th><th>Órgão</th><th>RP</th><th>Tipo</th>'+
+  '<th style="width:20%">Objeto</th><th style="width:15%">Proponente</th><th>Município</th><th>Situação</th>'+
+  '<th>Indicado R$</th><th>Empenhado R$</th><th>Pago R$</th></tr></thead>'+
+  '<tbody>'+linhas+'</tbody>'+
+  '<tfoot><tr><td colspan="9">TOTAL ('+filtered.length+' registros)</td>'+
+  '<td style="text-align:right">R$ '+Math.round(tI).toLocaleString('pt-BR')+'</td>'+
+  '<td style="text-align:right">R$ '+Math.round(tE).toLocaleString('pt-BR')+'</td>'+
+  '<td style="text-align:right">R$ '+Math.round(tP).toLocaleString('pt-BR')+'</td></tr></tfoot></table>'+
+  '<div class="rodape">Mandato Popular · Dep. João Daniel PT/SE · '+now+'</div></body></html>';
+  const win=window.open('','_blank');
   win.document.write(html);
   win.document.close();
   setTimeout(()=>win.print(),500);
 }
+
+['f-ano','f-orgao','f-mun','f-tipo','f-rp'].forEach(id=>document.getElementById(id).addEventListener('change',applyFilters));
+document.getElementById('f-busca').addEventListener('input',applyFilters);
 </script>
 </body>
 </html>
