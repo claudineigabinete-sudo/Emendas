@@ -221,9 +221,10 @@ function loadData(){
     showErro('Tempo esgotado. Verifique sua conexão.');
   },15000);
 
-  window[cbName]=function(rows){
+  window[cbName]=function(res){
     clearTimeout(timeout);delete window[cbName];
     try{
+      const rows=Array.isArray(res)?res:(res.dados||res);
       D=rows.map(r=>({
         nemenda:String(r['Nº Emenda']||''),
         ano:String(r['Ano Emenda']||''),
