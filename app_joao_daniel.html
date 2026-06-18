@@ -100,9 +100,78 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 
 /* EMPTY */
 .empty{padding:40px 20px;text-align:center;color:#888;font-size:14px}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#cc0000,#990000)}
+.login-box{background:#fff;border-radius:16px;padding:32px 28px;width:100%;max-width:340px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
+.login-star{width:56px;height:56px;background:#cc0000;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.login-titulo{font-size:18px;font-weight:700;color:#cc0000;text-align:center}
+.login-sub{font-size:12px;color:#888;text-align:center;margin-top:4px;margin-bottom:24px}
+.login-field{margin-bottom:14px}
+.login-field label{display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:5px}
+.login-field input{width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;outline:none;transition:border .2s}
+.login-field input:focus{border-color:#cc0000}
+.login-btn{width:100%;padding:12px;background:#cc0000;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px}
+.login-btn:hover{background:#990000}
+.login-erro{background:#fcebeb;color:#a32d2d;border-radius:8px;padding:10px 12px;font-size:12px;margin-top:12px;display:none;text-align:center}
+.login-cadastro{text-align:center;margin-top:16px;font-size:12px;color:#888}
+.login-cadastro a{color:#cc0000;cursor:pointer;text-decoration:none;font-weight:600}
+.cadastro-box{background:#fff;border-radius:16px;padding:32px 28px;width:100%;max-width:340px;box-shadow:0 8px 32px rgba(0,0,0,0.2);display:none}
+.cadastro-titulo{font-size:18px;font-weight:700;color:#cc0000;text-align:center;margin-bottom:4px}
+.cadastro-sub{font-size:12px;color:#888;text-align:center;margin-bottom:20px}
+.cadastro-ok{background:#eaf3de;color:#3b6d11;border-radius:8px;padding:12px;font-size:13px;margin-top:12px;display:none;text-align:center;line-height:1.5}
 </style>
 </head>
 <body>
+
+<!-- TELA DE LOGIN -->
+<div id="tela-login" class="login-wrap">
+  <div id="box-login" class="login-box">
+    <div class="login-star">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+    </div>
+    <div class="login-titulo">Mandato Popular</div>
+    <div class="login-sub">Dep. João Daniel · PT/SE<br>App do Parlamentar</div>
+    <div class="login-field">
+      <label>Usuário</label>
+      <input type="text" id="login-usuario" placeholder="seu.usuario" onkeydown="if(event.key==='Enter')fazerLogin()"/>
+    </div>
+    <div class="login-field">
+      <label>Senha</label>
+      <input type="password" id="login-senha" placeholder="••••••••" onkeydown="if(event.key==='Enter')fazerLogin()"/>
+    </div>
+    <button class="login-btn" onclick="fazerLogin()">Entrar</button>
+    <div class="login-erro" id="login-erro"></div>
+    <div class="login-cadastro">Não tem acesso? <a onclick="mostrarCadastro()">Solicitar cadastro</a></div>
+  </div>
+  <div id="box-cadastro" class="cadastro-box">
+    <div class="cadastro-titulo">Solicitar Acesso</div>
+    <div class="cadastro-sub">Preencha os dados abaixo.<br>Seu acesso será liberado pelo administrador.</div>
+    <div class="login-field">
+      <label>Nome completo</label>
+      <input type="text" id="cad-nome" placeholder="Seu nome completo"/>
+    </div>
+    <div class="login-field">
+      <label>Usuário</label>
+      <input type="text" id="cad-usuario" placeholder="Escolha um usuário (sem espaços)"/>
+    </div>
+    <div class="login-field">
+      <label>Senha</label>
+      <input type="password" id="cad-senha" placeholder="Escolha uma senha"/>
+    </div>
+    <div class="login-field">
+      <label>Confirmar senha</label>
+      <input type="password" id="cad-senha2" placeholder="Repita a senha"/>
+    </div>
+    <button class="login-btn" onclick="fazerCadastro()">Solicitar acesso</button>
+    <div class="login-erro" id="cad-erro"></div>
+    <div class="cadastro-ok" id="cad-ok"></div>
+    <div class="login-cadastro" style="margin-top:12px"><a onclick="mostrarLogin()">← Voltar para o login</a></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="tela-app" style="display:none">
 
 <div class="hdr">
   <div class="hdr-top">
@@ -179,7 +248,65 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 </div>
 
 <script>
+
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbxgMJcm7x2SyQlRrfnx-zFGtS1MemADX68YXmKwPl5B4GnJheqNEOhw-P2Dk0CV8tSG/exec';
+let nomeLogado='';
+
+function mostrarCadastro(){
+  document.getElementById('box-login').style.display='none';
+  document.getElementById('box-cadastro').style.display='block';
+}
+function mostrarLogin(){
+  document.getElementById('box-cadastro').style.display='none';
+  document.getElementById('box-login').style.display='block';
+}
+
+function fazerLogin(){
+  const usuario=document.getElementById('login-usuario').value.trim();
+  const senha=document.getElementById('login-senha').value;
+  const erroEl=document.getElementById('login-erro');
+  if(!usuario||!senha){erroEl.textContent='Preencha usuário e senha.';erroEl.style.display='block';return;}
+  erroEl.style.display='none';
+  const cbName='_login_'+Date.now();
+  window[cbName]=function(res){
+    delete window[cbName];
+    if(res.ok){
+      nomeLogado=res.nome;
+      document.getElementById('tela-login').style.display='none';
+      document.getElementById('tela-app').style.display='block';
+      loadData();
+    } else {
+      erroEl.textContent=res.msg||'Erro ao fazer login.';
+      erroEl.style.display='block';
+    }
+  };
+  const s=document.createElement('script');
+  s.src=SCRIPT_URL+'?action=login&usuario='+encodeURIComponent(usuario)+'&senha='+encodeURIComponent(senha)+'&callback='+cbName;
+  document.head.appendChild(s);
+}
+
+function fazerCadastro(){
+  const nome=document.getElementById('cad-nome').value.trim();
+  const usuario=document.getElementById('cad-usuario').value.trim();
+  const senha=document.getElementById('cad-senha').value;
+  const senha2=document.getElementById('cad-senha2').value;
+  const erroEl=document.getElementById('cad-erro');
+  const okEl=document.getElementById('cad-ok');
+  erroEl.style.display='none';okEl.style.display='none';
+  if(!nome||!usuario||!senha||!senha2){erroEl.textContent='Preencha todos os campos.';erroEl.style.display='block';return;}
+  if(senha!==senha2){erroEl.textContent='As senhas não coincidem.';erroEl.style.display='block';return;}
+  if(usuario.includes(' ')){erroEl.textContent='Usuário não pode ter espaços.';erroEl.style.display='block';return;}
+  const cbName='_cad_'+Date.now();
+  window[cbName]=function(res){
+    delete window[cbName];
+    if(res.ok){okEl.textContent=res.msg;okEl.style.display='block';}
+    else{erroEl.textContent=res.msg||'Erro ao cadastrar.';erroEl.style.display='block';}
+  };
+  const s=document.createElement('script');
+  s.src=SCRIPT_URL+'?action=cadastro&nome='+encodeURIComponent(nome)+'&usuario='+encodeURIComponent(usuario)+'&senha='+encodeURIComponent(senha)+'&callback='+cbName;
+  document.head.appendChild(s);
+}
+
 let D=[],abaAtual='municipios';
 
 const N=v=>{
@@ -455,6 +582,7 @@ loadData();
 
 let _munAtual="";
 </script>
+</div>
 </body>
 </html>
 <script>
@@ -503,6 +631,55 @@ function exportarMunPDF(){
     .rodape{margin-top:14px;font-size:9px;color:#aaa;text-align:right;border-top:1px solid #eee;padding-top:8px}
     @media print{body{padding:10px}@page{margin:1cm;size:A4 landscape}}
   </style></head><body>
+
+<!-- TELA DE LOGIN -->
+<div id="tela-login" class="login-wrap">
+  <div id="box-login" class="login-box">
+    <div class="login-star">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+    </div>
+    <div class="login-titulo">Mandato Popular</div>
+    <div class="login-sub">Dep. João Daniel · PT/SE<br>App do Parlamentar</div>
+    <div class="login-field">
+      <label>Usuário</label>
+      <input type="text" id="login-usuario" placeholder="seu.usuario" onkeydown="if(event.key==='Enter')fazerLogin()"/>
+    </div>
+    <div class="login-field">
+      <label>Senha</label>
+      <input type="password" id="login-senha" placeholder="••••••••" onkeydown="if(event.key==='Enter')fazerLogin()"/>
+    </div>
+    <button class="login-btn" onclick="fazerLogin()">Entrar</button>
+    <div class="login-erro" id="login-erro"></div>
+    <div class="login-cadastro">Não tem acesso? <a onclick="mostrarCadastro()">Solicitar cadastro</a></div>
+  </div>
+  <div id="box-cadastro" class="cadastro-box">
+    <div class="cadastro-titulo">Solicitar Acesso</div>
+    <div class="cadastro-sub">Preencha os dados abaixo.<br>Seu acesso será liberado pelo administrador.</div>
+    <div class="login-field">
+      <label>Nome completo</label>
+      <input type="text" id="cad-nome" placeholder="Seu nome completo"/>
+    </div>
+    <div class="login-field">
+      <label>Usuário</label>
+      <input type="text" id="cad-usuario" placeholder="Escolha um usuário (sem espaços)"/>
+    </div>
+    <div class="login-field">
+      <label>Senha</label>
+      <input type="password" id="cad-senha" placeholder="Escolha uma senha"/>
+    </div>
+    <div class="login-field">
+      <label>Confirmar senha</label>
+      <input type="password" id="cad-senha2" placeholder="Repita a senha"/>
+    </div>
+    <button class="login-btn" onclick="fazerCadastro()">Solicitar acesso</button>
+    <div class="login-erro" id="cad-erro"></div>
+    <div class="cadastro-ok" id="cad-ok"></div>
+    <div class="login-cadastro" style="margin-top:12px"><a onclick="mostrarLogin()">← Voltar para o login</a></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="tela-app" style="display:none">
   <div class="cabecalho">
     <div class="cab-estrela"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
     <div>
@@ -533,7 +710,8 @@ function exportarMunPDF(){
     </tr></tfoot>
   </table>
   <div class="rodape">Mandato Popular · Dep. João Daniel PT/SE · ${now}</div>
-  </body></html>`;
+  </div>
+</body></html>`;
 
   const win=window.open('','_blank');
   win.document.write(html);
