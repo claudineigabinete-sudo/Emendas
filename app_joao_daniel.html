@@ -3,12 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Emendas · João Daniel PT/SE</title>
+<title>App · João Daniel PT/SE</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#f2f2f7;color:#1c1c1e;min-height:100vh}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#cc0000,#990000);padding:20px}
+.login-box{background:#fff;border-radius:16px;padding:32px 28px;width:100%;max-width:360px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
+.login-star{width:56px;height:56px;background:#cc0000;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.login-titulo{font-size:18px;font-weight:700;color:#cc0000;text-align:center}
+.login-sub{font-size:12px;color:#888;text-align:center;margin-top:4px;margin-bottom:24px;line-height:1.5}
+.login-field{margin-bottom:14px}
+.login-field label{display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:5px}
+.login-field input{width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;outline:none}
+.login-field input:focus{border-color:#cc0000}
+.login-btn{width:100%;padding:12px;background:#cc0000;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px}
+.login-erro{background:#fcebeb;color:#a32d2d;border-radius:8px;padding:10px 12px;font-size:12px;margin-top:12px;display:none;text-align:center}
+.login-link{text-align:center;margin-top:16px;font-size:12px;color:#888}
+.login-link a{color:#cc0000;cursor:pointer;font-weight:600}
+.cadastro-box{display:none}
+.cadastro-ok{background:#eaf3de;color:#3b6d11;border-radius:8px;padding:12px;font-size:13px;margin-top:12px;display:none;text-align:center;line-height:1.5}
 
 /* HEADER */
 .hdr{background:linear-gradient(135deg,#cc0000,#990000);padding:16px 16px 12px;position:sticky;top:0;z-index:100}
@@ -16,37 +31,35 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 .hdr-star{width:32px;height:32px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .hdr-name{color:#fff;font-size:14px;font-weight:600;line-height:1.2}
 .hdr-sub{color:rgba(255,255,255,0.75);font-size:11px}
-.hdr-refresh{margin-left:auto;background:rgba(255,255,255,0.2);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-
-/* BUSCA */
+.hdr-btns{margin-left:auto;display:flex;gap:6px}
+.hdr-btn{background:rgba(255,255,255,0.2);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .search-wrap{background:#fff;border-radius:10px;display:flex;align-items:center;padding:0 10px;gap:8px}
 .search-wrap input{flex:1;border:none;outline:none;font-size:14px;padding:10px 0;background:transparent;color:#1c1c1e}
-.search-icon{color:#999;font-size:14px}
 
-/* TOTAIS GERAIS */
+/* TOTAIS */
 .totais{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 16px 0}
 .total-card{background:#fff;border-radius:12px;padding:12px 14px;border-left:3px solid #cc0000}
 .total-label{font-size:10px;color:#888;margin-bottom:2px;text-transform:uppercase;letter-spacing:.03em}
 .total-value{font-size:16px;font-weight:700;color:#1c1c1e}
 .total-value.red{color:#cc0000}
 .exec-bar{margin-top:6px;height:4px;background:#f0f0f0;border-radius:2px;overflow:hidden}
-.exec-fill{height:100%;background:#cc0000;border-radius:2px;transition:width .5s}
+.exec-fill{height:100%;background:#cc0000;border-radius:2px}
 .exec-pct{font-size:10px;color:#cc0000;margin-top:3px;font-weight:600}
 
 /* ABAS */
 .tabs{display:flex;padding:12px 16px 0;gap:8px}
-.tab{flex:1;padding:8px;background:#fff;border:none;border-radius:10px;font-size:12px;font-weight:500;color:#888;cursor:pointer;transition:all .2s}
+.tab{flex:1;padding:8px;background:#fff;border:none;border-radius:10px;font-size:12px;font-weight:500;color:#888;cursor:pointer}
 .tab.active{background:#cc0000;color:#fff}
 
-/* LISTA MUNICÍPIOS */
+/* LISTA */
 .section-title{padding:12px 16px 6px;font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.04em}
 .mun-list{padding:0 16px 80px}
-.mun-card{background:#fff;border-radius:12px;margin-bottom:8px;overflow:hidden;cursor:pointer;transition:transform .1s}
-.mun-card:active{transform:scale(0.98)}
+.mun-card{background:#fff;border-radius:12px;margin-bottom:8px;overflow:hidden;cursor:pointer}
+.mun-card:active{opacity:.85}
 .mun-header{padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
 .mun-nome{font-size:14px;font-weight:600;color:#1c1c1e}
 .mun-qtd{font-size:11px;color:#888;margin-top:1px}
-.mun-chevron{color:#ccc;font-size:16px}
+.mun-chevron{color:#ccc;font-size:18px}
 .mun-valores{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #f2f2f7}
 .mun-val{padding:8px 14px}
 .mun-val-label{font-size:10px;color:#888;margin-bottom:1px}
@@ -58,11 +71,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 .mun-objeto-item{font-size:11px;color:#555;padding:4px 0;border-bottom:1px solid #f7f7f7;line-height:1.4}
 .mun-objeto-item:last-child{border-bottom:none}
 
-/* DETALHE MUNICÍPIO */
+/* DETALHE */
 .detalhe{display:none;padding:0 16px 80px}
-.back-btn{display:flex;align-items:center;gap:6px;background:none;border:none;color:#cc0000;font-size:14px;font-weight:500;cursor:pointer;padding:12px 0}
-.detalhe-nome{font-size:20px;font-weight:700;color:#1c1c1e;margin-bottom:12px}
-.detalhe-totais{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.det-header{display:flex;gap:8px;align-items:center;padding:12px 0}
+.back-btn{background:none;border:1px solid #cc0000;color:#cc0000;font-size:13px;font-weight:500;cursor:pointer;padding:6px 12px;border-radius:8px}
+.pdf-btn{background:#cc0000;border:none;color:#fff;font-size:13px;font-weight:500;cursor:pointer;padding:6px 12px;border-radius:8px;margin-left:auto}
+.det-nome{font-size:20px;font-weight:700;color:#1c1c1e;margin-bottom:12px}
+.det-totais{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
 .dt{background:#fff;border-radius:10px;padding:10px 12px;text-align:center}
 .dt-label{font-size:10px;color:#888;margin-bottom:3px}
 .dt-value{font-size:13px;font-weight:700;color:#1c1c1e}
@@ -73,59 +88,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 .emenda-label{font-size:11px;color:#888}
 .emenda-val{font-size:11px;font-weight:600;color:#1c1c1e}
 .emenda-val.red{color:#cc0000}
-.emenda-sit{margin-top:6px}
-.pill{display:inline-block;font-size:10px;padding:3px 8px;border-radius:999px}
+.pill{display:inline-block;font-size:10px;padding:3px 8px;border-radius:999px;margin-top:6px}
 .s-ok{background:#eaf3de;color:#3b6d11}
 .s-info{background:#e6f1fb;color:#185fa5}
 .s-err{background:#fcebeb;color:#a32d2d}
 .s-warn{background:#faeeda;color:#854f0b}
 .s-gray{background:#f0f0f0;color:#666}
 
-/* RESUMO GERAL */
+/* RESUMO */
 .resumo{display:none;padding:0 16px 80px}
-.resumo-card{background:#fff;border-radius:12px;margin-bottom:8px;padding:14px}
+.resumo-card{background:#fff;border-radius:12px;margin-bottom:8px;padding:14px;margin-top:12px}
 .resumo-titulo{font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px}
 .resumo-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f2f2f7}
 .resumo-item:last-child{border-bottom:none}
 .resumo-item-nome{font-size:13px;color:#1c1c1e}
 .resumo-item-val{font-size:13px;font-weight:600;color:#cc0000}
 
-/* LOADING */
+/* LOADING / ERRO */
 .loading{padding:60px 20px;text-align:center;color:#888;font-size:14px}
 .loading-spinner{width:32px;height:32px;border:3px solid #eee;border-top:3px solid #cc0000;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-.erro{margin:16px;padding:14px;background:#fcebeb;border-radius:10px;color:#a32d2d;font-size:13px;line-height:1.6}
-.erro button{margin-top:10px;background:#cc0000;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer;width:100%}
-
-/* EMPTY */
+.erro-box{margin:16px;padding:14px;background:#fcebeb;border-radius:10px;color:#a32d2d;font-size:13px}
+.erro-box button{margin-top:10px;background:#cc0000;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer;width:100%}
 .empty{padding:40px 20px;text-align:center;color:#888;font-size:14px}
-
-/* LOGIN */
-.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#cc0000,#990000)}
-.login-box{background:#fff;border-radius:16px;padding:32px 28px;width:100%;max-width:340px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
-.login-star{width:56px;height:56px;background:#cc0000;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
-.login-titulo{font-size:18px;font-weight:700;color:#cc0000;text-align:center}
-.login-sub{font-size:12px;color:#888;text-align:center;margin-top:4px;margin-bottom:24px}
-.login-field{margin-bottom:14px}
-.login-field label{display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:5px}
-.login-field input{width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;outline:none;transition:border .2s}
-.login-field input:focus{border-color:#cc0000}
-.login-btn{width:100%;padding:12px;background:#cc0000;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px}
-.login-btn:hover{background:#990000}
-.login-erro{background:#fcebeb;color:#a32d2d;border-radius:8px;padding:10px 12px;font-size:12px;margin-top:12px;display:none;text-align:center}
-.login-cadastro{text-align:center;margin-top:16px;font-size:12px;color:#888}
-.login-cadastro a{color:#cc0000;cursor:pointer;text-decoration:none;font-weight:600}
-.cadastro-box{background:#fff;border-radius:16px;padding:32px 28px;width:100%;max-width:340px;box-shadow:0 8px 32px rgba(0,0,0,0.2);display:none}
-.cadastro-titulo{font-size:18px;font-weight:700;color:#cc0000;text-align:center;margin-bottom:4px}
-.cadastro-sub{font-size:12px;color:#888;text-align:center;margin-bottom:20px}
-.cadastro-ok{background:#eaf3de;color:#3b6d11;border-radius:8px;padding:12px;font-size:13px;margin-top:12px;display:none;text-align:center;line-height:1.5}
 </style>
 </head>
 <body>
 
-<!-- TELA DE LOGIN -->
-<div id="tela-login" class="login-wrap">
+<!-- TELA LOGIN -->
+<div id="tela-login" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#cc0000,#990000);padding:20px">
+
   <div id="box-login" class="login-box">
     <div class="login-star">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
@@ -142,11 +134,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
     </div>
     <button class="login-btn" onclick="fazerLogin()">Entrar</button>
     <div class="login-erro" id="login-erro"></div>
-    <div class="login-cadastro">Não tem acesso? <a onclick="mostrarCadastro()">Solicitar cadastro</a></div>
+    <div class="login-link">Não tem acesso? <a onclick="mostrarCadastro()">Solicitar cadastro</a></div>
   </div>
-  <div id="box-cadastro" class="cadastro-box">
-    <div class="cadastro-titulo">Solicitar Acesso</div>
-    <div class="cadastro-sub">Preencha os dados abaixo.<br>Seu acesso será liberado pelo administrador.</div>
+
+  <div id="box-cadastro" class="login-box cadastro-box">
+    <div class="login-titulo">Solicitar Acesso</div>
+    <div class="login-sub">Preencha os dados abaixo.<br>Seu acesso será liberado pelo administrador.</div>
     <div class="login-field">
       <label>Nome completo</label>
       <input type="text" id="cad-nome" placeholder="Seu nome completo"/>
@@ -166,8 +159,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
     <button class="login-btn" onclick="fazerCadastro()">Solicitar acesso</button>
     <div class="login-erro" id="cad-erro"></div>
     <div class="cadastro-ok" id="cad-ok"></div>
-    <div class="login-cadastro" style="margin-top:12px"><a onclick="mostrarLogin()">← Voltar para o login</a></div>
+    <div class="login-link" style="margin-top:12px"><a onclick="mostrarLogin()">← Voltar para o login</a></div>
   </div>
+
 </div>
 
 <!-- APP -->
@@ -182,28 +176,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
       <div class="hdr-name">Dep. João Daniel · PT/SE</div>
       <div class="hdr-sub" id="hdr-sub">Carregando...</div>
     </div>
-    <button class="hdr-refresh" onclick="loadData()" title="Atualizar">↺</button>
+    <div class="hdr-btns">
+      <button class="hdr-btn" onclick="loadData()" title="Atualizar">↺</button>
+      <button class="hdr-btn" onclick="fazerLogout()" title="Sair">⏻</button>
+    </div>
   </div>
   <div class="search-wrap">
-    <span class="search-icon">🔍</span>
+    <span style="color:#999;font-size:14px">🔍</span>
     <input type="text" id="busca" placeholder="Buscar município ou objeto…" oninput="onBusca()"/>
   </div>
 </div>
 
-<!-- LOADING -->
 <div id="loading" class="loading">
   <div class="loading-spinner"></div>
   Conectando ao Google Sheets...
 </div>
-<div id="erro" class="erro" style="display:none">
+<div id="erro" class="erro-box" style="display:none">
   <div id="erro-msg"></div>
   <button onclick="loadData()">↺ Tentar novamente</button>
 </div>
 
-<!-- CONTEÚDO PRINCIPAL -->
 <div id="conteudo" style="display:none">
-
-  <!-- TOTAIS GERAIS -->
   <div class="totais">
     <div class="total-card">
       <div class="total-label">Total indicado</div>
@@ -217,41 +210,61 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
     </div>
   </div>
 
-  <!-- ABAS -->
   <div class="tabs">
     <button class="tab active" onclick="showAba('municipios',this)">Por Município</button>
     <button class="tab" onclick="showAba('resumo',this)">Resumo Geral</button>
   </div>
 
-  <!-- ABA MUNICÍPIOS -->
   <div id="aba-municipios">
     <div class="section-title" id="sec-title">Municípios</div>
     <div class="mun-list" id="mun-list"></div>
   </div>
 
-  <!-- ABA RESUMO -->
   <div id="aba-resumo" class="resumo">
     <div id="resumo-content"></div>
   </div>
 
-  <!-- DETALHE MUNICÍPIO -->
   <div id="detalhe" class="detalhe">
-    <div style="display:flex;gap:8px;align-items:center;padding-bottom:4px">
-    <button class="back-btn" onclick="voltarLista()">← Voltar</button>
-    <button class="back-btn" onclick="exportarMunPDF()" style="background:#cc0000;color:#fff;border-color:#cc0000;margin-left:auto">⬇ Exportar PDF</button>
-  </div>
-    <div class="detalhe-nome" id="det-nome"></div>
-    <div class="detalhe-totais" id="det-totais"></div>
+    <div class="det-header">
+      <button class="back-btn" onclick="voltarLista()">← Voltar</button>
+      <button class="pdf-btn" onclick="exportarMunPDF()">⬇ Exportar PDF</button>
+    </div>
+    <div class="det-nome" id="det-nome"></div>
+    <div class="det-totais" id="det-totais"></div>
     <div id="det-emendas"></div>
   </div>
-
 </div>
 
+</div><!-- fim tela-app -->
+
 <script>
-
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbxgMJcm7x2SyQlRrfnx-zFGtS1MemADX68YXmKwPl5B4GnJheqNEOhw-P2Dk0CV8tSG/exec';
-let nomeLogado='';
+let D=[],abaAtual='municipios',_munAtual='',nomeLogado='';
 
+const N=v=>{
+  if(v===null||v===undefined||v==='')return 0;
+  if(typeof v==='number')return isNaN(v)?0:v;
+  const s=String(v).trim().replace(/[R$\s]/g,'');
+  if(/^\d{1,3}(\.\d{3})*(,\d+)?$/.test(s))return parseFloat(s.replace(/\./g,'').replace(',','.'))||0;
+  if(/^\d{1,3}(,\d{3})*(\.\d+)?$/.test(s))return parseFloat(s.replace(/,/g,''))||0;
+  return parseFloat(s.replace(',','.'))||0;
+};
+const FM=v=>{
+  if(!v&&v!==0)return '—';
+  if(v>=1e6)return 'R$ '+(v/1e6).toFixed(1).replace('.',',')+'M';
+  if(v>=1e3)return 'R$ '+(v/1e3).toFixed(0)+'mil';
+  return 'R$ '+Math.round(v).toLocaleString('pt-BR');
+};
+const FMF=v=>isNaN(v)||v===''?'—':'R$ '+Math.round(v).toLocaleString('pt-BR');
+function sC(s){
+  if(!s)return 's-gray';const l=s.toLowerCase();
+  if(l.includes('conclu')||l.includes('pago')||l.includes('aprovad'))return 's-ok';
+  if(l.includes('execu')||l.includes('anális')||l.includes('analise')||l.includes('aguardando')||l.includes('iniciada')||l.includes('comprov')||l.includes('empenhad')||l.includes('complement'))return 's-info';
+  if(l.includes('anulado')||l.includes('rescindido')||l.includes('rejeit')||l.includes('cancelad'))return 's-err';
+  return 's-warn';
+}
+
+// ---- LOGIN ----
 function mostrarCadastro(){
   document.getElementById('box-login').style.display='none';
   document.getElementById('box-cadastro').style.display='block';
@@ -260,7 +273,6 @@ function mostrarLogin(){
   document.getElementById('box-cadastro').style.display='none';
   document.getElementById('box-login').style.display='block';
 }
-
 function fazerLogin(){
   const usuario=document.getElementById('login-usuario').value.trim();
   const senha=document.getElementById('login-senha').value;
@@ -284,7 +296,6 @@ function fazerLogin(){
   s.src=SCRIPT_URL+'?action=login&usuario='+encodeURIComponent(usuario)+'&senha='+encodeURIComponent(senha)+'&callback='+cbName;
   document.head.appendChild(s);
 }
-
 function fazerCadastro(){
   const nome=document.getElementById('cad-nome').value.trim();
   const usuario=document.getElementById('cad-usuario').value.trim();
@@ -306,48 +317,28 @@ function fazerCadastro(){
   s.src=SCRIPT_URL+'?action=cadastro&nome='+encodeURIComponent(nome)+'&usuario='+encodeURIComponent(usuario)+'&senha='+encodeURIComponent(senha)+'&callback='+cbName;
   document.head.appendChild(s);
 }
-
-let D=[],abaAtual='municipios';
-
-const N=v=>{
-  if(v===null||v===undefined||v==='')return 0;
-  if(typeof v==='number')return isNaN(v)?0:v;
-  const s=String(v).trim().replace(/[R$\s]/g,'');
-  if(/^\d{1,3}(\.\d{3})*(,\d+)?$/.test(s))return parseFloat(s.replace(/\./g,'').replace(',','.'))||0;
-  if(/^\d{1,3}(,\d{3})*(\.\d+)?$/.test(s))return parseFloat(s.replace(/,/g,''))||0;
-  return parseFloat(s.replace(',','.'))||0;
-};
-
-const FM=v=>{
-  if(!v&&v!==0)return '—';
-  if(v>=1e6)return 'R$ '+(v/1e6).toFixed(1).replace('.',',')+'M';
-  if(v>=1e3)return 'R$ '+(v/1e3).toFixed(0)+'mil';
-  return 'R$ '+Math.round(v).toLocaleString('pt-BR');
-};
-
-const FMF=v=>isNaN(v)||v===''?'—':'R$ '+Math.round(v).toLocaleString('pt-BR');
-
-function sC(s){
-  if(!s)return 's-gray';
-  const l=s.toLowerCase();
-  if(l.includes('conclu')||l.includes('pago')||l.includes('aprovad'))return 's-ok';
-  if(l.includes('execu')||l.includes('anális')||l.includes('analise')||l.includes('aguardando')||l.includes('iniciada')||l.includes('comprov')||l.includes('empenhad')||l.includes('complement'))return 's-info';
-  if(l.includes('anulado')||l.includes('rescindido')||l.includes('rejeit')||l.includes('cancelad'))return 's-err';
-  return 's-warn';
+function fazerLogout(){
+  nomeLogado='';D=[];
+  document.getElementById('tela-app').style.display='none';
+  document.getElementById('tela-login').style.display='flex';
+  document.getElementById('login-usuario').value='';
+  document.getElementById('login-senha').value='';
+  document.getElementById('conteudo').style.display='none';
 }
 
+// ---- DADOS ----
 function loadData(){
   document.getElementById('loading').style.display='block';
   document.getElementById('erro').style.display='none';
   document.getElementById('conteudo').style.display='none';
   document.getElementById('hdr-sub').textContent='Carregando...';
-
   const cbName='_cb_'+Date.now();
   const timeout=setTimeout(()=>{
     delete window[cbName];
-    showErro('Tempo esgotado. Verifique sua conexão.');
+    document.getElementById('loading').style.display='none';
+    document.getElementById('erro').style.display='block';
+    document.getElementById('erro-msg').textContent='Tempo esgotado. Verifique sua conexão.';
   },15000);
-
   window[cbName]=function(res){
     clearTimeout(timeout);delete window[cbName];
     try{
@@ -366,28 +357,26 @@ function loadData(){
         empenhado:N(r['Empenhado']),
         pago:N(r['Pago']),
       })).filter(r=>r.municipio);
-
       document.getElementById('loading').style.display='none';
       document.getElementById('conteudo').style.display='block';
       const now=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-      document.getElementById('hdr-sub').textContent=D.length+' emendas · atualizado '+now;
-      renderTotais(D);
-      renderMunicipios(D);
-      renderResumo();
-    }catch(e){showErro('Erro: '+e.message);}
+      document.getElementById('hdr-sub').textContent=D.length+' emendas · '+now;
+      renderTotais(D);renderMunicipios(D);renderResumo();
+    }catch(e){
+      document.getElementById('loading').style.display='none';
+      document.getElementById('erro').style.display='block';
+      document.getElementById('erro-msg').textContent='Erro: '+e.message;
+    }
   };
-
   const s=document.createElement('script');
-  s.src=SCRIPT_URL+'?callback='+cbName;
-  s.onerror=()=>{clearTimeout(timeout);delete window[cbName];showErro('Erro de conexão.');};
+  s.src=SCRIPT_URL+'?action=dados&callback='+cbName;
+  s.onerror=()=>{
+    clearTimeout(timeout);delete window[cbName];
+    document.getElementById('loading').style.display='none';
+    document.getElementById('erro').style.display='block';
+    document.getElementById('erro-msg').textContent='Erro de conexão.';
+  };
   document.head.appendChild(s);
-}
-
-function showErro(msg){
-  document.getElementById('loading').style.display='none';
-  document.getElementById('conteudo').style.display='none';
-  document.getElementById('erro').style.display='block';
-  document.getElementById('erro-msg').textContent=msg;
 }
 
 function renderTotais(data){
@@ -404,48 +393,23 @@ function renderMunicipios(data){
   const map={};
   data.forEach(r=>{
     const k=r.municipio;
-    if(!map[k])map[k]={nome:k,qtd:0,ind:0,pago:0};
-    map[k].qtd++;map[k].ind+=r.indicado;map[k].pago+=r.pago;
+    if(!map[k])map[k]={nome:k,qtd:0,ind:0,pago:0,rows:[]};
+    map[k].qtd++;map[k].ind+=r.indicado;map[k].pago+=r.pago;map[k].rows.push(r);
   });
   const list=Object.values(map).sort((a,b)=>b.ind-a.ind);
-  const q=document.getElementById('busca').value.toLowerCase();
-  const filtrado=q?list.filter(m=>m.nome.toLowerCase().includes(q)):list;
-
-  document.getElementById('sec-title').textContent=
-    filtrado.length+' município'+(filtrado.length!==1?'s':'')+(q?' encontrado'+(filtrado.length!==1?'s':''):'');
-
-  if(!filtrado.length){
-    document.getElementById('mun-list').innerHTML='<div class="empty">Nenhum município encontrado.</div>';
-    return;
-  }
-
+  const q=(document.getElementById('busca').value||'').toLowerCase();
+  const filtrado=q?list.filter(m=>m.nome.toLowerCase().includes(q)||m.rows.some(r=>r.objeto.toLowerCase().includes(q))):list;
+  document.getElementById('sec-title').textContent=filtrado.length+' município'+(filtrado.length!==1?'s':'');
+  if(!filtrado.length){document.getElementById('mun-list').innerHTML='<div class="empty">Nenhum município encontrado.</div>';return;}
   document.getElementById('mun-list').innerHTML=filtrado.map(m=>{
     const pct=m.ind>0?Math.min(100,Math.round(m.pago/m.ind*100)):0;
-    return`<div class="mun-card" onclick="verMunicipio('${m.nome.replace(/'/g,"\\'")}')">
-      <div class="mun-header">
-        <div>
-          <div class="mun-nome">${m.nome}</div>
-          <div class="mun-qtd">${m.qtd} emenda${m.qtd!==1?'s':''}</div>
-        </div>
-        <div class="mun-chevron">›</div>
-      </div>
-      <div class="mun-valores">
-        <div class="mun-val">
-          <div class="mun-val-label">Indicado</div>
-          <div class="mun-val-num">${FM(m.ind)}</div>
-        </div>
-        <div class="mun-val">
-          <div class="mun-val-label">Pago</div>
-          <div class="mun-val-num red">${FM(m.pago)}</div>
-        </div>
-      </div>
-      <div class="mun-bar"><div class="mun-bar-fill" style="width:${pct}%"></div></div>
-      <div class="mun-objetos">${
-        data.filter(r=>r.municipio===m.nome).map(r=>
-          `<div class="mun-objeto-item">· ${r.objeto}</div>`
-        ).join('')
-      }</div>
-    </div>`;
+    const objetos=m.rows.map(r=>'<div class="mun-objeto-item">· '+r.objeto+'</div>').join('');
+    return '<div class="mun-card" onclick="verMunicipio(\''+m.nome.replace(/'/g,"\\'")+'\')">' +
+      '<div class="mun-header"><div><div class="mun-nome">'+m.nome+'</div><div class="mun-qtd">'+m.qtd+' emenda'+(m.qtd!==1?'s':'')+'</div></div><div class="mun-chevron">›</div></div>'+
+      '<div class="mun-valores"><div class="mun-val"><div class="mun-val-label">Indicado</div><div class="mun-val-num">'+FM(m.ind)+'</div></div>'+
+      '<div class="mun-val"><div class="mun-val-label">Pago</div><div class="mun-val-num red">'+FM(m.pago)+'</div></div></div>'+
+      '<div class="mun-bar"><div class="mun-bar-fill" style="width:'+pct+'%"></div></div>'+
+      '<div class="mun-objetos">'+objetos+'</div></div>';
   }).join('');
 }
 
@@ -456,34 +420,20 @@ function verMunicipio(nome){
   const tE=rows.reduce((s,r)=>s+r.empenhado,0);
   const tP=rows.reduce((s,r)=>s+r.pago,0);
   const pct=tI>0?Math.min(100,Math.round(tP/tI*100)):0;
-
   document.getElementById('det-nome').textContent=nome;
-  document.getElementById('det-totais').innerHTML=`
-    <div class="dt"><div class="dt-label">Emendas</div><div class="dt-value">${rows.length}</div></div>
-    <div class="dt"><div class="dt-label">Indicado</div><div class="dt-value" style="font-size:12px">${FM(tI)}</div></div>
-    <div class="dt"><div class="dt-label">Pago · ${pct}%</div><div class="dt-value red" style="font-size:12px">${FM(tP)}</div></div>
-  `;
-
-  document.getElementById('det-emendas').innerHTML=rows.map(r=>`
-    <div class="emenda-item">
-      <div class="emenda-objeto">${r.objeto||'—'}</div>
-      <div class="emenda-row">
-        <span class="emenda-label">Indicado</span>
-        <span class="emenda-val">${FMF(r.indicado)}</span>
-      </div>
-      <div class="emenda-row">
-        <span class="emenda-label">Pago</span>
-        <span class="emenda-val red">${FMF(r.pago)}</span>
-      </div>
-      <div class="emenda-row">
-        <span class="emenda-label">Órgão · ${r.ano}</span>
-        <span class="emenda-val">${r.orgao}</span>
-      </div>
-      <div class="emenda-sit"><span class="pill ${sC(r.situacao)}">${r.situacao||'—'}</span></div>
-    </div>
-  `).join('');
-
-  // Esconde lista, mostra detalhe
+  document.getElementById('det-totais').innerHTML=
+    '<div class="dt"><div class="dt-label">Emendas</div><div class="dt-value">'+rows.length+'</div></div>'+
+    '<div class="dt"><div class="dt-label">Indicado</div><div class="dt-value" style="font-size:12px">'+FM(tI)+'</div></div>'+
+    '<div class="dt"><div class="dt-label">Pago · '+pct+'%</div><div class="dt-value red" style="font-size:12px">'+FM(tP)+'</div></div>';
+  document.getElementById('det-emendas').innerHTML=rows.map(r=>
+    '<div class="emenda-item">'+
+    '<div class="emenda-objeto">'+r.objeto+'</div>'+
+    '<div class="emenda-row"><span class="emenda-label">Indicado</span><span class="emenda-val">'+FMF(r.indicado)+'</span></div>'+
+    '<div class="emenda-row"><span class="emenda-label">Pago</span><span class="emenda-val red">'+FMF(r.pago)+'</span></div>'+
+    '<div class="emenda-row"><span class="emenda-label">Órgão · '+r.ano+'</span><span class="emenda-val">'+r.orgao+'</span></div>'+
+    '<span class="pill '+sC(r.situacao)+'">'+( r.situacao||'—')+'</span>'+
+    '</div>'
+  ).join('');
   document.getElementById('aba-municipios').style.display='none';
   document.getElementById('aba-resumo').style.display='none';
   document.getElementById('detalhe').style.display='block';
@@ -492,74 +442,38 @@ function verMunicipio(nome){
 
 function voltarLista(){
   document.getElementById('detalhe').style.display='none';
-  if(abaAtual==='municipios'){
-    document.getElementById('aba-municipios').style.display='block';
-  } else {
-    document.getElementById('aba-resumo').style.display='block';
-  }
+  if(abaAtual==='municipios'){document.getElementById('aba-municipios').style.display='block';}
+  else{document.getElementById('aba-resumo').style.display='block';}
   window.scrollTo(0,0);
 }
 
 function renderResumo(){
-  const porOrgao={};
-  const porTipo={};
-  const porAno={};
+  const porOrgao={},porTipo={},porAno={};
   D.forEach(r=>{
-    const o=r.orgao||'Outros';
-    if(!porOrgao[o])porOrgao[o]={ind:0,pago:0};
-    porOrgao[o].ind+=r.indicado;porOrgao[o].pago+=r.pago;
-    const t=r.tipo||'Outros';
-    if(!porTipo[t])porTipo[t]={ind:0,qtd:0};
-    porTipo[t].ind+=r.indicado;porTipo[t].qtd++;
-    const a=r.ano||'—';
-    if(!porAno[a])porAno[a]={ind:0,pago:0,qtd:0};
-    porAno[a].ind+=r.indicado;porAno[a].pago+=r.pago;porAno[a].qtd++;
+    const o=r.orgao||'Outros';if(!porOrgao[o])porOrgao[o]={ind:0,pago:0};porOrgao[o].ind+=r.indicado;porOrgao[o].pago+=r.pago;
+    const t=r.tipo||'Outros';if(!porTipo[t])porTipo[t]={ind:0,qtd:0};porTipo[t].ind+=r.indicado;porTipo[t].qtd++;
+    const a=r.ano||'—';if(!porAno[a])porAno[a]={ind:0,pago:0,qtd:0};porAno[a].ind+=r.indicado;porAno[a].pago+=r.pago;porAno[a].qtd++;
   });
-
   const tI=D.reduce((s,r)=>s+r.indicado,0);
   const tP=D.reduce((s,r)=>s+r.pago,0);
   const pct=tI>0?Math.min(100,Math.round(tP/tI*100)):0;
   const muns=new Set(D.map(r=>r.municipio)).size;
-
-  const top5orgao=Object.entries(porOrgao).sort((a,b)=>b[1].ind-a[1].ind).slice(0,5);
+  const top5=Object.entries(porOrgao).sort((a,b)=>b[1].ind-a[1].ind).slice(0,5);
   const anosOrd=Object.entries(porAno).sort((a,b)=>a[0].localeCompare(b[0]));
   const tiposOrd=Object.entries(porTipo).sort((a,b)=>b[1].ind-a[1].ind);
-
-  document.getElementById('resumo-content').innerHTML=`
-    <div style="height:12px"></div>
-    <div class="resumo-card">
-      <div class="resumo-titulo">Visão Geral</div>
-      <div class="resumo-item"><span class="resumo-item-nome">Total de emendas</span><span class="resumo-item-val">${D.length}</span></div>
-      <div class="resumo-item"><span class="resumo-item-nome">Municípios atendidos</span><span class="resumo-item-val">${muns}</span></div>
-      <div class="resumo-item"><span class="resumo-item-nome">Total indicado</span><span class="resumo-item-val">${FMF(tI)}</span></div>
-      <div class="resumo-item"><span class="resumo-item-nome">Total pago</span><span class="resumo-item-val">${FMF(tP)}</span></div>
-      <div class="resumo-item"><span class="resumo-item-nome">% executado</span><span class="resumo-item-val">${pct}%</span></div>
-    </div>
-    <div class="resumo-card">
-      <div class="resumo-titulo">Top 5 órgãos por valor</div>
-      ${top5orgao.map(([org,v])=>`
-        <div class="resumo-item">
-          <span class="resumo-item-nome">${org}</span>
-          <span class="resumo-item-val">${FM(v.ind)}</span>
-        </div>`).join('')}
-    </div>
-    <div class="resumo-card">
-      <div class="resumo-titulo">Por tipo de emenda</div>
-      ${tiposOrd.map(([tipo,v])=>`
-        <div class="resumo-item">
-          <span class="resumo-item-nome">${tipo} <span style="color:#888;font-size:11px">(${v.qtd})</span></span>
-          <span class="resumo-item-val">${FM(v.ind)}</span>
-        </div>`).join('')}
-    </div>
-    <div class="resumo-card">
-      <div class="resumo-titulo">Por ano</div>
-      ${anosOrd.map(([ano,v])=>`
-        <div class="resumo-item">
-          <span class="resumo-item-nome">${ano} <span style="color:#888;font-size:11px">(${v.qtd} emendas)</span></span>
-          <span class="resumo-item-val">${FM(v.ind)}</span>
-        </div>`).join('')}
-    </div>
-  `;
+  document.getElementById('resumo-content').innerHTML=
+    '<div class="resumo-card"><div class="resumo-titulo">Visão Geral</div>'+
+    '<div class="resumo-item"><span class="resumo-item-nome">Total de emendas</span><span class="resumo-item-val">'+D.length+'</span></div>'+
+    '<div class="resumo-item"><span class="resumo-item-nome">Municípios atendidos</span><span class="resumo-item-val">'+muns+'</span></div>'+
+    '<div class="resumo-item"><span class="resumo-item-nome">Total indicado</span><span class="resumo-item-val">'+FMF(tI)+'</span></div>'+
+    '<div class="resumo-item"><span class="resumo-item-nome">Total pago</span><span class="resumo-item-val">'+FMF(tP)+'</span></div>'+
+    '<div class="resumo-item"><span class="resumo-item-nome">% executado</span><span class="resumo-item-val">'+pct+'%</span></div></div>'+
+    '<div class="resumo-card"><div class="resumo-titulo">Top 5 órgãos</div>'+
+    top5.map(([o,v])=>'<div class="resumo-item"><span class="resumo-item-nome">'+o+'</span><span class="resumo-item-val">'+FM(v.ind)+'</span></div>').join('')+'</div>'+
+    '<div class="resumo-card"><div class="resumo-titulo">Por tipo de emenda</div>'+
+    tiposOrd.map(([t,v])=>'<div class="resumo-item"><span class="resumo-item-nome">'+t+' <span style="color:#888;font-size:11px">('+v.qtd+')</span></span><span class="resumo-item-val">'+FM(v.ind)+'</span></div>').join('')+'</div>'+
+    '<div class="resumo-card"><div class="resumo-titulo">Por ano</div>'+
+    anosOrd.map(([a,v])=>'<div class="resumo-item"><span class="resumo-item-nome">'+a+' <span style="color:#888;font-size:11px">('+v.qtd+')</span></span><span class="resumo-item-val">'+FM(v.ind)+'</span></div>').join('')+'</div>';
 }
 
 function showAba(aba,btn){
@@ -571,21 +485,8 @@ function showAba(aba,btn){
   document.getElementById('detalhe').style.display='none';
 }
 
-function onBusca(){
-  const q=document.getElementById('busca').value.toLowerCase();
-  if(abaAtual==='municipios'){
-    renderMunicipios(D);
-  }
-}
+function onBusca(){renderMunicipios(D);}
 
-loadData();
-
-let _munAtual="";
-</script>
-</div>
-</body>
-</html>
-<script>
 function exportarMunPDF(){
   const nome=_munAtual;
   const rows=D.filter(r=>r.municipio===nome);
@@ -595,127 +496,47 @@ function exportarMunPDF(){
   const tP=rows.reduce((s,r)=>s+r.pago,0);
   const pct=tI>0?Math.min(100,Math.round(tP/tI*100)):0;
   const now=new Date().toLocaleString('pt-BR');
-
   const linhas=rows.map((r,i)=>{
-    const bg=i%2===0?'#ffffff':'#fafafa';
-    return `<tr style="background:${bg}">
-      <td>${r.objeto}</td>
-      <td>${r.orgao}</td>
-      <td>${r.ano}</td>
-      <td>${r.tipo}</td>
-      <td style="text-align:right">${r.indicado>0?'R$ '+Math.round(r.indicado).toLocaleString('pt-BR'):'—'}</td>
-      <td style="text-align:right">${r.pago>0?'R$ '+Math.round(r.pago).toLocaleString('pt-BR'):'—'}</td>
-      <td>${r.situacao||'—'}</td>
-    </tr>`;
+    const bg=i%2===0?'#fff':'#fafafa';
+    return '<tr style="background:'+bg+'"><td>'+r.objeto+'</td><td>'+r.orgao+'</td><td>'+r.ano+'</td><td>'+r.tipo+'</td>'+
+      '<td style="text-align:right">'+(r.indicado>0?'R$ '+Math.round(r.indicado).toLocaleString('pt-BR'):'—')+'</td>'+
+      '<td style="text-align:right">'+(r.pago>0?'R$ '+Math.round(r.pago).toLocaleString('pt-BR'):'—')+'</td>'+
+      '<td>'+r.situacao+'</td></tr>';
   }).join('');
-
-  const html=`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
-  <title>Emendas em ${nome} — Dep. João Daniel PT/SE</title>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Arial,sans-serif;font-size:10px;color:#222;padding:20px}
-    .cabecalho{display:flex;align-items:center;gap:12px;border-bottom:3px solid #cc0000;padding-bottom:12px;margin-bottom:14px}
-    .cab-estrela{width:40px;height:40px;background:#cc0000;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .cab-titulo{font-size:16px;font-weight:700;color:#cc0000}
-    .cab-sub{font-size:11px;color:#666;margin-top:2px}
-    .municipio{font-size:20px;font-weight:700;color:#1c1c1e;margin-bottom:12px}
-    .totais{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
-    .total{background:#f9f9f9;border:1px solid #eee;border-radius:6px;padding:8px 10px;border-left:3px solid #cc0000}
-    .total-label{font-size:9px;color:#888;margin-bottom:2px;text-transform:uppercase}
-    .total-value{font-size:12px;font-weight:700;color:#222}
-    .total-value.red{color:#cc0000}
-    table{width:100%;border-collapse:collapse;font-size:9px}
-    thead th{background:#cc0000;color:#fff;padding:6px 5px;text-align:left;font-weight:600}
-    tbody td{padding:5px;border-bottom:1px solid #eee;vertical-align:top;word-break:break-word}
-    tfoot td{background:#fff5f5;color:#cc0000;font-weight:700;padding:6px 5px;border-top:2px solid #cc0000}
-    .rodape{margin-top:14px;font-size:9px;color:#aaa;text-align:right;border-top:1px solid #eee;padding-top:8px}
-    @media print{body{padding:10px}@page{margin:1cm;size:A4 landscape}}
-  </style></head><body>
-
-<!-- TELA DE LOGIN -->
-<div id="tela-login" class="login-wrap">
-  <div id="box-login" class="login-box">
-    <div class="login-star">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
-    </div>
-    <div class="login-titulo">Mandato Popular</div>
-    <div class="login-sub">Dep. João Daniel · PT/SE<br>App do Parlamentar</div>
-    <div class="login-field">
-      <label>Usuário</label>
-      <input type="text" id="login-usuario" placeholder="seu.usuario" onkeydown="if(event.key==='Enter')fazerLogin()"/>
-    </div>
-    <div class="login-field">
-      <label>Senha</label>
-      <input type="password" id="login-senha" placeholder="••••••••" onkeydown="if(event.key==='Enter')fazerLogin()"/>
-    </div>
-    <button class="login-btn" onclick="fazerLogin()">Entrar</button>
-    <div class="login-erro" id="login-erro"></div>
-    <div class="login-cadastro">Não tem acesso? <a onclick="mostrarCadastro()">Solicitar cadastro</a></div>
-  </div>
-  <div id="box-cadastro" class="cadastro-box">
-    <div class="cadastro-titulo">Solicitar Acesso</div>
-    <div class="cadastro-sub">Preencha os dados abaixo.<br>Seu acesso será liberado pelo administrador.</div>
-    <div class="login-field">
-      <label>Nome completo</label>
-      <input type="text" id="cad-nome" placeholder="Seu nome completo"/>
-    </div>
-    <div class="login-field">
-      <label>Usuário</label>
-      <input type="text" id="cad-usuario" placeholder="Escolha um usuário (sem espaços)"/>
-    </div>
-    <div class="login-field">
-      <label>Senha</label>
-      <input type="password" id="cad-senha" placeholder="Escolha uma senha"/>
-    </div>
-    <div class="login-field">
-      <label>Confirmar senha</label>
-      <input type="password" id="cad-senha2" placeholder="Repita a senha"/>
-    </div>
-    <button class="login-btn" onclick="fazerCadastro()">Solicitar acesso</button>
-    <div class="login-erro" id="cad-erro"></div>
-    <div class="cadastro-ok" id="cad-ok"></div>
-    <div class="login-cadastro" style="margin-top:12px"><a onclick="mostrarLogin()">← Voltar para o login</a></div>
-  </div>
-</div>
-
-<!-- APP -->
-<div id="tela-app" style="display:none">
-  <div class="cabecalho">
-    <div class="cab-estrela"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
-    <div>
-      <div class="cab-titulo">Dep. João Daniel — PT/SE · Mandato Popular</div>
-      <div class="cab-sub">Relatório de Emendas · Gerado em ${now}</div>
-    </div>
-  </div>
-  <div class="municipio">📍 ${nome}</div>
-  <div class="totais">
-    <div class="total"><div class="total-label">Emendas</div><div class="total-value">${rows.length}</div></div>
-    <div class="total"><div class="total-label">Total indicado</div><div class="total-value">R$ ${Math.round(tI).toLocaleString('pt-BR')}</div></div>
-    <div class="total"><div class="total-label">Total empenhado</div><div class="total-value">R$ ${Math.round(tE).toLocaleString('pt-BR')}</div></div>
-    <div class="total"><div class="total-label">Total pago · ${pct}%</div><div class="total-value red">R$ ${Math.round(tP).toLocaleString('pt-BR')}</div></div>
-  </div>
-  <table>
-    <thead><tr>
-      <th style="width:30%">Objeto</th><th>Órgão</th><th>Ano</th><th>Tipo</th>
-      <th style="text-align:right">Indicado R$</th>
-      <th style="text-align:right">Pago R$</th>
-      <th>Situação</th>
-    </tr></thead>
-    <tbody>${linhas}</tbody>
-    <tfoot><tr>
-      <td colspan="4">TOTAL (${rows.length} emendas)</td>
-      <td style="text-align:right">R$ ${Math.round(tI).toLocaleString('pt-BR')}</td>
-      <td style="text-align:right">R$ ${Math.round(tP).toLocaleString('pt-BR')}</td>
-      <td></td>
-    </tr></tfoot>
-  </table>
-  <div class="rodape">Mandato Popular · Dep. João Daniel PT/SE · ${now}</div>
-  </div>
-</body></html>`;
-
+  const html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Emendas '+nome+'</title>'+
+    '<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;font-size:10px;padding:20px}'+
+    '.cab{display:flex;align-items:center;gap:12px;border-bottom:3px solid #cc0000;padding-bottom:12px;margin-bottom:14px}'+
+    '.star{width:40px;height:40px;background:#cc0000;border-radius:50%;display:flex;align-items:center;justify-content:center}'+
+    '.titulo{font-size:16px;font-weight:700;color:#cc0000}.sub{font-size:11px;color:#666;margin-top:2px}'+
+    '.mun{font-size:20px;font-weight:700;margin-bottom:12px}'+
+    '.totais{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}'+
+    '.tot{background:#f9f9f9;border:1px solid #eee;border-radius:6px;padding:8px;border-left:3px solid #cc0000}'+
+    '.tot-label{font-size:9px;color:#888;text-transform:uppercase;margin-bottom:2px}.tot-value{font-size:12px;font-weight:700}'+
+    'table{width:100%;border-collapse:collapse;font-size:9px}'+
+    'thead th{background:#cc0000;color:#fff;padding:6px 5px;text-align:left;font-weight:600}'+
+    'tbody td{padding:5px;border-bottom:1px solid #eee;word-break:break-word}'+
+    'tfoot td{background:#fff5f5;color:#cc0000;font-weight:700;padding:6px 5px;border-top:2px solid #cc0000}'+
+    '.rodape{margin-top:14px;font-size:9px;color:#aaa;text-align:right;border-top:1px solid #eee;padding-top:8px}'+
+    '@media print{body{padding:10px}@page{margin:1cm;size:A4 landscape}}</style></head><body>'+
+    '<div class="cab"><div class="star"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>'+
+    '<div><div class="titulo">Dep. João Daniel — PT/SE · Mandato Popular</div><div class="sub">Relatório de Emendas · Gerado em '+now+'</div></div></div>'+
+    '<div class="mun">📍 '+nome+'</div>'+
+    '<div class="totais">'+
+    '<div class="tot"><div class="tot-label">Emendas</div><div class="tot-value">'+rows.length+'</div></div>'+
+    '<div class="tot"><div class="tot-label">Indicado</div><div class="tot-value">R$ '+Math.round(tI).toLocaleString('pt-BR')+'</div></div>'+
+    '<div class="tot"><div class="tot-label">Empenhado</div><div class="tot-value">R$ '+Math.round(tE).toLocaleString('pt-BR')+'</div></div>'+
+    '<div class="tot"><div class="tot-label">Pago · '+pct+'%</div><div class="tot-value" style="color:#cc0000">R$ '+Math.round(tP).toLocaleString('pt-BR')+'</div></div></div>'+
+    '<table><thead><tr><th style="width:30%">Objeto</th><th>Órgão</th><th>Ano</th><th>Tipo</th><th style="text-align:right">Indicado R$</th><th style="text-align:right">Pago R$</th><th>Situação</th></tr></thead>'+
+    '<tbody>'+linhas+'</tbody>'+
+    '<tfoot><tr><td colspan="4">TOTAL ('+rows.length+' emendas)</td>'+
+    '<td style="text-align:right">R$ '+Math.round(tI).toLocaleString('pt-BR')+'</td>'+
+    '<td style="text-align:right">R$ '+Math.round(tP).toLocaleString('pt-BR')+'</td><td></td></tr></tfoot></table>'+
+    '<div class="rodape">Mandato Popular · Dep. João Daniel PT/SE · '+now+'</div></body></html>';
   const win=window.open('','_blank');
   win.document.write(html);
   win.document.close();
-  setTimeout(()=>win.print(),500);
+  setTimeout(()=>win.print(),600);
 }
 </script>
+</body>
+</html>
