@@ -183,6 +183,7 @@ tfoot tr td{background:#fff5f5;font-weight:600;color:#cc0000;padding:6px 8px;fon
         <select id="f-orgao"><option value="">Todos os órgãos</option></select>
         <select id="f-mun"><option value="">Todos os municípios</option></select>
         <select id="f-tipo"><option value="">Todos os tipos</option></select>
+        <select id="f-acao"><option value="">Todas as ações</option></select>
         <select id="f-rp"><option value="">Todos os RPs</option></select>
         <input type="text" id="f-busca" placeholder="Buscar objeto ou proponente…"/>
         <button class="filter-reset" onclick="resetFilters()">↺ Limpar filtros</button>
@@ -380,6 +381,7 @@ function loadData(){
         municipio:String(r['Município']||''),
         rp:String(r['RP']||'').trim().replace(/[^a-zA-Z0-9]/g,''),
         tipo:String(r['Tipo Emenda']||''),
+        acao:String(r['Ação']||'').trim(),
         indicado:N(r['Indicado']),
         empenhado:N(r['Empenhado']),
         pago:N(r['Pago']),
@@ -418,6 +420,7 @@ function populateFilters(){
   sel('f-orgao',[...new Set(D.map(r=>r.orgao))].sort());
   sel('f-mun',[...new Set(D.map(r=>r.municipio))].sort());
   sel('f-tipo',[...new Set(D.map(r=>r.tipo))].sort());
+  sel('f-acao',[...new Set(D.map(r=>r.acao))].sort());
   sel('f-rp',[...new Set(D.map(r=>r.rp))].sort());
 }
 
@@ -426,6 +429,7 @@ function applyFilters(){
   const org=document.getElementById('f-orgao').value;
   const mun=document.getElementById('f-mun').value;
   const tipo=document.getElementById('f-tipo').value;
+  const acao=document.getElementById('f-acao').value;
   const rp=document.getElementById('f-rp').value;
   const q=document.getElementById('f-busca').value.toLowerCase();
   filtered=D.filter(r=>{
@@ -433,6 +437,7 @@ function applyFilters(){
     if(org&&r.orgao!==org)return false;
     if(mun&&r.municipio!==mun)return false;
     if(tipo&&r.tipo!==tipo)return false;
+    if(acao&&r.acao!==acao)return false;
     if(rp&&r.rp!==rp)return false;
     if(q&&!r.objeto.toLowerCase().includes(q)&&!r.proponente.toLowerCase().includes(q))return false;
     return true;
@@ -441,7 +446,7 @@ function applyFilters(){
 }
 
 function resetFilters(){
-  ['f-ano','f-orgao','f-mun','f-tipo','f-rp'].forEach(id=>document.getElementById(id).value='');
+  ['f-ano','f-orgao','f-mun','f-tipo','f-acao','f-rp'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f-busca').value='';
   filtered=[...D];page=1;render();
 }
@@ -585,12 +590,14 @@ function exportarPDF(){
   const fOrg=document.getElementById('f-orgao').value;
   const fMun=document.getElementById('f-mun').value;
   const fTipo=document.getElementById('f-tipo').value;
+  const fAcao=document.getElementById('f-acao').value;
   const fRp=document.getElementById('f-rp').value;
   const fBusca=document.getElementById('f-busca').value;
   if(fAno)filtrosAtivos.push('Ano: '+fAno);
   if(fOrg)filtrosAtivos.push('Órgão: '+fOrg);
   if(fMun)filtrosAtivos.push('Município: '+fMun);
   if(fTipo)filtrosAtivos.push('Tipo: '+fTipo);
+  if(fAcao)filtrosAtivos.push('Ação: '+fAcao);
   if(fRp)filtrosAtivos.push('RP: '+fRp);
   if(fBusca)filtrosAtivos.push('Busca: '+fBusca);
   const linhas=filtered.map((r,i)=>{
@@ -604,19 +611,19 @@ function exportarPDF(){
     '</tr>';
   }).join('');
   const html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório de Emendas</title>'+
-  '<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;font-size:10px;color:#222;padding:20px}'+
+  '<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;font-size:13px;color:#222;padding:20px}'+
   '.cab{display:flex;align-items:center;gap:12px;border-bottom:3px solid #cc0000;padding-bottom:12px;margin-bottom:14px}'+
   '.cab-star{width:40px;height:40px;background:#cc0000;border-radius:50%;display:flex;align-items:center;justify-content:center}'+
-  '.cab-titulo{font-size:16px;font-weight:700;color:#cc0000}.cab-sub{font-size:11px;color:#666;margin-top:2px}'+
-  '.filtros{background:#fff5f5;border:1px solid #f7c1c1;border-radius:6px;padding:8px 12px;margin-bottom:12px;font-size:10px;color:#666}'+
+  '.cab-titulo{font-size:19px;font-weight:700;color:#cc0000}.cab-sub{font-size:13px;color:#666;margin-top:2px}'+
+  '.filtros{background:#fff5f5;border:1px solid #f7c1c1;border-radius:6px;padding:8px 12px;margin-bottom:12px;font-size:12px;color:#666}'+
   '.totais{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}'+
   '.total{background:#f9f9f9;border:1px solid #eee;border-radius:6px;padding:8px 10px;border-left:3px solid #cc0000}'+
-  '.total-label{font-size:9px;color:#888;margin-bottom:2px;text-transform:uppercase}.total-value{font-size:12px;font-weight:700}'+
-  'table{width:100%;border-collapse:collapse;font-size:9px}'+
-  'thead th{background:#cc0000;color:#fff;padding:6px 5px;text-align:left;font-weight:600}'+
-  'tbody td{padding:5px;border-bottom:1px solid #eee;vertical-align:top;word-break:break-word}'+
-  'tfoot td{background:#fff5f5;color:#cc0000;font-weight:700;padding:6px 5px;border-top:2px solid #cc0000}'+
-  '.rodape{margin-top:14px;font-size:9px;color:#aaa;text-align:right;border-top:1px solid #eee;padding-top:8px}'+
+  '.total-label{font-size:11px;color:#888;margin-bottom:2px;text-transform:uppercase}.total-value{font-size:15px;font-weight:700}'+
+  'table{width:100%;border-collapse:collapse;font-size:12px}'+
+  'thead th{background:#cc0000;color:#fff;padding:7px 5px;text-align:left;font-weight:600}'+
+  'tbody td{padding:6px 5px;border-bottom:1px solid #eee;vertical-align:top;word-break:break-word}'+
+  'tfoot td{background:#fff5f5;color:#cc0000;font-weight:700;padding:7px 5px;border-top:2px solid #cc0000}'+
+  '.rodape{margin-top:14px;font-size:11px;color:#aaa;text-align:right;border-top:1px solid #eee;padding-top:8px}'+
   '@media print{body{padding:10px}@page{margin:1cm;size:A4 landscape}}</style></head><body>'+
   '<div class="cab"><div class="cab-star"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>'+
   '<div><div class="cab-titulo">Dep. João Daniel — PT/SE · Mandato Popular</div>'+
@@ -643,7 +650,7 @@ function exportarPDF(){
   setTimeout(()=>win.print(),500);
 }
 
-['f-ano','f-orgao','f-mun','f-tipo','f-rp'].forEach(id=>document.getElementById(id).addEventListener('change',applyFilters));
+['f-ano','f-orgao','f-mun','f-tipo','f-acao','f-rp'].forEach(id=>document.getElementById(id).addEventListener('change',applyFilters));
 document.getElementById('f-busca').addEventListener('input',applyFilters);
 </script>
 </body>
