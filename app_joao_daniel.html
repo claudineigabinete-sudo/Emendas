@@ -504,19 +504,19 @@ function exportarMunPDF(){
       '<td>'+r.situacao+'</td></tr>';
   }).join('');
   const html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Emendas '+nome+'</title>'+
-    '<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;font-size:10px;padding:20px}'+
+    '<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;font-size:13px;padding:20px}'+
     '.cab{display:flex;align-items:center;gap:12px;border-bottom:3px solid #cc0000;padding-bottom:12px;margin-bottom:14px}'+
     '.star{width:40px;height:40px;background:#cc0000;border-radius:50%;display:flex;align-items:center;justify-content:center}'+
-    '.titulo{font-size:16px;font-weight:700;color:#cc0000}.sub{font-size:11px;color:#666;margin-top:2px}'+
-    '.mun{font-size:20px;font-weight:700;margin-bottom:12px}'+
+    '.titulo{font-size:19px;font-weight:700;color:#cc0000}.sub{font-size:13px;color:#666;margin-top:2px}'+
+    '.mun{font-size:22px;font-weight:700;margin-bottom:12px}'+
     '.totais{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}'+
     '.tot{background:#f9f9f9;border:1px solid #eee;border-radius:6px;padding:8px;border-left:3px solid #cc0000}'+
-    '.tot-label{font-size:9px;color:#888;text-transform:uppercase;margin-bottom:2px}.tot-value{font-size:12px;font-weight:700}'+
-    'table{width:100%;border-collapse:collapse;font-size:9px}'+
-    'thead th{background:#cc0000;color:#fff;padding:6px 5px;text-align:left;font-weight:600}'+
-    'tbody td{padding:5px;border-bottom:1px solid #eee;word-break:break-word}'+
-    'tfoot td{background:#fff5f5;color:#cc0000;font-weight:700;padding:6px 5px;border-top:2px solid #cc0000}'+
-    '.rodape{margin-top:14px;font-size:9px;color:#aaa;text-align:right;border-top:1px solid #eee;padding-top:8px}'+
+    '.tot-label{font-size:11px;color:#888;text-transform:uppercase;margin-bottom:2px}.tot-value{font-size:15px;font-weight:700}'+
+    'table{width:100%;border-collapse:collapse;font-size:12px}'+
+    'thead th{background:#cc0000;color:#fff;padding:7px 5px;text-align:left;font-weight:600}'+
+    'tbody td{padding:6px 5px;border-bottom:1px solid #eee;word-break:break-word}'+
+    'tfoot td{background:#fff5f5;color:#cc0000;font-weight:700;padding:7px 5px;border-top:2px solid #cc0000}'+
+    '.rodape{margin-top:14px;font-size:11px;color:#aaa;text-align:right;border-top:1px solid #eee;padding-top:8px}'+
     '@media print{body{padding:10px}@page{margin:1cm;size:A4 landscape}}</style></head><body>'+
     '<div class="cab"><div class="star"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>'+
     '<div><div class="titulo">Dep. João Daniel — PT/SE · Mandato Popular</div><div class="sub">Relatório de Emendas · Gerado em '+now+'</div></div></div>'+
