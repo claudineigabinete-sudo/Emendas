@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -604,11 +605,17 @@ function exportarPDF(){
   if(fTipo)filtrosAtivos.push('Tipo: '+fTipo);
   if(fRp)filtrosAtivos.push('RP: '+fRp);
   if(fBusca)filtrosAtivos.push('Busca: '+fBusca);
+  const munFiltradoPDF=document.getElementById('f-mun').value;
+  const mostrarMunPDF=!munFiltradoPDF;
+  const thMunPDF=mostrarMunPDF?'<th style="width:10%">Município</th>':'';
+  const colspanTotal=mostrarMunPDF?9:8;
+
   const linhas=filtered.map((r,i)=>{
     const bg=i%2===0?'#ffffff':'#fafafa';
+    const tdMunPDF=mostrarMunPDF?'<td>'+r.municipio+'</td>':'';
     return '<tr style="background:'+bg+'">'+
       '<td>'+r.nemenda+'</td><td>'+r.ano+'</td><td>'+r.orgao+'</td><td>'+r.rp+'</td><td>'+r.tipo+'</td>'+
-      '<td>'+r.objeto+'</td><td>'+r.proponente+'</td><td>'+r.municipio+'</td><td>'+r.situacao+'</td>'+
+      '<td>'+r.objeto+'</td><td>'+r.proponente+'</td>'+tdMunPDF+'<td>'+r.situacao+'</td>'+
       '<td style="text-align:right">'+(r.indicado>0?'R$ '+Math.round(r.indicado).toLocaleString('pt-BR'):'—')+'</td>'+
       '<td style="text-align:right">'+(r.empenhado>0?'R$ '+Math.round(r.empenhado).toLocaleString('pt-BR'):'—')+'</td>'+
       '<td style="text-align:right">'+(r.pago>0?'R$ '+Math.round(r.pago).toLocaleString('pt-BR'):'—')+'</td>'+
@@ -640,10 +647,10 @@ function exportarPDF(){
   '<div class="total"><div class="total-label">Total pago</div><div class="total-value" style="color:#cc0000">R$ '+Math.round(tP).toLocaleString('pt-BR')+' ('+pct+'%)</div></div>'+
   '</div>'+
   '<table><thead><tr><th>Nº Emenda</th><th>Ano</th><th>Órgão</th><th>RP</th><th>Tipo</th>'+
-  '<th style="width:20%">Objeto</th><th style="width:15%">Proponente</th><th>Município</th><th>Situação</th>'+
+  '<th style="width:20%">Objeto</th><th style="width:15%">Proponente</th>'+thMunPDF+'<th>Situação</th>'+
   '<th>Indicado R$</th><th>Empenhado R$</th><th>Pago R$</th></tr></thead>'+
   '<tbody>'+linhas+'</tbody>'+
-  '<tfoot><tr><td colspan="9">TOTAL ('+filtered.length+' registros)</td>'+
+  '<tfoot><tr><td colspan="'+colspanTotal+'">TOTAL ('+filtered.length+' registros)</td>'+
   '<td style="text-align:right">R$ '+Math.round(tI).toLocaleString('pt-BR')+'</td>'+
   '<td style="text-align:right">R$ '+Math.round(tE).toLocaleString('pt-BR')+'</td>'+
   '<td style="text-align:right">R$ '+Math.round(tP).toLocaleString('pt-BR')+'</td></tr></tfoot></table>'+
