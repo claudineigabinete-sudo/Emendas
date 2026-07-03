@@ -150,6 +150,7 @@ tbody td{padding:6px 8px;color:#222;vertical-align:middle}
       <button class="filter-reset" onclick="resetFilters()">↺ Limpar</button>
       <button class="export-btn" onclick="exportarPDF()">⬇ Exportar PDF</button>
     </div>
+    <div id="mun-titulo" style="display:none;padding:8px 20px;font-size:14px;font-weight:600;color:#cc0000;background:#fff5f5;border-left:3px solid #cc0000;margin:0 20px 8px;border-radius:6px"></div>
     <div class="table-wrap">
       <table>
         <colgroup>
@@ -161,7 +162,7 @@ tbody td{padding:6px 8px;color:#222;vertical-align:middle}
         </colgroup>
         <thead><tr>
           <th>Nº Emenda</th><th>Ano</th><th>Órgão</th>
-          <th>Ação</th><th>Objeto</th><th>Município</th><th>Situação</th>
+          <th>Ação</th><th>Objeto</th><th id="th-mun">Município</th><th>Situação</th>
           <th style="text-align:right" onclick="ordenarPor('indicado')">Indicado R$ ↕</th>
           <th style="text-align:right" onclick="ordenarPor('empenhado')">Empenhado R$ ↕</th>
           <th style="text-align:right" onclick="ordenarPor('pago')">Pago R$ ↕</th>
@@ -368,16 +369,34 @@ function render(){
     '<div class="metric"><div class="metric-label">Total indicado</div><div class="metric-value" style="font-size:13px">'+FMT(tI)+'</div></div>'+
     '<div class="metric"><div class="metric-label">Total empenhado</div><div class="metric-value" style="font-size:13px">'+FMT(tE)+'</div></div>'+
     '<div class="metric"><div class="metric-label">Total pago · <span style="color:#cc0000">'+pct+'% exec.</span></div><div class="metric-value" style="font-size:13px;color:#cc0000">'+FMT(tP)+'</div></div>';
+
+  const munFiltrado=document.getElementById('f-mun').value;
+  const mostrarMun=!munFiltrado;
+
+  // Atualizar cabeçalho da tabela
+  const thMun=document.getElementById('th-mun');
+  if(thMun)thMun.style.display=mostrarMun?'':'none';
+
+  // Título do município filtrado
+  const tituloEl=document.getElementById('mun-titulo');
+  if(munFiltrado){
+    tituloEl.style.display='block';
+    tituloEl.textContent='📍 '+munFiltrado;
+  } else {
+    tituloEl.style.display='none';
+  }
+
   const s=(page-1)*PAGE,e=Math.min(s+PAGE,filtered.length);
   document.getElementById('tbody').innerHTML=filtered.slice(s,e).map(r=>{
     const lk=r.link?'<a class="link-a" href="'+r.link+'" target="_blank">↗</a>':'';
+    const tdMun=mostrarMun?'<td style="font-size:10px">'+r.municipio+'</td>':'';
     return '<tr>'+
       '<td style="font-size:10px">'+r.nemenda+'</td>'+
       '<td>'+r.ano+'</td>'+
       '<td style="font-size:10px">'+r.orgao+'</td>'+
       '<td class="td-ell" title="'+r.acao+'" style="font-size:10px">'+r.acao+'</td>'+
       '<td class="td-ell" title="'+r.objeto+'">'+r.objeto+'</td>'+
-      '<td style="font-size:10px">'+r.municipio+'</td>'+
+      tdMun+
       '<td><span class="pill '+sC(r.situacao)+'">'+( r.situacao||'—')+'</span></td>'+
       '<td style="text-align:right;font-size:10px">'+NUM(r.indicado)+'</td>'+
       '<td style="text-align:right;font-size:10px">'+NUM(r.empenhado)+'</td>'+
@@ -431,7 +450,7 @@ function exportarPDF(){
     '<div class="tot"><div class="tot-label">Total empenhado</div><div class="tot-value">R$ '+Math.round(tE).toLocaleString('pt-BR')+'</div></div>'+
     '<div class="tot"><div class="tot-label">Total pago · '+pct+'%</div><div class="tot-value" style="color:#cc0000">R$ '+Math.round(tP).toLocaleString('pt-BR')+'</div></div></div>'+
     '<table><thead><tr><th>Nº Emenda</th><th>Ano</th><th>Órgão</th><th>Ação</th><th style="width:20%">Objeto</th>'+
-    '<th>Município</th><th>Situação</th><th style="text-align:right">Indicado R$</th>'+
+    '<th id="th-mun">Município</th><th>Situação</th><th style="text-align:right">Indicado R$</th>'+
     '<th style="text-align:right">Empenhado R$</th><th style="text-align:right">Pago R$</th></tr></thead>'+
     '<tbody>'+linhas+'</tbody>'+
     '<tfoot><tr><td colspan="7">TOTAL ('+filtered.length+' registros)</td>'+
