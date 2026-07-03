@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -188,6 +189,7 @@ tfoot tr td{background:#fff5f5;font-weight:600;color:#cc0000;padding:6px 8px;fon
         <button class="filter-reset" onclick="resetFilters()">↺ Limpar filtros</button>
         <button class="export-btn" onclick="exportarPDF()">⬇ Exportar PDF</button>
       </div>
+      <div id="mun-titulo" style="display:none;padding:8px 20px;font-size:14px;font-weight:600;color:#cc0000;background:#fff5f5;border-left:3px solid #cc0000;margin:0 20px 8px;border-radius:6px"></div>
       <div class="table-wrap">
         <table>
           <colgroup>
@@ -200,7 +202,7 @@ tfoot tr td{background:#fff5f5;font-weight:600;color:#cc0000;padding:6px 8px;fon
           </colgroup>
           <thead><tr>
             <th>Nº Emenda</th><th>Ano</th><th>Órgão</th><th>RP</th><th>Tipo</th>
-            <th>Objeto</th><th>Proponente</th><th>Município</th><th>Situação</th>
+            <th>Objeto</th><th>Proponente</th><th id="th-mun">Município</th><th>Situação</th>
             <th style="text-align:right">Indicado R$</th>
             <th style="text-align:right">Empenhado R$</th>
             <th style="text-align:right">Pago R$</th>
@@ -228,6 +230,7 @@ tfoot tr td{background:#fff5f5;font-weight:600;color:#cc0000;padding:6px 8px;fon
       <button class="back-btn" onclick="closeDetail()">← Voltar para lista</button>
       <div class="detail-title" id="detail-name"></div>
       <div class="detail-metrics" id="detail-metrics"></div>
+      <div id="mun-titulo" style="display:none;padding:8px 20px;font-size:14px;font-weight:600;color:#cc0000;background:#fff5f5;border-left:3px solid #cc0000;margin:0 20px 8px;border-radius:6px"></div>
       <div class="table-wrap">
         <table>
           <colgroup><col style="width:80px"><col style="width:48px"><col style="width:75px"><col style="width:200px"><col style="width:100px"><col style="width:90px"><col style="width:90px"><col style="width:120px"><col style="width:28px"></colgroup>
@@ -457,9 +460,18 @@ function render(){
     '<div class="metric"><div class="metric-label">Total empenhado</div><div class="metric-value" style="font-size:13px">'+FMT(tE)+'</div></div>'+
     '<div class="metric"><div class="metric-label">Total pago · <span style="color:#cc0000">'+pct+'% exec.</span></div><div class="metric-value" style="font-size:13px;color:#cc0000">'+FMT(tP)+'</div></div>';
 
+  const munFiltrado=document.getElementById('f-mun').value;
+  const mostrarMun=!munFiltrado;
+  const thMun=document.getElementById('th-mun');
+  if(thMun)thMun.style.display=mostrarMun?'':'none';
+  const tituloEl=document.getElementById('mun-titulo');
+  if(munFiltrado){tituloEl.style.display='block';tituloEl.textContent='📍 '+munFiltrado;}
+  else{tituloEl.style.display='none';}
+
   const s=(page-1)*PAGE,e=Math.min(s+PAGE,filtered.length);
   document.getElementById('tbody').innerHTML=filtered.slice(s,e).map(r=>{
     const lk=r.link?'<a class="link-a" href="'+r.link+'" target="_blank" title="Ver no TransfereGov">↗</a>':'';
+    const tdMun=mostrarMun?'<td style="font-size:10px">'+r.municipio+'</td>':'';
     return '<tr>'+
       '<td style="font-size:10px">'+r.nemenda+'</td>'+
       '<td>'+r.ano+'</td>'+
@@ -468,7 +480,7 @@ function render(){
       '<td style="font-size:10px">'+r.tipo+'</td>'+
       '<td class="td-ell" title="'+r.objeto+'">'+r.objeto+'</td>'+
       '<td class="td-ell" title="'+r.proponente+'" style="font-size:10px">'+r.proponente+'</td>'+
-      '<td style="font-size:10px">'+r.municipio+'</td>'+
+      tdMun+
       '<td><span class="pill '+sC(r.situacao)+'">'+( r.situacao||'—')+'</span></td>'+
       '<td style="text-align:right;font-size:10px">'+NUM(r.indicado)+'</td>'+
       '<td style="text-align:right;font-size:10px">'+NUM(r.empenhado)+'</td>'+
