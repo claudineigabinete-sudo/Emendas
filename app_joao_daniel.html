@@ -375,7 +375,7 @@ function render(){
 
   // Atualizar cabeçalho da tabela
   const thMun=document.getElementById('th-mun');
-  if(thMun)thMun.style.display=mostrarMun?'':'none';
+  if(thMun)thMun.style.display=mostrarMun?'table-cell':'none';
 
   // Título do município filtrado
   const tituloEl=document.getElementById('mun-titulo');
@@ -417,11 +417,18 @@ function exportarPDF(){
   const tP=filtered.reduce((s,r)=>s+r.pago,0);
   const pct=tI>0?Math.round(tP/tI*100):0;
   const now=new Date().toLocaleString('pt-BR');
+  const munFiltradoPDF=document.getElementById('f-mun').value;
+  const mostrarMunPDF=!munFiltradoPDF;
+  const thMunPDF=mostrarMunPDF?'<th>Município</th>':'';
+  const colspanTotal=mostrarMunPDF?7:6;
+  const munTituloPDF=munFiltradoPDF?'<div style="font-size:14px;font-weight:700;color:#cc0000;margin-bottom:12px">📍 '+munFiltradoPDF+'</div>':'';
+
   const linhas=filtered.map((r,i)=>{
     const bg=i%2===0?'#fff':'#fafafa';
+    const tdMunPDF=mostrarMunPDF?'<td>'+r.municipio+'</td>':'';
     return '<tr style="background:'+bg+'">'+
       '<td>'+r.nemenda+'</td><td>'+r.ano+'</td><td>'+r.orgao+'</td>'+
-      '<td>'+r.acao+'</td><td>'+r.objeto+'</td><td>'+r.municipio+'</td><td>'+r.situacao+'</td>'+
+      '<td>'+r.acao+'</td><td>'+r.objeto+'</td>'+tdMunPDF+'<td>'+r.situacao+'</td>'+
       '<td style="text-align:right">'+(r.indicado>0?'R$ '+Math.round(r.indicado).toLocaleString('pt-BR'):'—')+'</td>'+
       '<td style="text-align:right">'+(r.empenhado>0?'R$ '+Math.round(r.empenhado).toLocaleString('pt-BR'):'—')+'</td>'+
       '<td style="text-align:right">'+(r.pago>0?'R$ '+Math.round(r.pago).toLocaleString('pt-BR'):'—')+'</td>'+
@@ -449,11 +456,12 @@ function exportarPDF(){
     '<div class="tot"><div class="tot-label">Total indicado</div><div class="tot-value">R$ '+Math.round(tI).toLocaleString('pt-BR')+'</div></div>'+
     '<div class="tot"><div class="tot-label">Total empenhado</div><div class="tot-value">R$ '+Math.round(tE).toLocaleString('pt-BR')+'</div></div>'+
     '<div class="tot"><div class="tot-label">Total pago · '+pct+'%</div><div class="tot-value" style="color:#cc0000">R$ '+Math.round(tP).toLocaleString('pt-BR')+'</div></div></div>'+
+    munTituloPDF+
     '<table><thead><tr><th>Nº Emenda</th><th>Ano</th><th>Órgão</th><th>Ação</th><th style="width:20%">Objeto</th>'+
-    '<th id="th-mun">Município</th><th>Situação</th><th style="text-align:right">Indicado R$</th>'+
+    thMunPDF+'<th>Situação</th><th style="text-align:right">Indicado R$</th>'+
     '<th style="text-align:right">Empenhado R$</th><th style="text-align:right">Pago R$</th></tr></thead>'+
     '<tbody>'+linhas+'</tbody>'+
-    '<tfoot><tr><td colspan="7">TOTAL ('+filtered.length+' registros)</td>'+
+    '<tfoot><tr><td colspan="'+colspanTotal+'">TOTAL ('+filtered.length+' registros)</td>'+
     '<td style="text-align:right">R$ '+Math.round(tI).toLocaleString('pt-BR')+'</td>'+
     '<td style="text-align:right">R$ '+Math.round(tE).toLocaleString('pt-BR')+'</td>'+
     '<td style="text-align:right">R$ '+Math.round(tP).toLocaleString('pt-BR')+'</td></tr></tfoot></table>'+
