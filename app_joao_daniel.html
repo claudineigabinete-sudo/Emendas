@@ -6,7 +6,7 @@
 <title>App · João Daniel PT/SE</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#f2f2f7;color:#1c1c1e;min-height:100vh}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#f5f5f5;color:#1c1c1e;min-height:100vh}
 
 /* LOGIN */
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#cc0000,#990000);padding:20px}
@@ -22,102 +22,62 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 .login-erro{background:#fcebeb;color:#a32d2d;border-radius:8px;padding:10px 12px;font-size:12px;margin-top:12px;display:none;text-align:center}
 .login-link{text-align:center;margin-top:16px;font-size:12px;color:#888}
 .login-link a{color:#cc0000;cursor:pointer;font-weight:600}
-.cadastro-box{display:none}
 .cadastro-ok{background:#eaf3de;color:#3b6d11;border-radius:8px;padding:12px;font-size:13px;margin-top:12px;display:none;text-align:center;line-height:1.5}
 
 /* HEADER */
-.hdr{background:linear-gradient(135deg,#cc0000,#990000);padding:16px 16px 12px;position:sticky;top:0;z-index:100}
-.hdr-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.hdr-star{width:32px;height:32px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.hdr-name{color:#fff;font-size:14px;font-weight:600;line-height:1.2}
-.hdr-sub{color:rgba(255,255,255,0.75);font-size:11px}
+.hdr{background:linear-gradient(135deg,#cc0000,#990000);padding:14px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100}
+.hdr-star{width:36px;height:36px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hdr-title{color:#fff;font-size:15px;font-weight:600}
+.hdr-sub{color:rgba(255,255,255,0.75);font-size:11px;margin-top:2px}
 .hdr-btns{margin-left:auto;display:flex;gap:6px}
-.hdr-btn{background:rgba(255,255,255,0.2);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.search-wrap{background:#fff;border-radius:10px;display:flex;align-items:center;padding:0 10px;gap:8px}
-.search-wrap input{flex:1;border:none;outline:none;font-size:14px;padding:10px 0;background:transparent;color:#1c1c1e}
+.hdr-btn{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:11px;padding:4px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.hdr-btn:hover{background:rgba(255,255,255,0.25)}
 
-/* TOTAIS */
-.totais{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 16px 0}
-.total-card{background:#fff;border-radius:12px;padding:12px 14px;border-left:3px solid #cc0000}
-.total-label{font-size:10px;color:#888;margin-bottom:2px;text-transform:uppercase;letter-spacing:.03em}
-.total-value{font-size:16px;font-weight:700;color:#1c1c1e}
-.total-value.red{color:#cc0000}
-.exec-bar{margin-top:6px;height:4px;background:#f0f0f0;border-radius:2px;overflow:hidden}
-.exec-fill{height:100%;background:#cc0000;border-radius:2px}
-.exec-pct{font-size:10px;color:#cc0000;margin-top:3px;font-weight:600}
+/* MÉTRICAS */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px 20px}
+.metric{background:#fff;border-radius:8px;padding:12px 14px;border-left:3px solid #cc0000;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+.metric-label{font-size:11px;color:#888;margin-bottom:4px}
+.metric-value{font-size:15px;font-weight:600;color:#222}
 
-/* ABAS */
-.tabs{display:flex;padding:12px 16px 0;gap:8px}
-.tab{flex:1;padding:8px;background:#fff;border:none;border-radius:10px;font-size:12px;font-weight:500;color:#888;cursor:pointer}
-.tab.active{background:#cc0000;color:#fff}
+/* FILTROS */
+.filters{padding:0 20px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filters select,.filters input{font-size:12px;padding:5px 8px;border-radius:6px;border:1px solid #ddd;background:#fff;color:#222;height:30px}
+.filters input[type=text]{width:200px}
+.filter-reset{font-size:12px;color:#cc0000;cursor:pointer;background:none;border:none;padding:5px 0}
+.export-btn{font-size:12px;background:#cc0000;color:#fff;border:none;border-radius:6px;padding:5px 12px;cursor:pointer;height:30px;font-weight:500}
 
-/* LISTA */
-.section-title{padding:12px 16px 6px;font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.04em}
-.mun-list{padding:0 16px 80px}
-.mun-card{background:#fff;border-radius:12px;margin-bottom:8px;overflow:hidden;cursor:pointer}
-.mun-card:active{opacity:.85}
-.mun-header{padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
-.mun-nome{font-size:14px;font-weight:600;color:#1c1c1e}
-.mun-qtd{font-size:11px;color:#888;margin-top:1px}
-.mun-chevron{color:#ccc;font-size:18px}
-.mun-valores{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #f2f2f7}
-.mun-val{padding:8px 14px}
-.mun-val-label{font-size:10px;color:#888;margin-bottom:1px}
-.mun-val-num{font-size:13px;font-weight:600;color:#1c1c1e}
-.mun-val-num.red{color:#cc0000}
-.mun-bar{height:3px;background:#f0f0f0;margin:0 14px 8px;border-radius:2px;overflow:hidden}
-.mun-bar-fill{height:100%;background:#cc0000;border-radius:2px}
-.mun-objetos{padding:0 14px 10px;border-top:1px solid #f2f2f7}
-.mun-objeto-item{font-size:11px;color:#555;padding:4px 0;border-bottom:1px solid #f7f7f7;line-height:1.4}
-.mun-objeto-item:last-child{border-bottom:none}
-
-/* DETALHE */
-.detalhe{display:none;padding:0 16px 80px}
-.det-header{display:flex;gap:8px;align-items:center;padding:12px 0}
-.back-btn{background:none;border:1px solid #cc0000;color:#cc0000;font-size:13px;font-weight:500;cursor:pointer;padding:6px 12px;border-radius:8px}
-.pdf-btn{background:#cc0000;border:none;color:#fff;font-size:13px;font-weight:500;cursor:pointer;padding:6px 12px;border-radius:8px;margin-left:auto}
-.det-nome{font-size:20px;font-weight:700;color:#1c1c1e;margin-bottom:12px}
-.det-totais{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
-.dt{background:#fff;border-radius:10px;padding:10px 12px;text-align:center}
-.dt-label{font-size:10px;color:#888;margin-bottom:3px}
-.dt-value{font-size:13px;font-weight:700;color:#1c1c1e}
-.dt-value.red{color:#cc0000}
-.emenda-item{background:#fff;border-radius:10px;margin-bottom:8px;padding:12px 14px}
-.emenda-objeto{font-size:13px;font-weight:500;color:#1c1c1e;margin-bottom:8px;line-height:1.4}
-.emenda-row{display:flex;justify-content:space-between;margin-bottom:4px}
-.emenda-label{font-size:11px;color:#888}
-.emenda-val{font-size:11px;font-weight:600;color:#1c1c1e}
-.emenda-val.red{color:#cc0000}
-.pill{display:inline-block;font-size:10px;padding:3px 8px;border-radius:999px;margin-top:6px}
+/* TABELA */
+.table-wrap{padding:0 20px 4px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
+thead th{background:#cc0000;color:#fff;padding:7px 8px;text-align:left;font-weight:600;font-size:10px;white-space:nowrap;cursor:pointer}
+thead th:hover{background:#990000}
+tbody tr{border-bottom:1px solid #eee}
+tbody tr:hover{background:#fff5f5}
+tbody td{padding:6px 8px;color:#222;vertical-align:middle}
+.td-ell{max-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pill{display:inline-block;font-size:9px;padding:2px 6px;border-radius:999px;white-space:nowrap}
 .s-ok{background:#eaf3de;color:#3b6d11}
 .s-info{background:#e6f1fb;color:#185fa5}
 .s-err{background:#fcebeb;color:#a32d2d}
 .s-warn{background:#faeeda;color:#854f0b}
 .s-gray{background:#f0f0f0;color:#666}
+.link-a{color:#cc0000;font-size:13px;text-decoration:none}
 
-/* RESUMO */
-.resumo{display:none;padding:0 16px 80px}
-.resumo-card{background:#fff;border-radius:12px;margin-bottom:8px;padding:14px;margin-top:12px}
-.resumo-titulo{font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px}
-.resumo-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f2f2f7}
-.resumo-item:last-child{border-bottom:none}
-.resumo-item-nome{font-size:13px;color:#1c1c1e}
-.resumo-item-val{font-size:13px;font-weight:600;color:#cc0000}
+/* PAGINAÇÃO */
+.pagination{display:flex;align-items:center;justify-content:space-between;padding:8px 20px 14px;font-size:11px;color:#888}
+.pagination button{background:#fff;border:1px solid #ddd;border-radius:6px;padding:4px 12px;cursor:pointer;font-size:12px}
+.pagination button:disabled{opacity:.4;cursor:default}
 
-/* LOADING / ERRO */
-.loading{padding:60px 20px;text-align:center;color:#888;font-size:14px}
-.loading-spinner{width:32px;height:32px;border:3px solid #eee;border-top:3px solid #cc0000;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
-@keyframes spin{to{transform:rotate(360deg)}}
+/* LOADING/ERRO */
+.loading{padding:40px 20px;text-align:center;color:#888;font-size:13px}
 .erro-box{margin:16px;padding:14px;background:#fcebeb;border-radius:10px;color:#a32d2d;font-size:13px}
 .erro-box button{margin-top:10px;background:#cc0000;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer;width:100%}
-.empty{padding:40px 20px;text-align:center;color:#888;font-size:14px}
 </style>
 </head>
 <body>
 
 <!-- TELA LOGIN -->
 <div id="tela-login" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#cc0000,#990000);padding:20px">
-
   <div id="box-login" class="login-box">
     <div class="login-star">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
@@ -137,110 +97,95 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
     <div class="login-link">Não tem acesso? <a onclick="mostrarCadastro()">Solicitar cadastro</a></div>
   </div>
 
-  <div id="box-cadastro" class="login-box cadastro-box">
+  <div id="box-cadastro" class="login-box" style="display:none">
     <div class="login-titulo">Solicitar Acesso</div>
     <div class="login-sub">Preencha os dados abaixo.<br>Seu acesso será liberado pelo administrador.</div>
-    <div class="login-field">
-      <label>Nome completo</label>
-      <input type="text" id="cad-nome" placeholder="Seu nome completo"/>
-    </div>
-    <div class="login-field">
-      <label>Usuário</label>
-      <input type="text" id="cad-usuario" placeholder="Escolha um usuário (sem espaços)"/>
-    </div>
-    <div class="login-field">
-      <label>Senha</label>
-      <input type="password" id="cad-senha" placeholder="Escolha uma senha"/>
-    </div>
-    <div class="login-field">
-      <label>Confirmar senha</label>
-      <input type="password" id="cad-senha2" placeholder="Repita a senha"/>
-    </div>
+    <div class="login-field"><label>Nome completo</label><input type="text" id="cad-nome" placeholder="Seu nome completo"/></div>
+    <div class="login-field"><label>Usuário</label><input type="text" id="cad-usuario" placeholder="Escolha um usuário (sem espaços)"/></div>
+    <div class="login-field"><label>Senha</label><input type="password" id="cad-senha" placeholder="Escolha uma senha"/></div>
+    <div class="login-field"><label>Confirmar senha</label><input type="password" id="cad-senha2" placeholder="Repita a senha"/></div>
     <button class="login-btn" onclick="fazerCadastro()">Solicitar acesso</button>
     <div class="login-erro" id="cad-erro"></div>
     <div class="cadastro-ok" id="cad-ok"></div>
     <div class="login-link" style="margin-top:12px"><a onclick="mostrarLogin()">← Voltar para o login</a></div>
   </div>
-
 </div>
 
 <!-- APP -->
 <div id="tela-app" style="display:none">
-
-<div class="hdr">
-  <div class="hdr-top">
+  <div class="hdr">
     <div class="hdr-star">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="#cc0000"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#cc0000"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
     </div>
     <div>
-      <div class="hdr-name">Dep. João Daniel · PT/SE</div>
-      <div class="hdr-sub" id="hdr-sub">Carregando...</div>
+      <div class="hdr-title">Dep. João Daniel — PT/SE · Mandato Popular</div>
+      <div class="hdr-sub" id="hdr-sub">Carregando dados...</div>
     </div>
     <div class="hdr-btns">
-      <button class="hdr-btn" onclick="loadData()" title="Atualizar">↺</button>
-      <button class="hdr-btn" onclick="fazerLogout()" title="Sair">⏻</button>
-    </div>
-  </div>
-  <div class="search-wrap">
-    <span style="color:#999;font-size:14px">🔍</span>
-    <input type="text" id="busca" placeholder="Buscar município ou objeto…" oninput="onBusca()"/>
-  </div>
-</div>
-
-<div id="loading" class="loading">
-  <div class="loading-spinner"></div>
-  Conectando ao Google Sheets...
-</div>
-<div id="erro" class="erro-box" style="display:none">
-  <div id="erro-msg"></div>
-  <button onclick="loadData()">↺ Tentar novamente</button>
-</div>
-
-<div id="conteudo" style="display:none">
-  <div class="totais">
-    <div class="total-card">
-      <div class="total-label">Total indicado</div>
-      <div class="total-value" id="t-ind">—</div>
-    </div>
-    <div class="total-card">
-      <div class="total-label">Total pago</div>
-      <div class="total-value red" id="t-pago">—</div>
-      <div class="exec-bar"><div class="exec-fill" id="t-bar" style="width:0%"></div></div>
-      <div class="exec-pct" id="t-pct">0% executado</div>
+      <button class="hdr-btn" onclick="loadData()">↺ Atualizar</button>
+      <button class="hdr-btn" id="hdr-username"></button>
+      <button class="hdr-btn" onclick="fazerLogout()">Sair</button>
     </div>
   </div>
 
-  <div class="tabs">
-    <button class="tab active" onclick="showAba('municipios',this)">Por Município</button>
-    <button class="tab" onclick="showAba('resumo',this)">Resumo Geral</button>
+  <div id="loading-msg" class="loading">Conectando ao Google Sheets...</div>
+  <div id="erro-msg" class="erro-box" style="display:none">
+    <div id="erro-txt"></div>
+    <button onclick="loadData()">↺ Tentar novamente</button>
   </div>
 
-  <div id="aba-municipios">
-    <div class="section-title" id="sec-title">Municípios</div>
-    <div class="mun-list" id="mun-list"></div>
-  </div>
-
-  <div id="aba-resumo" class="resumo">
-    <div id="resumo-content"></div>
-  </div>
-
-  <div id="detalhe" class="detalhe">
-    <div class="det-header">
-      <button class="back-btn" onclick="voltarLista()">← Voltar</button>
-      <button class="pdf-btn" onclick="exportarMunPDF()">⬇ Exportar PDF</button>
+  <div id="painel" style="display:none">
+    <div class="metrics" id="metrics"></div>
+    <div class="filters">
+      <select id="f-mun"><option value="">Todos os municípios</option></select>
+      <select id="f-orgao"><option value="">Todos os órgãos</option></select>
+      <select id="f-ano"><option value="">Todos os anos</option></select>
+      <select id="f-acao"><option value="">Todas as ações</option></select>
+      <select id="f-valor">
+        <option value="">Ordenar por valor</option>
+        <option value="maior">Maior para menor</option>
+        <option value="menor">Menor para maior</option>
+      </select>
+      <button class="filter-reset" onclick="resetFilters()">↺ Limpar</button>
+      <button class="export-btn" onclick="exportarPDF()">⬇ Exportar PDF</button>
     </div>
-    <div class="det-nome" id="det-nome"></div>
-    <div class="det-totais" id="det-totais"></div>
-    <div id="det-emendas"></div>
+    <div class="table-wrap">
+      <table>
+        <colgroup>
+          <col style="width:80px"><col style="width:48px"><col style="width:75px">
+          <col style="width:120px"><col style="width:180px">
+          <col style="width:100px"><col style="width:110px">
+          <col style="width:90px"><col style="width:90px"><col style="width:90px">
+          <col style="width:28px">
+        </colgroup>
+        <thead><tr>
+          <th>Nº Emenda</th><th>Ano</th><th>Órgão</th>
+          <th>Ação</th><th>Objeto</th><th>Município</th><th>Situação</th>
+          <th style="text-align:right" onclick="ordenarPor('indicado')">Indicado R$ ↕</th>
+          <th style="text-align:right" onclick="ordenarPor('empenhado')">Empenhado R$ ↕</th>
+          <th style="text-align:right" onclick="ordenarPor('pago')">Pago R$ ↕</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="pagination">
+      <span id="pag-info"></span>
+      <div style="display:flex;gap:6px">
+        <button id="btn-prev" onclick="changePage(-1)">‹ Anterior</button>
+        <button id="btn-next" onclick="changePage(1)">Próxima ›</button>
+      </div>
+    </div>
   </div>
 </div>
-
-</div><!-- fim tela-app -->
 
 <script>
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbxgMJcm7x2SyQlRrfnx-zFGtS1MemADX68YXmKwPl5B4GnJheqNEOhw-P2Dk0CV8tSG/exec';
-let D=[],abaAtual='municipios',_munAtual='',nomeLogado='';
+const PAGE=20;
+let D=[],filtered=[],page=1,nomeLogado='',ordemAtual={campo:'',asc:false};
 
+const FMT=v=>isNaN(v)||v===''?'—':'R$ '+Math.round(v).toLocaleString('pt-BR');
+const NUM=v=>(!v&&v!==0)||isNaN(v)?'—':Math.round(v).toLocaleString('pt-BR');
 const N=v=>{
   if(v===null||v===undefined||v==='')return 0;
   if(typeof v==='number')return isNaN(v)?0:v;
@@ -249,13 +194,6 @@ const N=v=>{
   if(/^\d{1,3}(,\d{3})*(\.\d+)?$/.test(s))return parseFloat(s.replace(/,/g,''))||0;
   return parseFloat(s.replace(',','.'))||0;
 };
-const FM=v=>{
-  if(!v&&v!==0)return '—';
-  if(v>=1e6)return 'R$ '+(v/1e6).toFixed(1).replace('.',',')+'M';
-  if(v>=1e3)return 'R$ '+(v/1e3).toFixed(0)+'mil';
-  return 'R$ '+Math.round(v).toLocaleString('pt-BR');
-};
-const FMF=v=>isNaN(v)||v===''?'—':'R$ '+Math.round(v).toLocaleString('pt-BR');
 function sC(s){
   if(!s)return 's-gray';const l=s.toLowerCase();
   if(l.includes('conclu')||l.includes('pago')||l.includes('aprovad'))return 's-ok';
@@ -264,15 +202,10 @@ function sC(s){
   return 's-warn';
 }
 
-// ---- LOGIN ----
-function mostrarCadastro(){
-  document.getElementById('box-login').style.display='none';
-  document.getElementById('box-cadastro').style.display='block';
-}
-function mostrarLogin(){
-  document.getElementById('box-cadastro').style.display='none';
-  document.getElementById('box-login').style.display='block';
-}
+// LOGIN
+function mostrarCadastro(){document.getElementById('box-login').style.display='none';document.getElementById('box-cadastro').style.display='block';}
+function mostrarLogin(){document.getElementById('box-cadastro').style.display='none';document.getElementById('box-login').style.display='block';}
+
 function fazerLogin(){
   const usuario=document.getElementById('login-usuario').value.trim();
   const senha=document.getElementById('login-senha').value;
@@ -286,16 +219,17 @@ function fazerLogin(){
       nomeLogado=res.nome;
       document.getElementById('tela-login').style.display='none';
       document.getElementById('tela-app').style.display='block';
+      document.getElementById('hdr-username').textContent=res.nome;
       loadData();
     } else {
-      erroEl.textContent=res.msg||'Erro ao fazer login.';
-      erroEl.style.display='block';
+      erroEl.textContent=res.msg||'Erro ao fazer login.';erroEl.style.display='block';
     }
   };
   const s=document.createElement('script');
   s.src=SCRIPT_URL+'?action=login&usuario='+encodeURIComponent(usuario)+'&senha='+encodeURIComponent(senha)+'&callback='+cbName;
   document.head.appendChild(s);
 }
+
 function fazerCadastro(){
   const nome=document.getElementById('cad-nome').value.trim();
   const usuario=document.getElementById('cad-usuario').value.trim();
@@ -317,27 +251,27 @@ function fazerCadastro(){
   s.src=SCRIPT_URL+'?action=cadastro&nome='+encodeURIComponent(nome)+'&usuario='+encodeURIComponent(usuario)+'&senha='+encodeURIComponent(senha)+'&callback='+cbName;
   document.head.appendChild(s);
 }
+
 function fazerLogout(){
   nomeLogado='';D=[];
   document.getElementById('tela-app').style.display='none';
   document.getElementById('tela-login').style.display='flex';
   document.getElementById('login-usuario').value='';
   document.getElementById('login-senha').value='';
-  document.getElementById('conteudo').style.display='none';
+  document.getElementById('painel').style.display='none';
 }
 
-// ---- DADOS ----
+// DADOS
 function loadData(){
-  document.getElementById('loading').style.display='block';
-  document.getElementById('erro').style.display='none';
-  document.getElementById('conteudo').style.display='none';
-  document.getElementById('hdr-sub').textContent='Carregando...';
-  const cbName='_cb_'+Date.now();
+  document.getElementById('loading-msg').style.display='block';
+  document.getElementById('erro-msg').style.display='none';
+  document.getElementById('painel').style.display='none';
+  const cbName='_dados_'+Date.now();
   const timeout=setTimeout(()=>{
     delete window[cbName];
-    document.getElementById('loading').style.display='none';
-    document.getElementById('erro').style.display='block';
-    document.getElementById('erro-msg').textContent='Tempo esgotado. Verifique sua conexão.';
+    document.getElementById('loading-msg').style.display='none';
+    document.getElementById('erro-msg').style.display='block';
+    document.getElementById('erro-txt').textContent='Tempo esgotado. Tente novamente.';
   },15000);
   window[cbName]=function(res){
     clearTimeout(timeout);delete window[cbName];
@@ -347,196 +281,169 @@ function loadData(){
         nemenda:String(r['Nº Emenda']||''),
         ano:String(r['Ano Emenda']||''),
         orgao:String(r['ORGÃO']||'').trim(),
+        acao:String(r['Ação']||r['Acao']||'').trim(),
         objeto:String(r['Objeto']||''),
         proponente:String(r['Proponente']||''),
         municipio:String(r['Município']||'').trim(),
         situacao:String(r['Situação']||''),
-        tipo:String(r['Tipo Emenda']||'').trim().replace(/[^a-zA-Z0-9\u00C0-\u00FF ]/g,''),
+        tipo:String(r['Tipo Emenda']||''),
         link:String(r['Link']||''),
         indicado:N(r['Indicado']),
         empenhado:N(r['Empenhado']),
         pago:N(r['Pago']),
-      })).filter(r=>r.municipio);
-      document.getElementById('loading').style.display='none';
-      document.getElementById('conteudo').style.display='block';
-      const now=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-      document.getElementById('hdr-sub').textContent=D.length+' emendas · '+now;
-      renderTotais(D);renderMunicipios(D);renderResumo();
+      }));
+      filtered=[...D];
+      document.getElementById('loading-msg').style.display='none';
+      document.getElementById('painel').style.display='block';
+      const now=new Date().toLocaleString('pt-BR');
+      document.getElementById('hdr-sub').textContent='Painel de Emendas · '+D.length+' registros · atualizado '+now;
+      populateFilters();render();
     }catch(e){
-      document.getElementById('loading').style.display='none';
-      document.getElementById('erro').style.display='block';
-      document.getElementById('erro-msg').textContent='Erro: '+e.message;
+      document.getElementById('loading-msg').style.display='none';
+      document.getElementById('erro-msg').style.display='block';
+      document.getElementById('erro-txt').textContent='Erro: '+e.message;
     }
   };
   const s=document.createElement('script');
   s.src=SCRIPT_URL+'?action=dados&callback='+cbName;
   s.onerror=()=>{
     clearTimeout(timeout);delete window[cbName];
-    document.getElementById('loading').style.display='none';
-    document.getElementById('erro').style.display='block';
-    document.getElementById('erro-msg').textContent='Erro de conexão.';
+    document.getElementById('loading-msg').style.display='none';
+    document.getElementById('erro-msg').style.display='block';
+    document.getElementById('erro-txt').textContent='Erro de conexão.';
   };
   document.head.appendChild(s);
 }
 
-function renderTotais(data){
-  const tI=data.reduce((s,r)=>s+r.indicado,0);
-  const tP=data.reduce((s,r)=>s+r.pago,0);
-  const pct=tI>0?Math.min(100,Math.round(tP/tI*100)):0;
-  document.getElementById('t-ind').textContent=FMF(tI);
-  document.getElementById('t-pago').textContent=FMF(tP);
-  document.getElementById('t-bar').style.width=pct+'%';
-  document.getElementById('t-pct').textContent=pct+'% executado';
+function populateFilters(){
+  const sel=(id,arr)=>{
+    const el=document.getElementById(id);
+    while(el.options.length>1)el.remove(1);
+    arr.forEach(v=>{if(!v)return;const o=document.createElement('option');o.value=v;o.textContent=v;el.appendChild(o);});
+  };
+  sel('f-mun',[...new Set(D.map(r=>r.municipio))].sort());
+  sel('f-orgao',[...new Set(D.map(r=>r.orgao))].sort());
+  sel('f-ano',[...new Set(D.map(r=>r.ano))].sort());
+  sel('f-acao',[...new Set(D.map(r=>r.acao).filter(v=>v))].sort());
 }
 
-function renderMunicipios(data){
-  const map={};
-  data.forEach(r=>{
-    const k=r.municipio;
-    if(!map[k])map[k]={nome:k,qtd:0,ind:0,pago:0,rows:[]};
-    map[k].qtd++;map[k].ind+=r.indicado;map[k].pago+=r.pago;map[k].rows.push(r);
+function applyFilters(){
+  const mun=document.getElementById('f-mun').value;
+  const org=document.getElementById('f-orgao').value;
+  const ano=document.getElementById('f-ano').value;
+  const acao=document.getElementById('f-acao').value;
+  const valor=document.getElementById('f-valor').value;
+  filtered=D.filter(r=>{
+    if(mun&&r.municipio!==mun)return false;
+    if(org&&r.orgao!==org)return false;
+    if(ano&&r.ano!==ano)return false;
+    if(acao&&r.acao!==acao)return false;
+    return true;
   });
-  const list=Object.values(map).sort((a,b)=>b.ind-a.ind);
-  const q=(document.getElementById('busca').value||'').toLowerCase();
-  const filtrado=q?list.filter(m=>m.nome.toLowerCase().includes(q)||m.rows.some(r=>r.objeto.toLowerCase().includes(q))):list;
-  document.getElementById('sec-title').textContent=filtrado.length+' município'+(filtrado.length!==1?'s':'');
-  if(!filtrado.length){document.getElementById('mun-list').innerHTML='<div class="empty">Nenhum município encontrado.</div>';return;}
-  document.getElementById('mun-list').innerHTML=filtrado.map(m=>{
-    const pct=m.ind>0?Math.min(100,Math.round(m.pago/m.ind*100)):0;
-    const objetos=m.rows.map(r=>'<div class="mun-objeto-item">· '+r.objeto+'</div>').join('');
-    return '<div class="mun-card" onclick="verMunicipio(\''+m.nome.replace(/'/g,"\\'")+'\')">' +
-      '<div class="mun-header"><div><div class="mun-nome">'+m.nome+'</div><div class="mun-qtd">'+m.qtd+' emenda'+(m.qtd!==1?'s':'')+'</div></div><div class="mun-chevron">›</div></div>'+
-      '<div class="mun-valores"><div class="mun-val"><div class="mun-val-label">Indicado</div><div class="mun-val-num">'+FM(m.ind)+'</div></div>'+
-      '<div class="mun-val"><div class="mun-val-label">Pago</div><div class="mun-val-num red">'+FM(m.pago)+'</div></div></div>'+
-      '<div class="mun-bar"><div class="mun-bar-fill" style="width:'+pct+'%"></div></div>'+
-      '<div class="mun-objetos">'+objetos+'</div></div>';
+  if(valor==='maior')filtered.sort((a,b)=>b.indicado-a.indicado);
+  else if(valor==='menor')filtered.sort((a,b)=>a.indicado-b.indicado);
+  page=1;render();
+}
+
+function ordenarPor(campo){
+  if(ordemAtual.campo===campo){ordemAtual.asc=!ordemAtual.asc;}
+  else{ordemAtual.campo=campo;ordemAtual.asc=false;}
+  filtered.sort((a,b)=>ordemAtual.asc?a[campo]-b[campo]:b[campo]-a[campo]);
+  render();
+}
+
+function resetFilters(){
+  ['f-mun','f-orgao','f-ano','f-acao','f-valor'].forEach(id=>document.getElementById(id).value='');
+  filtered=[...D];ordemAtual={campo:'',asc:false};page=1;render();
+}
+
+function render(){
+  const tI=filtered.reduce((s,r)=>s+r.indicado,0);
+  const tE=filtered.reduce((s,r)=>s+r.empenhado,0);
+  const tP=filtered.reduce((s,r)=>s+r.pago,0);
+  const pct=tI>0?Math.round(tP/tI*100):0;
+  document.getElementById('metrics').innerHTML=
+    '<div class="metric"><div class="metric-label">Registros</div><div class="metric-value">'+filtered.length+' <span style="font-size:11px;color:#888">de '+D.length+'</span></div></div>'+
+    '<div class="metric"><div class="metric-label">Total indicado</div><div class="metric-value" style="font-size:13px">'+FMT(tI)+'</div></div>'+
+    '<div class="metric"><div class="metric-label">Total empenhado</div><div class="metric-value" style="font-size:13px">'+FMT(tE)+'</div></div>'+
+    '<div class="metric"><div class="metric-label">Total pago · <span style="color:#cc0000">'+pct+'% exec.</span></div><div class="metric-value" style="font-size:13px;color:#cc0000">'+FMT(tP)+'</div></div>';
+  const s=(page-1)*PAGE,e=Math.min(s+PAGE,filtered.length);
+  document.getElementById('tbody').innerHTML=filtered.slice(s,e).map(r=>{
+    const lk=r.link?'<a class="link-a" href="'+r.link+'" target="_blank">↗</a>':'';
+    return '<tr>'+
+      '<td style="font-size:10px">'+r.nemenda+'</td>'+
+      '<td>'+r.ano+'</td>'+
+      '<td style="font-size:10px">'+r.orgao+'</td>'+
+      '<td class="td-ell" title="'+r.acao+'" style="font-size:10px">'+r.acao+'</td>'+
+      '<td class="td-ell" title="'+r.objeto+'">'+r.objeto+'</td>'+
+      '<td style="font-size:10px">'+r.municipio+'</td>'+
+      '<td><span class="pill '+sC(r.situacao)+'">'+( r.situacao||'—')+'</span></td>'+
+      '<td style="text-align:right;font-size:10px">'+NUM(r.indicado)+'</td>'+
+      '<td style="text-align:right;font-size:10px">'+NUM(r.empenhado)+'</td>'+
+      '<td style="text-align:right;font-size:10px">'+NUM(r.pago)+'</td>'+
+      '<td>'+lk+'</td>'+
+    '</tr>';
   }).join('');
+  document.getElementById('pag-info').textContent=(s+1)+'–'+e+' de '+filtered.length+' registros';
+  document.getElementById('btn-prev').disabled=page===1;
+  document.getElementById('btn-next').disabled=e>=filtered.length;
 }
 
-function verMunicipio(nome){
-  _munAtual=nome;
-  const rows=D.filter(r=>r.municipio===nome);
-  const tI=rows.reduce((s,r)=>s+r.indicado,0);
-  const tE=rows.reduce((s,r)=>s+r.empenhado,0);
-  const tP=rows.reduce((s,r)=>s+r.pago,0);
-  const pct=tI>0?Math.min(100,Math.round(tP/tI*100)):0;
-  document.getElementById('det-nome').textContent=nome;
-  document.getElementById('det-totais').innerHTML=
-    '<div class="dt"><div class="dt-label">Emendas</div><div class="dt-value">'+rows.length+'</div></div>'+
-    '<div class="dt"><div class="dt-label">Indicado</div><div class="dt-value" style="font-size:12px">'+FM(tI)+'</div></div>'+
-    '<div class="dt"><div class="dt-label">Pago · '+pct+'%</div><div class="dt-value red" style="font-size:12px">'+FM(tP)+'</div></div>';
-  document.getElementById('det-emendas').innerHTML=rows.map(r=>
-    '<div class="emenda-item">'+
-    '<div class="emenda-objeto">'+r.objeto+'</div>'+
-    '<div class="emenda-row"><span class="emenda-label">Indicado</span><span class="emenda-val">'+FMF(r.indicado)+'</span></div>'+
-    '<div class="emenda-row"><span class="emenda-label">Pago</span><span class="emenda-val red">'+FMF(r.pago)+'</span></div>'+
-    '<div class="emenda-row"><span class="emenda-label">Órgão · '+r.ano+'</span><span class="emenda-val">'+r.orgao+'</span></div>'+
-    '<span class="pill '+sC(r.situacao)+'">'+( r.situacao||'—')+'</span>'+
-    '</div>'
-  ).join('');
-  document.getElementById('aba-municipios').style.display='none';
-  document.getElementById('aba-resumo').style.display='none';
-  document.getElementById('detalhe').style.display='block';
-  window.scrollTo(0,0);
-}
+function changePage(d){page+=d;render();}
 
-function voltarLista(){
-  document.getElementById('detalhe').style.display='none';
-  if(abaAtual==='municipios'){document.getElementById('aba-municipios').style.display='block';}
-  else{document.getElementById('aba-resumo').style.display='block';}
-  window.scrollTo(0,0);
-}
-
-function renderResumo(){
-  const porOrgao={},porTipo={},porAno={};
-  D.forEach(r=>{
-    const o=r.orgao||'Outros';if(!porOrgao[o])porOrgao[o]={ind:0,pago:0};porOrgao[o].ind+=r.indicado;porOrgao[o].pago+=r.pago;
-    const t=r.tipo||'Outros';if(!porTipo[t])porTipo[t]={ind:0,qtd:0};porTipo[t].ind+=r.indicado;porTipo[t].qtd++;
-    const a=r.ano||'—';if(!porAno[a])porAno[a]={ind:0,pago:0,qtd:0};porAno[a].ind+=r.indicado;porAno[a].pago+=r.pago;porAno[a].qtd++;
-  });
-  const tI=D.reduce((s,r)=>s+r.indicado,0);
-  const tP=D.reduce((s,r)=>s+r.pago,0);
-  const pct=tI>0?Math.min(100,Math.round(tP/tI*100)):0;
-  const muns=new Set(D.map(r=>r.municipio)).size;
-  const top5=Object.entries(porOrgao).sort((a,b)=>b[1].ind-a[1].ind).slice(0,5);
-  const anosOrd=Object.entries(porAno).sort((a,b)=>a[0].localeCompare(b[0]));
-  const tiposOrd=Object.entries(porTipo).sort((a,b)=>b[1].ind-a[1].ind);
-  document.getElementById('resumo-content').innerHTML=
-    '<div class="resumo-card"><div class="resumo-titulo">Visão Geral</div>'+
-    '<div class="resumo-item"><span class="resumo-item-nome">Total de emendas</span><span class="resumo-item-val">'+D.length+'</span></div>'+
-    '<div class="resumo-item"><span class="resumo-item-nome">Municípios atendidos</span><span class="resumo-item-val">'+muns+'</span></div>'+
-    '<div class="resumo-item"><span class="resumo-item-nome">Total indicado</span><span class="resumo-item-val">'+FMF(tI)+'</span></div>'+
-    '<div class="resumo-item"><span class="resumo-item-nome">Total pago</span><span class="resumo-item-val">'+FMF(tP)+'</span></div>'+
-    '<div class="resumo-item"><span class="resumo-item-nome">% executado</span><span class="resumo-item-val">'+pct+'%</span></div></div>'+
-    '<div class="resumo-card"><div class="resumo-titulo">Top 5 órgãos</div>'+
-    top5.map(([o,v])=>'<div class="resumo-item"><span class="resumo-item-nome">'+o+'</span><span class="resumo-item-val">'+FM(v.ind)+'</span></div>').join('')+'</div>'+
-    '<div class="resumo-card"><div class="resumo-titulo">Por tipo de emenda</div>'+
-    tiposOrd.map(([t,v])=>'<div class="resumo-item"><span class="resumo-item-nome">'+t+' <span style="color:#888;font-size:11px">('+v.qtd+')</span></span><span class="resumo-item-val">'+FM(v.ind)+'</span></div>').join('')+'</div>'+
-    '<div class="resumo-card"><div class="resumo-titulo">Por ano</div>'+
-    anosOrd.map(([a,v])=>'<div class="resumo-item"><span class="resumo-item-nome">'+a+' <span style="color:#888;font-size:11px">('+v.qtd+')</span></span><span class="resumo-item-val">'+FM(v.ind)+'</span></div>').join('')+'</div>';
-}
-
-function showAba(aba,btn){
-  abaAtual=aba;
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('aba-municipios').style.display=aba==='municipios'?'block':'none';
-  document.getElementById('aba-resumo').style.display=aba==='resumo'?'block':'none';
-  document.getElementById('detalhe').style.display='none';
-}
-
-function onBusca(){renderMunicipios(D);}
-
-function exportarMunPDF(){
-  const nome=_munAtual;
-  const rows=D.filter(r=>r.municipio===nome);
-  if(!rows.length)return;
-  const tI=rows.reduce((s,r)=>s+r.indicado,0);
-  const tE=rows.reduce((s,r)=>s+r.empenhado,0);
-  const tP=rows.reduce((s,r)=>s+r.pago,0);
-  const pct=tI>0?Math.min(100,Math.round(tP/tI*100)):0;
+function exportarPDF(){
+  const tI=filtered.reduce((s,r)=>s+r.indicado,0);
+  const tE=filtered.reduce((s,r)=>s+r.empenhado,0);
+  const tP=filtered.reduce((s,r)=>s+r.pago,0);
+  const pct=tI>0?Math.round(tP/tI*100):0;
   const now=new Date().toLocaleString('pt-BR');
-  const linhas=rows.map((r,i)=>{
+  const linhas=filtered.map((r,i)=>{
     const bg=i%2===0?'#fff':'#fafafa';
-    return '<tr style="background:'+bg+'"><td>'+r.objeto+'</td><td>'+r.orgao+'</td><td>'+r.ano+'</td><td>'+r.tipo+'</td>'+
+    return '<tr style="background:'+bg+'">'+
+      '<td>'+r.nemenda+'</td><td>'+r.ano+'</td><td>'+r.orgao+'</td>'+
+      '<td>'+r.acao+'</td><td>'+r.objeto+'</td><td>'+r.municipio+'</td><td>'+r.situacao+'</td>'+
       '<td style="text-align:right">'+(r.indicado>0?'R$ '+Math.round(r.indicado).toLocaleString('pt-BR'):'—')+'</td>'+
+      '<td style="text-align:right">'+(r.empenhado>0?'R$ '+Math.round(r.empenhado).toLocaleString('pt-BR'):'—')+'</td>'+
       '<td style="text-align:right">'+(r.pago>0?'R$ '+Math.round(r.pago).toLocaleString('pt-BR'):'—')+'</td>'+
-      '<td>'+r.situacao+'</td></tr>';
+    '</tr>';
   }).join('');
-  const html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Emendas '+nome+'</title>'+
-    '<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;font-size:13px;padding:20px}'+
+  const html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório de Emendas</title>'+
+    '<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;font-size:10px;padding:20px}'+
     '.cab{display:flex;align-items:center;gap:12px;border-bottom:3px solid #cc0000;padding-bottom:12px;margin-bottom:14px}'+
     '.star{width:40px;height:40px;background:#cc0000;border-radius:50%;display:flex;align-items:center;justify-content:center}'+
-    '.titulo{font-size:19px;font-weight:700;color:#cc0000}.sub{font-size:13px;color:#666;margin-top:2px}'+
-    '.mun{font-size:22px;font-weight:700;margin-bottom:12px}'+
+    '.titulo{font-size:16px;font-weight:700;color:#cc0000}.sub{font-size:11px;color:#666;margin-top:2px}'+
     '.totais{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}'+
     '.tot{background:#f9f9f9;border:1px solid #eee;border-radius:6px;padding:8px;border-left:3px solid #cc0000}'+
-    '.tot-label{font-size:11px;color:#888;text-transform:uppercase;margin-bottom:2px}.tot-value{font-size:15px;font-weight:700}'+
-    'table{width:100%;border-collapse:collapse;font-size:12px}'+
-    'thead th{background:#cc0000;color:#fff;padding:7px 5px;text-align:left;font-weight:600}'+
-    'tbody td{padding:6px 5px;border-bottom:1px solid #eee;word-break:break-word}'+
-    'tfoot td{background:#fff5f5;color:#cc0000;font-weight:700;padding:7px 5px;border-top:2px solid #cc0000}'+
-    '.rodape{margin-top:14px;font-size:11px;color:#aaa;text-align:right;border-top:1px solid #eee;padding-top:8px}'+
+    '.tot-label{font-size:9px;color:#888;text-transform:uppercase;margin-bottom:2px}.tot-value{font-size:12px;font-weight:700}'+
+    'table{width:100%;border-collapse:collapse;font-size:9px}'+
+    'thead th{background:#cc0000;color:#fff;padding:6px 5px;text-align:left;font-weight:600}'+
+    'tbody td{padding:5px;border-bottom:1px solid #eee;word-break:break-word}'+
+    'tfoot td{background:#fff5f5;color:#cc0000;font-weight:700;padding:6px 5px;border-top:2px solid #cc0000}'+
+    '.rodape{margin-top:14px;font-size:9px;color:#aaa;text-align:right;border-top:1px solid #eee;padding-top:8px}'+
     '@media print{body{padding:10px}@page{margin:1cm;size:A4 landscape}}</style></head><body>'+
     '<div class="cab"><div class="star"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>'+
-    '<div><div class="titulo">Dep. João Daniel — PT/SE · Mandato Popular</div><div class="sub">Relatório de Emendas · Gerado em '+now+'</div></div></div>'+
-    '<div class="mun">📍 '+nome+'</div>'+
+    '<div><div class="titulo">Dep. João Daniel — PT/SE · Mandato Popular</div>'+
+    '<div class="sub">Relatório de Emendas Parlamentares · Gerado por '+nomeLogado+' em '+now+'</div></div></div>'+
     '<div class="totais">'+
-    '<div class="tot"><div class="tot-label">Emendas</div><div class="tot-value">'+rows.length+'</div></div>'+
-    '<div class="tot"><div class="tot-label">Indicado</div><div class="tot-value">R$ '+Math.round(tI).toLocaleString('pt-BR')+'</div></div>'+
-    '<div class="tot"><div class="tot-label">Empenhado</div><div class="tot-value">R$ '+Math.round(tE).toLocaleString('pt-BR')+'</div></div>'+
-    '<div class="tot"><div class="tot-label">Pago · '+pct+'%</div><div class="tot-value" style="color:#cc0000">R$ '+Math.round(tP).toLocaleString('pt-BR')+'</div></div></div>'+
-    '<table><thead><tr><th style="width:30%">Objeto</th><th>Órgão</th><th>Ano</th><th>Tipo</th><th style="text-align:right">Indicado R$</th><th style="text-align:right">Pago R$</th><th>Situação</th></tr></thead>'+
+    '<div class="tot"><div class="tot-label">Registros</div><div class="tot-value">'+filtered.length+' de '+D.length+'</div></div>'+
+    '<div class="tot"><div class="tot-label">Total indicado</div><div class="tot-value">R$ '+Math.round(tI).toLocaleString('pt-BR')+'</div></div>'+
+    '<div class="tot"><div class="tot-label">Total empenhado</div><div class="tot-value">R$ '+Math.round(tE).toLocaleString('pt-BR')+'</div></div>'+
+    '<div class="tot"><div class="tot-label">Total pago · '+pct+'%</div><div class="tot-value" style="color:#cc0000">R$ '+Math.round(tP).toLocaleString('pt-BR')+'</div></div></div>'+
+    '<table><thead><tr><th>Nº Emenda</th><th>Ano</th><th>Órgão</th><th>Ação</th><th style="width:20%">Objeto</th>'+
+    '<th>Município</th><th>Situação</th><th style="text-align:right">Indicado R$</th>'+
+    '<th style="text-align:right">Empenhado R$</th><th style="text-align:right">Pago R$</th></tr></thead>'+
     '<tbody>'+linhas+'</tbody>'+
-    '<tfoot><tr><td colspan="4">TOTAL ('+rows.length+' emendas)</td>'+
+    '<tfoot><tr><td colspan="7">TOTAL ('+filtered.length+' registros)</td>'+
     '<td style="text-align:right">R$ '+Math.round(tI).toLocaleString('pt-BR')+'</td>'+
-    '<td style="text-align:right">R$ '+Math.round(tP).toLocaleString('pt-BR')+'</td><td></td></tr></tfoot></table>'+
+    '<td style="text-align:right">R$ '+Math.round(tE).toLocaleString('pt-BR')+'</td>'+
+    '<td style="text-align:right">R$ '+Math.round(tP).toLocaleString('pt-BR')+'</td></tr></tfoot></table>'+
     '<div class="rodape">Mandato Popular · Dep. João Daniel PT/SE · '+now+'</div></body></html>';
   const win=window.open('','_blank');
-  win.document.write(html);
-  win.document.close();
+  win.document.write(html);win.document.close();
   setTimeout(()=>win.print(),600);
 }
+
+['f-mun','f-orgao','f-ano','f-acao','f-valor'].forEach(id=>document.getElementById(id).addEventListener('change',applyFilters));
 </script>
 </body>
 </html>
