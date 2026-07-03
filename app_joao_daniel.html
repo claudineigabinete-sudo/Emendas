@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -272,7 +273,7 @@ function loadData(){
     document.getElementById('loading-msg').style.display='none';
     document.getElementById('erro-msg').style.display='block';
     document.getElementById('erro-txt').textContent='Tempo esgotado. Tente novamente.';
-  },15000);
+  },30000);
   window[cbName]=function(res){
     clearTimeout(timeout);delete window[cbName];
     try{
