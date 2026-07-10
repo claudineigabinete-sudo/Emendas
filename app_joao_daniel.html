@@ -285,6 +285,7 @@ function loadData(){
         orgao:String(r['ORGÃO']||'').trim(),
         acao:String(r['Ação']||r['Acao']||'').trim(),
         objeto:String(r['Objeto']||''),
+        beneficiario:String(r['Beneficiário']||r['Beneficiario']||''),
         proponente:String(r['Proponente']||''),
         municipio:String(r['Município']||'').trim(),
         situacao:String(r['Situação']||''),
@@ -396,6 +397,7 @@ function render(){
       '<td style="font-size:10px">'+r.orgao+'</td>'+
       '<td class="td-ell" title="'+r.acao+'" style="font-size:10px">'+r.acao+'</td>'+
       '<td class="td-ell" title="'+r.objeto+'">'+r.objeto+'</td>'+
+      '<td class="td-ell" title="'+r.beneficiario+'" style="font-size:10px">'+r.beneficiario+'</td>'+
       tdMun+
       '<td><span class="pill '+sC(r.situacao)+'">'+( r.situacao||'—')+'</span></td>'+
       '<td style="text-align:right;font-size:10px">'+NUM(r.indicado)+'</td>'+
@@ -420,7 +422,7 @@ function exportarPDF(){
   const munFiltradoPDF=document.getElementById('f-mun').value;
   const mostrarMunPDF=!munFiltradoPDF;
   const thMunPDF=mostrarMunPDF?'<th>Município</th>':'';
-  const colspanTotal=mostrarMunPDF?7:6;
+  const colspanTotal=mostrarMunPDF?8:7;
   const munTituloPDF=munFiltradoPDF?'<div style="font-size:14px;font-weight:700;color:#cc0000;margin-bottom:12px">📍 '+munFiltradoPDF+'</div>':'';
 
   const linhas=filtered.map((r,i)=>{
@@ -428,7 +430,7 @@ function exportarPDF(){
     const tdMunPDF=mostrarMunPDF?'<td>'+r.municipio+'</td>':'';
     return '<tr style="background:'+bg+'">'+
       '<td>'+r.nemenda+'</td><td>'+r.ano+'</td><td>'+r.orgao+'</td>'+
-      '<td>'+r.acao+'</td><td>'+r.objeto+'</td>'+tdMunPDF+'<td>'+r.situacao+'</td>'+
+      '<td>'+r.acao+'</td><td>'+r.objeto+'</td><td>'+r.beneficiario+'</td>'+tdMunPDF+'<td>'+r.situacao+'</td>'+
       '<td style="text-align:right">'+(r.indicado>0?'R$ '+Math.round(r.indicado).toLocaleString('pt-BR'):'—')+'</td>'+
       '<td style="text-align:right">'+(r.empenhado>0?'R$ '+Math.round(r.empenhado).toLocaleString('pt-BR'):'—')+'</td>'+
       '<td style="text-align:right">'+(r.pago>0?'R$ '+Math.round(r.pago).toLocaleString('pt-BR'):'—')+'</td>'+
