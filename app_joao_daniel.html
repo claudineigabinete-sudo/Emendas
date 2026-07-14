@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -344,8 +345,6 @@ function populateFilters(){
     arr.forEach(v=>{if(!v)return;const o=document.createElement('option');o.value=v;o.textContent=v;el.appendChild(o);});
   };
   sel('f-mun',[...new Set(D.map(r=>r.municipio))].sort());
-  sel('f-orgao',[...new Set(D.map(r=>r.orgao))].sort());
-  sel('f-ano',[...new Set(D.map(r=>r.ano))].sort());
   sel('f-acao',[...new Set(D.map(r=>r.acao).filter(v=>v))].sort());
   popularDD('ano',[...new Set(D.map(r=>r.ano))].sort());
   popularDD('orgao',[...new Set(D.map(r=>r.orgao))].filter(v=>v).sort());
