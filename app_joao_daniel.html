@@ -73,6 +73,25 @@ tbody td{padding:6px 8px;color:#222;vertical-align:middle}
 .loading{padding:40px 20px;text-align:center;color:#888;font-size:13px}
 .erro-box{margin:16px;padding:14px;background:#fcebeb;border-radius:10px;color:#a32d2d;font-size:13px}
 .erro-box button{margin-top:10px;background:#cc0000;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer;width:100%}
+
+.select-multi{font-size:12px;padding:4px 8px;border-radius:6px;border:1px solid #ddd;background:#fff;color:#222;min-height:30px;max-height:80px}
+.select-multi-wrap{display:flex;flex-direction:column;gap:2px}
+.select-multi-label{font-size:10px;color:#888}
+
+.dd-wrap{position:relative;display:inline-block}
+.dd-btn{font-size:12px;padding:5px 10px;border-radius:6px;border:1px solid #ddd;background:#fff;color:#222;height:30px;cursor:pointer;min-width:130px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:6px;white-space:nowrap}
+.dd-btn:after{content:'▾';font-size:10px;color:#888}
+.dd-btn.ativo{border-color:#cc0000;color:#cc0000}
+.dd-menu{display:none;position:absolute;top:34px;left:0;background:#fff;border:1px solid #ddd;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.12);z-index:999;min-width:200px;max-height:250px;overflow-y:auto;padding:6px 0}
+.dd-menu.open{display:block}
+.dd-item{display:flex;align-items:center;gap:8px;padding:6px 12px;cursor:pointer;font-size:12px;color:#222}
+.dd-item:hover{background:#fff5f5}
+.dd-item input[type=checkbox]{accent-color:#cc0000;width:14px;height:14px;cursor:pointer}
+.dd-search{padding:6px 10px;border-bottom:1px solid #eee}
+.dd-search input{width:100%;font-size:12px;padding:4px 8px;border:1px solid #ddd;border-radius:6px;outline:none}
+.dd-search input:focus{border-color:#cc0000}
+.dd-limpar{padding:6px 12px;font-size:11px;color:#cc0000;cursor:pointer;border-top:1px solid #eee;text-align:center}
+.dd-limpar:hover{background:#fff5f5}
 </style>
 </head>
 <body>
@@ -139,9 +158,10 @@ tbody td{padding:6px 8px;color:#222;vertical-align:middle}
     <div class="metrics" id="metrics"></div>
     <div class="filters">
       <select id="f-mun"><option value="">Todos os municípios</option></select>
-      <select id="f-orgao"><option value="">Todos os órgãos</option></select>
-      <select id="f-ano"><option value="">Todos os anos</option></select>
+      <div class="dd-wrap" id="ddw-orgao"><button class="dd-btn" id="ddb-orgao" onclick="toggleDD('orgao')"><span id="ddl-orgao">Todos os órgãos</span></button><div class="dd-menu" id="ddm-orgao"><div class="dd-search"><input type="text" placeholder="Buscar órgão…" oninput="filtrarDD('orgao',this.value)"/></div><div id="ddi-orgao"></div><div class="dd-limpar" onclick="limparDD('orgao')">Limpar seleção</div></div></div>
+      <div class="dd-wrap" id="ddw-ano"><button class="dd-btn" id="ddb-ano" onclick="toggleDD('ano')"><span id="ddl-ano">Todos os anos</span></button><div class="dd-menu" id="ddm-ano"><div class="dd-search"><input type="text" placeholder="Buscar ano…" oninput="filtrarDD('ano',this.value)"/></div><div id="ddi-ano"></div><div class="dd-limpar" onclick="limparDD('ano')">Limpar seleção</div></div></div>
       <select id="f-acao"><option value="">Todas as ações</option></select>
+      <div class="dd-wrap" id="ddw-benef"><button class="dd-btn" id="ddb-benef" onclick="toggleDD('benef')"><span id="ddl-benef">Todos os beneficiários</span></button><div class="dd-menu" id="ddm-benef"><div class="dd-search"><input type="text" placeholder="Buscar beneficiário…" oninput="filtrarDD('benef',this.value)"/></div><div id="ddi-benef"></div><div class="dd-limpar" onclick="limparDD('benef')">Limpar seleção</div></div></div>
       <select id="f-valor">
         <option value="">Ordenar por valor</option>
         <option value="maior">Maior para menor</option>
@@ -328,18 +348,24 @@ function populateFilters(){
   sel('f-orgao',[...new Set(D.map(r=>r.orgao))].sort());
   sel('f-ano',[...new Set(D.map(r=>r.ano))].sort());
   sel('f-acao',[...new Set(D.map(r=>r.acao).filter(v=>v))].sort());
+  popularDD('ano',[...new Set(D.map(r=>r.ano))].sort());
+  popularDD('orgao',[...new Set(D.map(r=>r.orgao))].filter(v=>v).sort());
+  popularDD('benef',[...new Set(D.map(r=>r.beneficiario))].filter(v=>v).sort());
 }
 
 function applyFilters(){
   const mun=document.getElementById('f-mun').value;
-  const org=document.getElementById('f-orgao').value;
-  const ano=document.getElementById('f-ano').value;
+  const org='';
+  const anos=getSelecionados('ano');
+  const orgaosSel=getSelecionados('orgao');
+  const benefs=getSelecionados('benef');
   const acao=document.getElementById('f-acao').value;
   const valor=document.getElementById('f-valor').value;
   filtered=D.filter(r=>{
     if(mun&&r.municipio!==mun)return false;
-    if(org&&r.orgao!==org)return false;
-    if(ano&&r.ano!==ano)return false;
+    if(orgaosSel.length&&!orgaosSel.includes(r.orgao))return false;
+    if(anos.length&&!anos.includes(r.ano))return false;
+    if(benefs.length&&!benefs.includes(r.beneficiario))return false;
     if(acao&&r.acao!==acao)return false;
     return true;
   });
@@ -356,7 +382,8 @@ function ordenarPor(campo){
 }
 
 function resetFilters(){
-  ['f-mun','f-orgao','f-ano','f-acao','f-valor'].forEach(id=>document.getElementById(id).value='');
+  ['f-mun','f-acao','f-valor'].forEach(id=>document.getElementById(id).value='');
+  limparDD('ano');limparDD('orgao');limparDD('benef');
   filtered=[...D];ordemAtual={campo:'',asc:false};page=1;render();
 }
 
@@ -473,7 +500,67 @@ function exportarPDF(){
   setTimeout(()=>win.print(),600);
 }
 
-['f-mun','f-orgao','f-ano','f-acao','f-valor'].forEach(id=>document.getElementById(id).addEventListener('change',applyFilters));
+['f-mun','f-acao','f-valor'].forEach(id=>document.getElementById(id).addEventListener('change',applyFilters));
+
+const _ddData={};
+
+function popularDD(id, itens){
+  _ddData[id]=itens;
+  renderDD(id,itens);
+}
+
+function renderDD(id, itens){
+  const container=document.getElementById('ddi-'+id);
+  container.innerHTML=itens.map(v=>
+    '<label class="dd-item"><input type="checkbox" value="'+v+'" onchange="onCheckDD(''+id+'')"/> '+v+'</label>'
+  ).join('');
+}
+
+function filtrarDD(id, q){
+  const itens=(_ddData[id]||[]).filter(v=>v.toLowerCase().includes(q.toLowerCase()));
+  const container=document.getElementById('ddi-'+id);
+  const selecionados=getSelecionados(id);
+  container.innerHTML=itens.map(v=>
+    '<label class="dd-item"><input type="checkbox" value="'+v+'"'+(selecionados.includes(v)?' checked':'')+' onchange="onCheckDD(''+id+'')"/> '+v+'</label>'
+  ).join('');
+}
+
+function toggleDD(id){
+  ['ano','orgao','benef'].forEach(d=>{
+    if(d!==id)document.getElementById('ddm-'+d).classList.remove('open');
+  });
+  document.getElementById('ddm-'+id).classList.toggle('open');
+}
+
+function onCheckDD(id){
+  const sel=getSelecionados(id);
+  const btn=document.getElementById('ddl-'+id);
+  const labels={ano:'Todos os anos',orgao:'Todos os órgãos',benef:'Todos os beneficiários'};
+  if(sel.length===0){btn.textContent=labels[id];document.getElementById('ddb-'+id).classList.remove('ativo');}
+  else if(sel.length===1){btn.textContent=sel[0];document.getElementById('ddb-'+id).classList.add('ativo');}
+  else{btn.textContent=sel.length+' selecionados';document.getElementById('ddb-'+id).classList.add('ativo');}
+  applyFilters();
+}
+
+function getSelecionados(id){
+  const checks=document.querySelectorAll('#ddi-'+id+' input[type=checkbox]:checked');
+  return [...checks].map(c=>c.value);
+}
+
+function limparDD(id){
+  document.querySelectorAll('#ddi-'+id+' input[type=checkbox]').forEach(c=>c.checked=false);
+  const labels={ano:'Todos os anos',orgao:'Todos os órgãos',benef:'Todos os beneficiários'};
+  document.getElementById('ddl-'+id).textContent=labels[id];
+  document.getElementById('ddb-'+id).classList.remove('ativo');
+  applyFilters();
+}
+
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.dd-wrap')){
+    document.querySelectorAll('.dd-menu').forEach(m=>m.classList.remove('open'));
+  }
+});
+
 </script>
 </body>
 </html>
