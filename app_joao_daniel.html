@@ -305,7 +305,8 @@ function loadData(){
         orgao:String(r['ORGÃO']||'').trim(),
         acao:String(r['Ação']||r['Acao']||'').trim(),
         objeto:String(r['Objeto']||''),
-        beneficiario:String(r['Beneficiário']||r['Beneficiario']||''),
+        beneficiario:String(r['Beneficiário']||''),
+        cnpj:String(r['CNPJ']||''),
         proponente:String(r['Proponente']||''),
         municipio:String(r['Município']||'').trim(),
         situacao:String(r['Situação']||''),
@@ -397,20 +398,15 @@ function render(){
     '<div class="metric"><div class="metric-label">Total empenhado</div><div class="metric-value" style="font-size:13px">'+FMT(tE)+'</div></div>'+
     '<div class="metric"><div class="metric-label">Total pago · <span style="color:#cc0000">'+pct+'% exec.</span></div><div class="metric-value" style="font-size:13px;color:#cc0000">'+FMT(tP)+'</div></div>';
 
-  const munFiltrado=document.getElementById('f-mun').value;
+  const munEl=document.getElementById('f-mun');
+  const munFiltrado=munEl?munEl.value:'';
   const mostrarMun=!munFiltrado;
-
-  // Atualizar cabeçalho da tabela
   const thMun=document.getElementById('th-mun');
   if(thMun)thMun.style.display=mostrarMun?'table-cell':'none';
-
-  // Título do município filtrado
   const tituloEl=document.getElementById('mun-titulo');
-  if(munFiltrado){
-    tituloEl.style.display='block';
-    tituloEl.textContent='📍 '+munFiltrado;
-  } else {
-    tituloEl.style.display='none';
+  if(tituloEl){
+    if(munFiltrado){tituloEl.style.display='block';tituloEl.textContent='📍 '+munFiltrado;}
+    else{tituloEl.style.display='none';}
   }
 
   const s=(page-1)*PAGE,e=Math.min(s+PAGE,filtered.length);
@@ -542,8 +538,10 @@ function onCheckDD(id){
 }
 
 function getSelecionados(id){
-  const checks=document.querySelectorAll('#ddi-'+id+' input[type=checkbox]:checked');
-  return [...checks].map(c=>c.value);
+  try{
+    const checks=document.querySelectorAll('#ddi-'+id+' input[type=checkbox]:checked');
+    return [...checks].map(c=>c.value);
+  }catch(e){return [];}
 }
 
 function limparDD(id){
