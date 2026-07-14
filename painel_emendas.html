@@ -99,6 +99,25 @@ tbody td{padding:6px 8px;color:#222;vertical-align:middle}
 .chart-card{background:#fff;border:1px solid #eee;border-radius:10px;padding:14px;border-top:3px solid #cc0000;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
 .chart-title{font-size:11px;font-weight:600;color:#888;margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em}
 tfoot tr td{background:#fff5f5;font-weight:600;color:#cc0000;padding:6px 8px;font-size:11px}
+
+.select-multi{font-size:12px;padding:4px 8px;border-radius:6px;border:1px solid #ddd;background:#fff;color:#222;min-height:30px;max-height:80px}
+.select-multi-wrap{display:flex;flex-direction:column;gap:2px}
+.select-multi-label{font-size:10px;color:#888}
+
+.dd-wrap{position:relative;display:inline-block}
+.dd-btn{font-size:12px;padding:5px 10px;border-radius:6px;border:1px solid #ddd;background:#fff;color:#222;height:30px;cursor:pointer;min-width:130px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:6px;white-space:nowrap}
+.dd-btn:after{content:'▾';font-size:10px;color:#888}
+.dd-btn.ativo{border-color:#cc0000;color:#cc0000}
+.dd-menu{display:none;position:absolute;top:34px;left:0;background:#fff;border:1px solid #ddd;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.12);z-index:999;min-width:200px;max-height:250px;overflow-y:auto;padding:6px 0}
+.dd-menu.open{display:block}
+.dd-item{display:flex;align-items:center;gap:8px;padding:6px 12px;cursor:pointer;font-size:12px;color:#222}
+.dd-item:hover{background:#fff5f5}
+.dd-item input[type=checkbox]{accent-color:#cc0000;width:14px;height:14px;cursor:pointer}
+.dd-search{padding:6px 10px;border-bottom:1px solid #eee}
+.dd-search input{width:100%;font-size:12px;padding:4px 8px;border:1px solid #ddd;border-radius:6px;outline:none}
+.dd-search input:focus{border-color:#cc0000}
+.dd-limpar{padding:6px 12px;font-size:11px;color:#cc0000;cursor:pointer;border-top:1px solid #eee;text-align:center}
+.dd-limpar:hover{background:#fff5f5}
 </style>
 </head>
 <body>
@@ -180,12 +199,13 @@ tfoot tr td{background:#fff5f5;font-weight:600;color:#cc0000;padding:6px 8px;fon
     <div id="painel" style="display:none">
       <div class="metrics" id="metrics"></div>
       <div class="filters">
-        <select id="f-ano"><option value="">Todos os anos</option></select>
-        <select id="f-orgao"><option value="">Todos os órgãos</option></select>
+        <div class="dd-wrap" id="ddw-ano"><button class="dd-btn" id="ddb-ano" onclick="toggleDD('ano')"><span id="ddl-ano">Todos os anos</span></button><div class="dd-menu" id="ddm-ano"><div class="dd-search"><input type="text" placeholder="Buscar ano…" oninput="filtrarDD('ano',this.value)"/></div><div id="ddi-ano"></div><div class="dd-limpar" onclick="limparDD('ano')">Limpar seleção</div></div></div>
+        <div class="dd-wrap" id="ddw-orgao"><button class="dd-btn" id="ddb-orgao" onclick="toggleDD('orgao')"><span id="ddl-orgao">Todos os órgãos</span></button><div class="dd-menu" id="ddm-orgao"><div class="dd-search"><input type="text" placeholder="Buscar órgão…" oninput="filtrarDD('orgao',this.value)"/></div><div id="ddi-orgao"></div><div class="dd-limpar" onclick="limparDD('orgao')">Limpar seleção</div></div></div>
         <select id="f-mun"><option value="">Todos os municípios</option></select>
         <select id="f-tipo"><option value="">Todos os tipos</option></select>
         <select id="f-rp"><option value="">Todos os RPs</option></select>
-        <input type="text" id="f-busca" placeholder="Buscar objeto ou proponente…"/>
+        <div class="dd-wrap" id="ddw-benef"><button class="dd-btn" id="ddb-benef" onclick="toggleDD('benef')"><span id="ddl-benef">Todos os beneficiários</span></button><div class="dd-menu" id="ddm-benef"><div class="dd-search"><input type="text" placeholder="Buscar beneficiário…" oninput="filtrarDD('benef',this.value)"/></div><div id="ddi-benef"></div><div class="dd-limpar" onclick="limparDD('benef')">Limpar seleção</div></div></div>
+      <input type="text" id="f-busca" placeholder="Buscar objeto ou proponente…"/>
         <button class="filter-reset" onclick="resetFilters()">↺ Limpar filtros</button>
         <button class="export-btn" onclick="exportarPDF()">⬇ Exportar PDF</button>
       </div>
@@ -418,23 +438,27 @@ function populateFilters(){
     while(el.options.length>1)el.remove(1);
     arr.forEach(v=>{if(!v)return;const o=document.createElement('option');o.value=v;o.textContent=v;el.appendChild(o);});
   };
-  sel('f-ano',[...new Set(D.map(r=>r.ano))].sort());
-  sel('f-orgao',[...new Set(D.map(r=>r.orgao))].sort());
   sel('f-mun',[...new Set(D.map(r=>r.municipio))].sort());
   sel('f-tipo',[...new Set(D.map(r=>r.tipo))].sort());
   sel('f-rp',[...new Set(D.map(r=>r.rp))].sort());
+  popularDD('ano',[...new Set(D.map(r=>r.ano))].sort());
+  popularDD('orgao',[...new Set(D.map(r=>r.orgao))].filter(v=>v).sort());
+  popularDD('benef',[...new Set(D.map(r=>r.beneficiario))].filter(v=>v).sort());
 }
 
 function applyFilters(){
-  const ano=document.getElementById('f-ano').value;
-  const org=document.getElementById('f-orgao').value;
+  const anos=getSelecionados('ano');
+  const orgaosSel=getSelecionados('orgao');
+  const benefs=getSelecionados('benef');
+  const org='';
   const mun=document.getElementById('f-mun').value;
   const tipo=document.getElementById('f-tipo').value;
   const rp=document.getElementById('f-rp').value;
   const q=document.getElementById('f-busca').value.toLowerCase();
   filtered=D.filter(r=>{
-    if(ano&&r.ano!==ano)return false;
-    if(org&&r.orgao!==org)return false;
+    if(anos.length&&!anos.includes(r.ano))return false;
+    if(benefs.length&&!benefs.includes(r.beneficiario))return false;
+    if(orgaosSel.length&&!orgaosSel.includes(r.orgao))return false;
     if(mun&&r.municipio!==mun)return false;
     if(tipo&&r.tipo!==tipo)return false;
     if(rp&&r.rp!==rp)return false;
@@ -445,7 +469,8 @@ function applyFilters(){
 }
 
 function resetFilters(){
-  ['f-ano','f-orgao','f-mun','f-tipo','f-rp'].forEach(id=>document.getElementById(id).value='');
+  ['f-mun','f-tipo','f-rp'].forEach(id=>document.getElementById(id).value='');
+  limparDD('ano');limparDD('orgao');limparDD('benef');
   document.getElementById('f-busca').value='';
   filtered=[...D];page=1;render();
 }
@@ -595,14 +620,18 @@ function exportarPDF(){
   const pct=tI>0?Math.round(tP/tI*100):0;
   const now=new Date().toLocaleString('pt-BR');
   const filtrosAtivos=[];
-  const fAno=document.getElementById('f-ano').value;
+  const fAno=getSelecionados('ano').join(', ');
   const fOrg=document.getElementById('f-orgao').value;
   const fMun=document.getElementById('f-mun').value;
   const fTipo=document.getElementById('f-tipo').value;
   const fRp=document.getElementById('f-rp').value;
   const fBusca=document.getElementById('f-busca').value;
   if(fAno)filtrosAtivos.push('Ano: '+fAno);
-  if(fOrg)filtrosAtivos.push('Órgão: '+fOrg);
+  const fBenefs=getSelecionados('benef');
+  if(fBenefs.length)filtrosAtivos.push('Beneficiário: '+fBenefs.join(', '));
+  const fOrgaos=getSelecionados('orgao');
+  if(fOrgaos.length)filtrosAtivos.push('Órgão: '+fOrgaos.join(', '));
+
   if(fMun)filtrosAtivos.push('Município: '+fMun);
   if(fTipo)filtrosAtivos.push('Tipo: '+fTipo);
   if(fRp)filtrosAtivos.push('RP: '+fRp);
@@ -663,7 +692,69 @@ function exportarPDF(){
   setTimeout(()=>win.print(),500);
 }
 
-['f-ano','f-orgao','f-mun','f-tipo','f-rp'].forEach(id=>document.getElementById(id).addEventListener('change',applyFilters));
+['f-mun','f-tipo','f-rp'].forEach(id=>document.getElementById(id).addEventListener('change',applyFilters));
+
+// DD vars
+const _ddData={};
+
+function popularDD(id, itens){
+  _ddData[id]=itens;
+  renderDD(id,itens);
+}
+
+function renderDD(id, itens){
+  const container=document.getElementById('ddi-'+id);
+  container.innerHTML=itens.map(v=>
+    '<label class="dd-item"><input type="checkbox" value="'+v+'" onchange="onCheckDD(''+id+'')"/> '+v+'</label>'
+  ).join('');
+}
+
+function filtrarDD(id, q){
+  const itens=(_ddData[id]||[]).filter(v=>v.toLowerCase().includes(q.toLowerCase()));
+  const container=document.getElementById('ddi-'+id);
+  const selecionados=getSelecionados(id);
+  container.innerHTML=itens.map(v=>
+    '<label class="dd-item"><input type="checkbox" value="'+v+'"'+(selecionados.includes(v)?' checked':'')+' onchange="onCheckDD(''+id+'')"/> '+v+'</label>'
+  ).join('');
+}
+
+function toggleDD(id){
+  ['ano','orgao','benef'].forEach(d=>{
+    if(d!==id)document.getElementById('ddm-'+d).classList.remove('open');
+  });
+  document.getElementById('ddm-'+id).classList.toggle('open');
+}
+
+function onCheckDD(id){
+  const sel=getSelecionados(id);
+  const btn=document.getElementById('ddl-'+id);
+  const labels={ano:'Todos os anos',orgao:'Todos os órgãos',benef:'Todos os beneficiários'};
+  if(sel.length===0){btn.textContent=labels[id];document.getElementById('ddb-'+id).classList.remove('ativo');}
+  else if(sel.length===1){btn.textContent=sel[0];document.getElementById('ddb-'+id).classList.add('ativo');}
+  else{btn.textContent=sel.length+' selecionados';document.getElementById('ddb-'+id).classList.add('ativo');}
+  applyFilters();
+}
+
+function getSelecionados(id){
+  const checks=document.querySelectorAll('#ddi-'+id+' input[type=checkbox]:checked');
+  return [...checks].map(c=>c.value);
+}
+
+function limparDD(id){
+  document.querySelectorAll('#ddi-'+id+' input[type=checkbox]').forEach(c=>c.checked=false);
+  const labels={ano:'Todos os anos',orgao:'Todos os órgãos',benef:'Todos os beneficiários'};
+  document.getElementById('ddl-'+id).textContent=labels[id];
+  document.getElementById('ddb-'+id).classList.remove('ativo');
+  applyFilters();
+}
+
+// Fechar dropdown ao clicar fora
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.dd-wrap')){
+    document.querySelectorAll('.dd-menu').forEach(m=>m.classList.remove('open'));
+  }
+});
+
 document.getElementById('f-busca').addEventListener('input',applyFilters);
 </script>
 </body>
