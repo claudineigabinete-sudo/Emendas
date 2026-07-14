@@ -512,7 +512,7 @@ function popularDD(id, itens){
 function renderDD(id, itens){
   const container=document.getElementById('ddi-'+id);
   container.innerHTML=itens.map(v=>
-    '<label class="dd-item"><input type="checkbox" value="'+v+'" onchange="onCheckDD(''+id+'')"/> '+v+'</label>'
+    '<label class="dd-item"><input type="checkbox" value="'+v+'" onchange="onCheckDD(&quot;'+id+'&quot;)"/> '+v+'</label>'
   ).join('');
 }
 
@@ -521,7 +521,7 @@ function filtrarDD(id, q){
   const container=document.getElementById('ddi-'+id);
   const selecionados=getSelecionados(id);
   container.innerHTML=itens.map(v=>
-    '<label class="dd-item"><input type="checkbox" value="'+v+'"'+(selecionados.includes(v)?' checked':'')+' onchange="onCheckDD(''+id+'')"/> '+v+'</label>'
+    '<label class="dd-item"><input type="checkbox" value="'+v+'"'+(selecionados.includes(v)?' checked':'')+' onchange="onCheckDD(&quot;'+id+'&quot;)"/> '+v+'</label>'
   ).join('');
 }
 
