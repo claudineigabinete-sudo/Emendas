@@ -221,8 +221,8 @@ tfoot tr td{background:#fff5f5;font-weight:600;color:#cc0000;padding:6px 8px;fon
             <col style="width:28px">
           </colgroup>
           <thead><tr>
-            <th>Nº Emenda</th><th>Ano</th><th>Órgão</th><th>RP</th><th>Tipo</th>
-            <th>Objeto</th><th>Beneficiário</th><th>Proponente</th><th id="th-mun">Município</th><th>Situação</th>
+            <th>Nº Emenda</th><th>Ano</th><th>Órgão</th><th>Ação</th>
+            <th>Objeto</th><th>Beneficiário</th><th id="th-mun">Município</th><th>Situação</th>
             <th style="text-align:right">Indicado R$</th>
             <th style="text-align:right">Empenhado R$</th>
             <th style="text-align:right">Pago R$</th>
@@ -504,11 +504,9 @@ function render(){
       '<td style="font-size:10px">'+r.nemenda+'</td>'+
       '<td>'+r.ano+'</td>'+
       '<td style="font-size:10px">'+r.orgao+'</td>'+
-      '<td style="font-size:10px">'+r.rp+'</td>'+
-      '<td style="font-size:10px">'+r.tipo+'</td>'+
+      '<td class="td-ell" title="'+r.acao+'" style="font-size:10px">'+r.acao+'</td>'+
       '<td class="td-ell" title="'+r.objeto+'">'+r.objeto+'</td>'+
       '<td class="td-ell" title="'+r.beneficiario+'" style="font-size:10px">'+r.beneficiario+'</td>'+
-      '<td class="td-ell" title="'+r.proponente+'" style="font-size:10px">'+r.proponente+'</td>'+
       tdMun+
       '<td><span class="pill '+sC(r.situacao)+'">'+( r.situacao||'—')+'</span></td>'+
       '<td style="text-align:right;font-size:10px">'+NUM(r.indicado)+'</td>'+
@@ -642,14 +640,14 @@ function exportarPDF(){
   const munFiltradoPDF=document.getElementById('f-mun').value;
   const mostrarMunPDF=!munFiltradoPDF;
   const thMunPDF=mostrarMunPDF?'<th style="width:10%">Município</th>':'';
-  const colspanTotal=mostrarMunPDF?10:9;
+  const colspanTotal=mostrarMunPDF?7:6;
 
   const linhas=filtered.map((r,i)=>{
     const bg=i%2===0?'#ffffff':'#fafafa';
     const tdMunPDF=mostrarMunPDF?'<td>'+r.municipio+'</td>':'';
     return '<tr style="background:'+bg+'">'+
-      '<td>'+r.nemenda+'</td><td>'+r.ano+'</td><td>'+r.orgao+'</td><td>'+r.rp+'</td><td>'+r.tipo+'</td>'+
-      '<td>'+r.objeto+'</td><td>'+r.beneficiario+'</td><td>'+r.proponente+'</td>'+tdMunPDF+'<td>'+r.situacao+'</td>'+
+      '<td>'+r.nemenda+'</td><td>'+r.ano+'</td><td>'+r.orgao+'</td><td>'+r.acao+'</td>'+
+      '<td>'+r.objeto+'</td><td>'+r.beneficiario+'</td>'+tdMunPDF+'<td>'+r.situacao+'</td>'+
       '<td style="text-align:right">'+(r.indicado>0?'R$ '+Math.round(r.indicado).toLocaleString('pt-BR'):'—')+'</td>'+
       '<td style="text-align:right">'+(r.empenhado>0?'R$ '+Math.round(r.empenhado).toLocaleString('pt-BR'):'—')+'</td>'+
       '<td style="text-align:right">'+(r.pago>0?'R$ '+Math.round(r.pago).toLocaleString('pt-BR'):'—')+'</td>'+
@@ -680,7 +678,7 @@ function exportarPDF(){
   '<div class="total"><div class="total-label">Total empenhado</div><div class="total-value">R$ '+Math.round(tE).toLocaleString('pt-BR')+'</div></div>'+
   '<div class="total"><div class="total-label">Total pago</div><div class="total-value" style="color:#cc0000">R$ '+Math.round(tP).toLocaleString('pt-BR')+' ('+pct+'%)</div></div>'+
   '</div>'+
-  '<table><thead><tr><th>Nº Emenda</th><th>Ano</th><th>Órgão</th><th>RP</th><th>Tipo</th>'+
+  '<table><thead><tr><th>Nº Emenda</th><th>Ano</th><th>Órgão</th><th>Ação</th>'+
   '<th style="width:18%">Objeto</th><th style="width:12%">Beneficiário</th><th style="width:12%">Proponente</th>'+thMunPDF+'<th>Situação</th>'+
   '<th>Indicado R$</th><th>Empenhado R$</th><th>Pago R$</th></tr></thead>'+
   '<tbody>'+linhas+'</tbody>'+
