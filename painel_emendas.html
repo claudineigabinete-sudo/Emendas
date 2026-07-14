@@ -621,7 +621,8 @@ function exportarPDF(){
   const now=new Date().toLocaleString('pt-BR');
   const filtrosAtivos=[];
   const fAno=getSelecionados('ano').join(', ');
-  const fOrg=document.getElementById('f-orgao').value;
+  const fOrgList=getSelecionados('orgao');
+  const fOrg=fOrgList.join(', ');
   const fMun=document.getElementById('f-mun').value;
   const fTipo=document.getElementById('f-tipo').value;
   const fRp=document.getElementById('f-rp').value;
